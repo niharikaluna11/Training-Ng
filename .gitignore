@@ -1,1 +1,7 @@
-day1/.vs/*
+day1/.vs/
+.vs/
+day1/college/bin/
+day1/college/.vs/
+day1/college/obj/
+.vs/
+
