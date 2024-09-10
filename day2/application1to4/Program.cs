@@ -103,62 +103,7 @@
                 Console.ReadKey();
             }
 
-            /// <summary>
-            /// task 4 :
-            /// 
-            /// </summary>
-            /// 
-            static string ctw(int num)
-            {
-                if (num == 0) return "Zero";
-
-                string[] ones = { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
-                          "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
-
-                string[] tens = { "", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
-
-                string[] thousands = { "", "One Thousand", "Two Thousand", "Three Thousand", "Four Thousand", "Five Thousand",
-                               "Six Thousand", "Seven Thousand", "Eight Thousand", "Nine Thousand" };
-
-                string result = "";
-
-                if (num / 1000 > 0)
-                {
-                    result += thousands[num / 1000] + " ";
-                    num %= 1000;
-                }
-
-                if (num / 100 > 0)
-                {
-                    result += ones[num / 100] + " Hundred ";
-                    num %= 100;
-                }
-
-                if (num > 19)
-                {
-                    result += tens[num / 10] + " ";
-                    num %= 10;
-                }
-
-                if (num > 0)
-                {
-                    result += ones[num];
-                }
-
-                return result.Trim();
-            }
-            static void task4()
-            {
-                Console.WriteLine("task 4");
-                int number = int.Parse(Console.ReadLine());
-                Console.WriteLine($"{number} in words: {ctw(number)}");
-            }
-
-            /// <summary>
-            /// task 5 :
-            /// 
-            /// </summary>
-
+           
 
             static void Main(string[] args)
             {
@@ -180,8 +125,7 @@
                 Console.WriteLine("1 - Take 10 numbers and find average of numbers divisible by 7");
                 Console.WriteLine("2 - Find all prime numbers in a range");
                 Console.WriteLine("3 - Print numbers that end with 3 or divisible by 3 until -1 is entered");
-                Console.WriteLine("4 - Convert a number (max 9999) to words");
-                Console.WriteLine("5 - Track employee expenses : another program : exit");
+                
                 Console.WriteLine("0 - Exit");
 
                 Console.Write("Enter your choice: ");
@@ -201,10 +145,7 @@
                         task3();
                         // Task 3: Numbers ending/divisible by 3
                         break;
-                    case "4":
-                        task4();
-                        // Task 4: Convert number to words
-                        break;
+                    
 
 
                     default:
