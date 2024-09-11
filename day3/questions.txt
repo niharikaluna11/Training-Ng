@@ -1,0 +1,22 @@
+
+Bank App Question:
+Create an Interface that exposes behavior for transaction in bank. Implement the interface in normal account, NRI account and salary acocount
+Normal account - .1% transaction charge - Rs. 5000 min balance
+NRI account - 2% transaction charge - Rs. 10000 min balance
+Salaary Account - 0 charges no min balance
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
+Product App Question:
+Create an application that will take Product details
+Product Class
+   Id, Name, Price, Quantity
+Customer
+   Id, Name, Phone
+Supplier
+   Id, Name
+
+Supplier can add product - increase quantity
+Customer can buy product - decrease quantity 
+
+Implement it with the proper business logic
