@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace bankapp
 {
-    internal interface Ibankacc
+    internal interface IbankAcc
     {
-        void Deposit(decimal amount);
-        void Withdraw(decimal amount);
-        decimal GetBalance();
-        decimal CalculateTransactionCharge(decimal amount);
+        bool MoneyTransaction(double amount); // Method to perform a transaction
+        bool hasMinimumBalance(); // Method to check if the account has the minimum required balance
+        double getBalance(); // Method to get the current balance of the account
 
     }
 }
