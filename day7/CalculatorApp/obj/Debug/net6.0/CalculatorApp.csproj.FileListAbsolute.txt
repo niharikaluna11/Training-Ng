@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\bin\Debug\net6.0\CalculatorApp.exe
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\bin\Debug\net6.0\CalculatorApp.deps.json
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\bin\Debug\net6.0\CalculatorApp.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\bin\Debug\net6.0\CalculatorApp.dll
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\bin\Debug\net6.0\CalculatorApp.pdb
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\CalculatorApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\CalculatorApp.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\CalculatorApp.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\CalculatorApp.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\CalculatorApp.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\CalculatorApp.dll
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\refint\CalculatorApp.dll
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\CalculatorApp.pdb
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\CalculatorApp.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day7\CalculatorApp\obj\Debug\net6.0\ref\CalculatorApp.dll
