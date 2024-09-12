@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\bin\Debug\net6.0\Assignment6.exe
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\bin\Debug\net6.0\Assignment6.deps.json
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\bin\Debug\net6.0\Assignment6.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\bin\Debug\net6.0\Assignment6.dll
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\bin\Debug\net6.0\Assignment6.pdb
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\Assignment6.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\Assignment6.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\Assignment6.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\Assignment6.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\Assignment6.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\Assignment6.dll
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\refint\Assignment6.dll
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\Assignment6.pdb
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\Assignment6.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day7\Assignments\Assignment6\obj\Debug\net6.0\ref\Assignment6.dll
