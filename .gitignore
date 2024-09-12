@@ -1,23 +1,23 @@
 day1/.vs/
 .vs/
 
-day1/college/bin/
-day1/college/.vs/
-day1/college/obj/
+day4/college/bin/
+day4/college/.vs/
+day4/college/obj/
 
-day2/application1to4/.vs/
-day2/application1to4/bin/
-day2/application1to4/.vs/
-day2/application1to4/obj/
+day5/application1to4/.vs/
+day5/application1to4/bin/
+day5/application1to4/.vs/
+day5/application1to4/obj/
 
-day2/application4to5/.vs
-day2/application4to5/obj
-day2/application4to5/bin
+day5/application4to5/.vs
+day5/application4to5/obj
+day5/application4to5/bin
 
-day3/bankapp/bin
-day3/bankapp/obj
-day3/bankapp/.vs
+day6/bankapp/bin
+day6/bankapp/obj
+day6/bankapp/.vs
 
-day3/productapp/bin
-day3/productapp/obj
-day3/productapp/.vs
+day6/productapp/bin
+day6/productapp/obj
+day6/productapp/.vs
