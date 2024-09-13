@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\bin\Debug\net6.0\CollectionsApp.exe
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\bin\Debug\net6.0\CollectionsApp.deps.json
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\bin\Debug\net6.0\CollectionsApp.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\bin\Debug\net6.0\CollectionsApp.dll
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\bin\Debug\net6.0\CollectionsApp.pdb
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\CollectionsApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\CollectionsApp.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\CollectionsApp.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\CollectionsApp.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\CollectionsApp.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\CollectionsApp.dll
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\refint\CollectionsApp.dll
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\CollectionsApp.pdb
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\CollectionsApp.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day8\CollectionsApp\obj\Debug\net6.0\ref\CollectionsApp.dll
