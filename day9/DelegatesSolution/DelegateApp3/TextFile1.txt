@@ -1,0 +1,9 @@
+﻿LINQ
+Language Integrated Query
+ //Language Integrated Query (LINQ)
+                //var result = (from e in employees
+                //              where e.Name == name
+                //              select e);
+                //var employee = result.FirstOrDefault();//The first value in teh collection or null which is the default for referebnce type
+
+            var employee=employees.FirstOrDefault(e=>e.Name==name);

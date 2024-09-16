@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\bin\Debug\net6.0\DelegatesApp.exe
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\bin\Debug\net6.0\DelegatesApp.deps.json
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\bin\Debug\net6.0\DelegatesApp.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\bin\Debug\net6.0\DelegatesApp.dll
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\bin\Debug\net6.0\DelegatesApp.pdb
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\DelegatesApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\DelegatesApp.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\DelegatesApp.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\DelegatesApp.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\DelegatesApp.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\DelegatesApp.dll
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\refint\DelegatesApp.dll
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\DelegatesApp.pdb
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\DelegatesApp.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day9\DelegatesSolution\DelegatesApp\obj\Debug\net6.0\ref\DelegatesApp.dll

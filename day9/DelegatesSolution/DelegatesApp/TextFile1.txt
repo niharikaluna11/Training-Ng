@@ -1,0 +1,34 @@
+﻿
+
+DAY 9: DELEGATES
+
+action no return
+func any return
+predicate boolean 
+
+
+A delegate is an object which refers to a method or you can say it is a reference type variable that can hold a reference to the methods.
+Delegate is like reference to the function
+/////////public delegate void CalculateDelegate(int n1, int n2);
+
+Action is a type of delegate that is pre defined.
+Action delegate is an in-built generic type delegate. 
+This delegate saves you from defining a custom delegate as shown in the below examples and make your program more readable and optimize
+//////////////Action<int, int> calculateDelegate = Multiply;
+
+
+A Func is a built-in generic type delegate.
+This delegate saves you from defining a custom delegate like as shown in the above example and make your program more readable and optimized.
+As we know that, Func is a generic delegate so it is defined under System namespace. 
+It can contain minimum 0 and maximum of 16 input parameters in it and contain only one out parameter. 
+The last parameter of the Func delegate is the out parameter which is considered as return type and used for the result.
+Func is generally used for those methods which are going to return a value, or in other words, Func delegate is used for value returning methods. 
+It can also contain parameters of the same type or of different types.
+////////////Func<int, int, int> calculateDelegate = Multiply;
+
+
+A Predicate delegate is an in-built generic type delegate.
+This delegate is defined under System namespace.
+It works with those methods which contain some set of criteria and determine whether
+the passed parameter fulfill the given criteria or not. 
+This delegate takes only one input and returns the value in the form of true or false

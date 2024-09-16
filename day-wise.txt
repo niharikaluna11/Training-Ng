@@ -1,0 +1,5 @@
+DAY WISE TOPICS :)
+
+DAY1: GIT & ITS COMMANDS
+
+DAY9: C# DELEGATES : delegates, action delegates, func delegates
