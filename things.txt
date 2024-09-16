@@ -6,7 +6,23 @@ GitHub : https://github.com/gayat19/CelsiorFSDDotnet
 Google Sheet Link for GitHub 
 https://docs.google.com/spreadsheets/d/1We-d3OY7OnR2vtDfDq_5uQsNao1_rnfqxsH-uJOaMso/edit?usp=sharing 
 
+ ------------------------------------------------------------------------------------------------
+
+steps of your application
+   Creating the models 
+      Ensure you have all the properties that are required
+      Ensure you have overridden the ToString for printing purposes
+   Think of the business logics that are required
+      Create the Interface with the behaviour listing
+      Implement the same in appropriate classes
+   Think about the functionalities be to exposed to end user
+       Ensure you have taken the right input
+       Ensure you are showing the correct output
  
+Follow all the coding standards
+Ensure your application is modular
+Ensure fast TAT
+Ensure you are minimizing repeated codes
 
  
 
