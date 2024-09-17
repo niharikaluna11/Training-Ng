@@ -6,16 +6,23 @@ using System.Threading.Tasks;
 
 namespace ClinicAppliScation
 {
-    internal interface IAppointment
+    public interface IAppointment 
     {
-        int id { get; set; }
+        int Id { get; set; }
 
         //foreign key
         int DoctorId { get; set; }
         int PatientId { get; set; }
 
+        DateTime AppointmentTime { get; set; }
+        TimeSpan Duration { get; }
+
         //aappointment tym & duration
 
         //check appointment & see future available appointment
+
+
+        bool CheckAppointmentOverlap(int doctorId, DateTime appointmentTime);
+        bool IsFutureAppointment();
     }
 }

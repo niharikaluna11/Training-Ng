@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClinicApplication
 {
-    internal interface IPerson
+    public interface IPerson
     {
         int Id { get; set; }
         string Name { get; set; }
@@ -16,7 +16,7 @@ namespace ClinicApplication
         string Password { get; set; }
 
         void Register(string name,string phoneNumber, string email,string uname, string password);
-        void login(string uname, string password);
+        bool Login(string uname, string password);
 
     }
 }

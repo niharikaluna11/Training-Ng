@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace ClinicApplication
 {
-    internal interface IPatient : IPerson
+    public interface IPatient : IPerson
     {
         //doctor list & book appointment & list them
-      
+        List<Doctor> GetAvailableDoctors();
+        bool BookAppointment(int doctorId, DateTime appointmentTime);
+        List<Appointment> ViewAppointments();
     }
 }
