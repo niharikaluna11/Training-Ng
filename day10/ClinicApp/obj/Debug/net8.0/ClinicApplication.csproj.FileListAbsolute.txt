@@ -1,0 +1,14 @@
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\bin\Debug\net8.0\ClinicApplication.exe
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\bin\Debug\net8.0\ClinicApplication.deps.json
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\bin\Debug\net8.0\ClinicApplication.runtimeconfig.json
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\bin\Debug\net8.0\ClinicApplication.dll
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\bin\Debug\net8.0\ClinicApplication.pdb
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\obj\Debug\net8.0\ClinicApplication.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\obj\Debug\net8.0\ClinicApplication.AssemblyInfoInputs.cache
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\obj\Debug\net8.0\ClinicApplication.AssemblyInfo.cs
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\obj\Debug\net8.0\ClinicApplication.csproj.CoreCompileInputs.cache
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\obj\Debug\net8.0\ClinicApplication.dll
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\obj\Debug\net8.0\refint\ClinicApplication.dll
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\obj\Debug\net8.0\ClinicApplication.pdb
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\obj\Debug\net8.0\ClinicApplication.genruntimeconfig.cache
+C:\Users\niharika.garg.PYRAMIDINDIA\source\repos\ClinicApp\obj\Debug\net8.0\ref\ClinicApplication.dll

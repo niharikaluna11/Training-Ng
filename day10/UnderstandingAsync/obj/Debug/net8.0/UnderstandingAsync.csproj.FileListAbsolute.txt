@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\bin\Debug\net8.0\UnderstandingAsync.exe
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\bin\Debug\net8.0\UnderstandingAsync.deps.json
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\bin\Debug\net8.0\UnderstandingAsync.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\bin\Debug\net8.0\UnderstandingAsync.dll
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\bin\Debug\net8.0\UnderstandingAsync.pdb
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\UnderstandingAsync.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\UnderstandingAsync.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\UnderstandingAsync.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\UnderstandingAsync.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\UnderstandingAsync.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\UnderstandingAsync.dll
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\refint\UnderstandingAsync.dll
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\UnderstandingAsync.pdb
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\UnderstandingAsync.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingAsync\obj\Debug\net8.0\ref\UnderstandingAsync.dll

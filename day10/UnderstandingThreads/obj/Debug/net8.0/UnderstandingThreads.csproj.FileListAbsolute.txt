@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\bin\Debug\net8.0\UnderstandingThreads.exe
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\bin\Debug\net8.0\UnderstandingThreads.deps.json
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\bin\Debug\net8.0\UnderstandingThreads.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\bin\Debug\net8.0\UnderstandingThreads.dll
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\bin\Debug\net8.0\UnderstandingThreads.pdb
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\UnderstandingThreads.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\UnderstandingThreads.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\UnderstandingThreads.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\UnderstandingThreads.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\UnderstandingThreads.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\UnderstandingThreads.dll
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\refint\UnderstandingThreads.dll
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\UnderstandingThreads.pdb
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\UnderstandingThreads.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingThreads\obj\Debug\net8.0\ref\UnderstandingThreads.dll

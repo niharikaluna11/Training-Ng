@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day10\Application\bin\Debug\net8.0\Application.exe
+D:\Niharikaluna-github\Training-Ng\day10\Application\bin\Debug\net8.0\Application.deps.json
+D:\Niharikaluna-github\Training-Ng\day10\Application\bin\Debug\net8.0\Application.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day10\Application\bin\Debug\net8.0\Application.dll
+D:\Niharikaluna-github\Training-Ng\day10\Application\bin\Debug\net8.0\Application.pdb
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\Application.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\Application.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\Application.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\Application.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\Application.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\Application.dll
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\refint\Application.dll
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\Application.pdb
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\Application.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day10\Application\obj\Debug\net8.0\ref\Application.dll

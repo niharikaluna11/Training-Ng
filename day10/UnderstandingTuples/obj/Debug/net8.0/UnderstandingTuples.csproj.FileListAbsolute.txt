@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\bin\Debug\net8.0\UnderstandingTuples.exe
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\bin\Debug\net8.0\UnderstandingTuples.deps.json
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\bin\Debug\net8.0\UnderstandingTuples.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\bin\Debug\net8.0\UnderstandingTuples.dll
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\bin\Debug\net8.0\UnderstandingTuples.pdb
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\UnderstandingTuples.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\UnderstandingTuples.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\UnderstandingTuples.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\UnderstandingTuples.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\UnderstandingTuples.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\UnderstandingTuples.dll
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\refint\UnderstandingTuples.dll
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\UnderstandingTuples.pdb
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\UnderstandingTuples.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day10\UnderstandingTuples\obj\Debug\net8.0\ref\UnderstandingTuples.dll
