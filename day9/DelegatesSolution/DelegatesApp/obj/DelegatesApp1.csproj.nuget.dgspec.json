@@ -10,11 +10,11 @@
         "projectUniqueName": "D:\\Niharikaluna-github\\Training-Ng\\day9\\DelegatesSolution\\DelegatesApp\\DelegatesApp1.csproj",
         "projectName": "DelegatesApp1",
         "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\day9\\DelegatesSolution\\DelegatesApp\\DelegatesApp1.csproj",
-        "packagesPath": "C:\\Users\\niharika.garg\\.nuget\\packages\\",
+        "packagesPath": "C:\\Users\\niharika.garg.PYRAMIDINDIA\\.nuget\\packages\\",
         "outputPath": "D:\\Niharikaluna-github\\Training-Ng\\day9\\DelegatesSolution\\DelegatesApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\niharika.garg\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\niharika.garg.PYRAMIDINDIA\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

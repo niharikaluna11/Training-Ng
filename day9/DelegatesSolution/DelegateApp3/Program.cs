@@ -56,6 +56,7 @@
             static void Main(string[] args)
             {
                 new Program();
+            Console.ReadKey();
             }
         }
     }

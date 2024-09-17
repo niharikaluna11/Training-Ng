@@ -11,7 +11,7 @@ https://docs.google.com/spreadsheets/d/1We-d3OY7OnR2vtDfDq_5uQsNao1_rnfqxsH-uJOa
 steps of your application
    Creating the models 
       Ensure you have all the properties that are required
-      Ensure you have overridden the ToString for printing purposes
+      Ensure you have overridden the To-String for printing purposes
    Think of the business logics that are required
       Create the Interface with the behaviour listing
       Implement the same in appropriate classes
