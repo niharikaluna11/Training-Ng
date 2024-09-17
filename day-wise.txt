@@ -1,5 +1,12 @@
 DAY WISE TOPICS :)
 
-DAY1: GIT & ITS COMMANDS
-
-DAY9: C# DELEGATES : delegates, action delegates, func delegates
+DAY1:  GIT & ITS COMMANDS
+DAY2:  GIT completed
+DAY3:  C# Basics
+DAY4:  Class,Creation of members in class,Creating Object,Access Members,Access Specifiers
+DAY5:  OOPS Concepts
+DAY6:  Class & Sequence Diagram, Interface,Abstract Class,
+DAY7:  Exception Handling
+DAY8:  C# Collections
+DAY9:  C# DELEGATES : delegates, action delegates, func delegates
+DAY10: C# Nullable types ,Checked BLock ,Tuples,ErrorHandling, Threading,Task
