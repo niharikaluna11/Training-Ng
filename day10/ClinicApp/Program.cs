@@ -198,23 +198,8 @@ namespace ClinicApplication
                                     .Where(a => a.DoctorId == doctor.Id) // Filter appointments for the current patient
                                     .ToList();
 
-                                if (appointmentss.Count > 0)
-                                {
-
-                                    foreach (var appointment in appointmentss)
-                                    {
-                                        // Display patient details
-                                        Console.WriteLine("---------------------------------------------------");
-                                        Console.WriteLine($"Patient ID: {patient.Id}:-\n \t Name: {patient.Name} \n \t Email: {patient.Email}  \n \t Number: {patient.PhoneNumber}");
-                                        Console.WriteLine($"Appointment on {appointment.AppointmentTime}");
-                                        Console.WriteLine("---------------------------------------------------");
-
-                                    }
-                                }
-                                else
-                                {
-                                    Console.WriteLine($"No appointments found for {doctor.Name}.");
-                                }
+                                 Console.WriteLine($"Patient ID: {patient.Id}:-\n \t Name: {patient.Name} \n \t Email: {patient.Email}  \n \t Number: {patient.PhoneNumber}");
+                                                                     
                             }
                         }
                        
@@ -224,29 +209,34 @@ namespace ClinicApplication
                     case 3:
                         //both
                         //all & future only
-                        List<Appointment> appointments = doctor.ViewAppointments();
-                        List<Patient> allPatientsDoctor = doctor.ViewPatients();
+                        List<Appointment> appointments = doctor.ViewAppointments()
+                                        .Where(a => a.DoctorId == doctor.Id)
+                                        .ToList();  // Filter appointments for the current doctor
+                        List<Patient> allPatientsDoctor = doctor.ViewPatients();  // Assuming this already retrieves patients relevant to the doctor
+
                         if (appointments.Count > 0)
                         {
                             Console.WriteLine("\nYour Appointments:");
                             foreach (var appointment in appointments)
                             {
                                 Console.WriteLine("---------------------------------------------------");
-                                //Console.WriteLine($"Appointment with Doctor :- ID {appointment.DoctorId} \n \t \t   on {appointment.AppointmentTime}");
                                 Console.WriteLine($"Appointment with Patient :- ID {appointment.PatientId} on {appointment.AppointmentTime}");
-                                foreach (var patient in allPatientsDoctor)
+
+                                // Find the patient for the current appointment
+                                var patient = allPatientsDoctor.FirstOrDefault(p => p.Id == appointment.PatientId);
+                                if (patient != null)
                                 {
-                                    if (patient.Id == appointment.PatientId)
-                                    {
-                                        Console.WriteLine($"Patient Name : {patient.Name} ,\n   \t Email :{patient.Email} ,\n  \t Number :{patient.PhoneNumber}");
-
-                                    }
+                                    Console.WriteLine($"Patient Name : {patient.Name},\n\t Email: {patient.Email},\n\t Number: {patient.PhoneNumber}");
                                 }
-                                Console.WriteLine("---------------------------------------------------");
 
-                              
+                                Console.WriteLine("---------------------------------------------------");
                             }
                         }
+                        else
+                        {
+                            Console.WriteLine("No appointments found for this doctor.");
+                        }
+
 
                         break;
                     
@@ -407,7 +397,7 @@ namespace ClinicApplication
 
                         List<Doctor> allDoctorrs = patient.GetAvailableDoctors();
 
-                        Console.Write("These are available Doctor Specializationss: ");
+                        Console.Write("These are available Doctor Specializationss:\n ");
                         int count = 1;
                         foreach (var doctor in allDoctorrs)
                         {
@@ -416,8 +406,9 @@ namespace ClinicApplication
                                 count++;   
                          }
 
-                        Console.Write("Enter Doctor Specialization: ");
-                        String specialization = Console.ReadLine();
+                        // Assuming DoctorRegister.GetValidSpecialization is static
+                        string specializationInput = "Enter specialization";
+                        string specialization = DoctorRegister.GetValidSpecialization(specializationInput);
 
 
                         if (allDoctorrs.Count == 0)
@@ -432,15 +423,29 @@ namespace ClinicApplication
                                 {
                                     //doctor listing
                                     Console.WriteLine("---------------------------------------------------");
-                                    Console.WriteLine($"Doctor ID: {doctor.Id}:-\n \t Name: {doctor.Name} \n \t Email: {doctor.Email} \n \t Number: {doctor.PhoneNumber},  \n  \t Specialization :{doctor.Specialization}");
+                                    Console.WriteLine($"Doctor ID: {doctor.Id} :: \t Name: {doctor.Name} \n ");
                                     Console.WriteLine("---------------------------------------------------");
                                 }
                                
                             }
                         }
 
+                       
                         Console.Write("Enter Doctor ID: ");
-                        int doctorId = int.Parse(Console.ReadLine());
+                        string input = Console.ReadLine();
+                        int doctorId;
+
+                        if (int.TryParse(input, out doctorId))
+                        {
+                            // Successfully parsed the Doctor ID
+                            Console.WriteLine($"Doctor ID entered: {doctorId}");
+                            // Proceed with the rest of your logic
+                        }
+                        else
+                        {
+                            // Invalid input, handle accordingly
+                            Console.WriteLine("Invalid Doctor ID. Please enter a valid number.");
+                        }
 
                         Console.Write("Enter Appointment Date and Time (yyyy-mm-dd hh:mm): ");
                         DateTime appointmentTime;

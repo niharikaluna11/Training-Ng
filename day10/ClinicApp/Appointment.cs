@@ -18,13 +18,24 @@ namespace ClinicApplication
         public bool CheckAppointmentOverlap(int doctorId, DateTime appointmentTime)
         {
             // Check for overlap with existing appointments for the same doctor
-            return ClinicData.Appointments.Any(a => a.DoctorId == doctorId &&
-                (a.AppointmentTime < appointmentTime.Add(Duration) && a.AppointmentTime.Add(a.Duration) > appointmentTime));
+            try
+            {
+                return ClinicData.Appointments.Any(a => a.DoctorId == doctorId &&
+              (a.AppointmentTime < appointmentTime.Add(Duration) && a.AppointmentTime.Add(a.Duration) > appointmentTime));
+
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine($"exception occured {ex.Message}");
+                return false;
+            }
+          
         }
 
         public bool IsFutureAppointment()
         {
             return AppointmentTime > DateTime.Now;
         }
+
     }
 }

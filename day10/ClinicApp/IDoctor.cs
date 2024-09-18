@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace ClinicApplication
 {
-    public interface IDoctor : IPerson
+    public interface IDoctor : IPerson //doctor is a person
     {
         //patient list & appointment list
-        List<Patient> ViewPatients();
+        List<Patient> ViewPatients(); 
+
         List<Appointment> ViewAppointments();
     }
 }

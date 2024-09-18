@@ -11,13 +11,23 @@ namespace ClinicApplication
         public required string Specialization { get; set; }
         public List<Appointment> ViewAppointments()
         {
-            if (ClinicData.Appointments.Count == 0)
+            try
             {
-                Console.WriteLine("No Appointments available at the moment.");
-                return new List<Appointment>();
-            }
+                if (ClinicData.Appointments.Count == 0)
+                {
+                    Console.WriteLine("No Appointments available at the moment.");
+                    return new List<Appointment>();
+                }
 
-            return ClinicData.Appointments;
+                return ClinicData.Appointments;
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"exception {ex.Message}");
+                return null;
+            }
+           
         }
 
         //public List<Patient> ViewMyPatients()
@@ -31,14 +41,23 @@ namespace ClinicApplication
 
         public List<Patient> ViewPatients()
         {
-            if (ClinicData.Patients.Count == 0)
+            try
             {
-                Console.WriteLine("No patients available at the moment.");
-                return new List<Patient>();
+                if (ClinicData.Patients.Count == 0)
+                {
+                    Console.WriteLine("No patients available at the moment.");
+                    return new List<Patient>();
+                }
+
+                // Returning all  patients from ClinicData
+                return ClinicData.Patients;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"exception {ex.Message}");
+                return null;
             }
 
-            // Returning all  patients from ClinicData
-            return ClinicData.Patients;
         }
 
         

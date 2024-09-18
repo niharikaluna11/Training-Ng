@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ClinicAppliScation
 {
-    public interface IAppointment 
+    public interface IAppointment  //appointment detailsss
     {
         int Id { get; set; }
 
@@ -24,5 +24,6 @@ namespace ClinicAppliScation
 
         bool CheckAppointmentOverlap(int doctorId, DateTime appointmentTime);
         bool IsFutureAppointment();
+        //future is not done yet 
     }
 }
