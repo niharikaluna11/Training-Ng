@@ -5,9 +5,16 @@ namespace ClinicApplication
 {
     public class Program
     {
+        public static void FetchDoctors()
+        {
+            Console.WriteLine("Fetching doctors in the background...");
+            Thread.Sleep(2000); // Simulate a delay of 5 seconds for fetching doctors
+            Console.WriteLine("Doctors fetched successfully.");
+        }
+
         //--------------------------------------------------------------------------------------------------
         //main menu for all the functioning
-         void PrintMenu()
+        void PrintMenu()
         {
             // printing the main menu
             Console.ForegroundColor = ConsoleColor.Blue;
@@ -399,10 +406,10 @@ namespace ClinicApplication
 
                         Console.Write("These are available Doctor Specializationss:\n ");
                         int count = 1;
-                        foreach (var doctor in allDoctorrs)
+                        foreach (var speciality in allDoctorrs.Select(e=>e.Specialization).Distinct())
                         {
                                 //specialization listing
-                                Console.WriteLine($"{count}. {doctor.Specialization}");
+                                Console.WriteLine($"{count}. {speciality}");
                                 count++;   
                          }
 
@@ -484,6 +491,11 @@ namespace ClinicApplication
             
             Program program = new Program();
             //InitializeData();
+
+            // Start a background thread to fetch doctor data
+            Thread fetchDoctorsThread = new Thread(FetchDoctors);
+            fetchDoctorsThread.Start();
+
             int choice = -1;
             while (choice != 0)
             {
@@ -513,8 +525,13 @@ namespace ClinicApplication
                         break;
                 }
             }
+            // Ensure the background thread finishes before exiting the application
+            fetchDoctorsThread.Join();
+
+            Console.WriteLine("Application exited. All tasks completed.");
             Console.ReadKey();
-            //end of main
+            //Console.ReadKey();
+            ////end of main
         }
 
     } // end of program class
