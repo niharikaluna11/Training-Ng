@@ -1,0 +1,5 @@
+Day11:
+Algorithm logics
+https://www.hackerrank.com/challenges/compare-the-triplets/problem?isFullScreen=true
+https://www.hackerrank.com/challenges/a-very-big-sum/problem?isFullScreen=true
+https://www.hackerrank.com/challenges/diagonal-difference/problem?isFullScreen=true
