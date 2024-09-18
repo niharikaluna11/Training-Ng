@@ -11,18 +11,24 @@ namespace ClinicApplication
         public string UserName { get; set; }
         public string Password { get; set; }
 
-        public bool BookAppointment(int doctorId, DateTime appointmentTime)
+        public bool BookAppointment(int doctorId,int patientId, DateTime appointmentTime)
         {
             // Check if the doctor exists and if the appointment time is valid
             Doctor doctor = ClinicData.Doctors.FirstOrDefault(d => d.Id == doctorId);
+            Patient patient = ClinicData.Patients.FirstOrDefault(d=>d.Id == patientId);
             if (doctor == null)
             {
                 Console.WriteLine("Doctor not found.");
                 return false;
             }
+            if (patient == null)
+            {
+                Console.WriteLine("Patient not found.");
+                return false;
+            }
 
             // Check if the appointment time is available
-            if (ClinicData.Appointments.Any(a => a.DoctorId == doctorId && a.AppointmentTime == appointmentTime))
+            if (ClinicData.Appointments.Any(a => a.DoctorId == doctorId && a.AppointmentTime == appointmentTime && a.PatientId==patientId))
             {
                 Console.WriteLine("Appointment slot is already taken.");
                 return false;
@@ -42,10 +48,11 @@ namespace ClinicApplication
             return true;
         }
 
-        public List<Appointment> ViewAppointments()
+        public List<Appointment> ViewAppointments() //only that person appointmentss 
         {
             return ClinicData.Appointments.Where(a => a.PatientId == this.Id).ToList();
         }
+
 
         public List<Doctor> GetAvailableDoctors()
         {

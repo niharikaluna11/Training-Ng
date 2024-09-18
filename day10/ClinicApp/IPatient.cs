@@ -10,7 +10,7 @@ namespace ClinicApplication
     {
         //doctor list & book appointment & list them
         List<Doctor> GetAvailableDoctors();
-        bool BookAppointment(int doctorId, DateTime appointmentTime);
+        bool BookAppointment(int doctorId,int patientId, DateTime appointmentTime);
         List<Appointment> ViewAppointments();
     }
 }

@@ -5,6 +5,7 @@ namespace ClinicApplication
 {
     public class Program
     {
+        //--------------------------------------------------------------------------------------------------
         //main menu for all the functioning
          void PrintMenu()
         {
@@ -61,6 +62,8 @@ namespace ClinicApplication
             Console.WriteLine("5- Clear Screen");
             Console.ResetColor();
         }
+
+        //------------------------------------------------------------------------------------------------
 
         //Doctor's main menu - register & login done
         void DoctorMainMenu()
@@ -156,6 +159,7 @@ namespace ClinicApplication
                 switch (option)
                 {
                     case 1:
+                        //view all patientss
                         List<Patient> allPatients = doctor.ViewPatients();
                         if (allPatients.Count == 0)
                         {
@@ -163,28 +167,84 @@ namespace ClinicApplication
                         }
                         else
                         {
+                            Console.WriteLine("ALL Patients :)");
                             foreach (var patient in allPatients)
                             {
-                                Console.WriteLine($"Patient ID: {patient.Id}:-\n Name: {patient.Name} Email: {patient.Email} Number: {patient.PhoneNumber}");
+                                Console.WriteLine("---------------------------------------------------");
+                                Console.WriteLine($"Patient ID: {patient.Id}:-\n \t Name: {patient.Name} \n \t Email: {patient.Email}  \n \t Number: {patient.PhoneNumber}");
+                                Console.WriteLine("---------------------------------------------------");
+
                             }
                         }
                         break;
                     case 2:
+                        //viewmypatients
+                        //only mine
+                        // View my patients (only for the logged-in doctor)
+                        List<Patient> allPatientsOfDoctor = doctor.ViewPatients();
+
+                        if (allPatientsOfDoctor.Count == 0)
+                        {
+                            Console.WriteLine("No patients found.");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"Patients of Dr. {doctor.Name}:");
+
+                            foreach (var patient in allPatientsOfDoctor)
+                            {
+                                // Find the appointment for this patient with the current doctor
+                                List<Appointment> appointmentss = doctor.ViewAppointments()
+                                    .Where(a => a.DoctorId == doctor.Id) // Filter appointments for the current patient
+                                    .ToList();
+
+                                if (appointmentss.Count > 0)
+                                {
+
+                                    foreach (var appointment in appointmentss)
+                                    {
+                                        // Display patient details
+                                        Console.WriteLine("---------------------------------------------------");
+                                        Console.WriteLine($"Patient ID: {patient.Id}:-\n \t Name: {patient.Name} \n \t Email: {patient.Email}  \n \t Number: {patient.PhoneNumber}");
+                                        Console.WriteLine($"Appointment on {appointment.AppointmentTime}");
+                                        Console.WriteLine("---------------------------------------------------");
+
+                                    }
+                                }
+                                else
+                                {
+                                    Console.WriteLine($"No appointments found for {doctor.Name}.");
+                                }
+                            }
+                        }
                        
-                      //viewmypatients
-                      //only mine
+
                         break;
 
                     case 3:
                         //both
                         //all & future only
                         List<Appointment> appointments = doctor.ViewAppointments();
+                        List<Patient> allPatientsDoctor = doctor.ViewPatients();
                         if (appointments.Count > 0)
                         {
                             Console.WriteLine("\nYour Appointments:");
                             foreach (var appointment in appointments)
                             {
-                                Console.WriteLine($"Appointment with Doctor ID {appointment.DoctorId} on {appointment.AppointmentTime}");
+                                Console.WriteLine("---------------------------------------------------");
+                                //Console.WriteLine($"Appointment with Doctor :- ID {appointment.DoctorId} \n \t \t   on {appointment.AppointmentTime}");
+                                Console.WriteLine($"Appointment with Patient :- ID {appointment.PatientId} on {appointment.AppointmentTime}");
+                                foreach (var patient in allPatientsDoctor)
+                                {
+                                    if (patient.Id == appointment.PatientId)
+                                    {
+                                        Console.WriteLine($"Patient Name : {patient.Name} ,\n   \t Email :{patient.Email} ,\n  \t Number :{patient.PhoneNumber}");
+
+                                    }
+                                }
+                                Console.WriteLine("---------------------------------------------------");
+
+                              
                             }
                         }
 
@@ -204,6 +264,9 @@ namespace ClinicApplication
             }
            
         }
+
+
+        //--------------------------------------------------------------------------------------------------------
 
         //Patient's main menu - register & login done
         void PatientMainMenu()
@@ -302,7 +365,10 @@ namespace ClinicApplication
                         {
                             foreach (var doctor in allDoctors)
                             {
-                                Console.WriteLine($"Doctor ID: {doctor.Id}:-\n Name: {doctor.Name} Email: {doctor.Email} Number: {doctor.PhoneNumber}, Specialization :{doctor.Specialization}");
+                                //doctor listing
+                                Console.WriteLine("---------------------------------------------------");
+                                Console.WriteLine($"Doctor ID: {doctor.Id}:-\n \t Name: {doctor.Name} \n \t Email: {doctor.Email} \n \t E Number: {doctor.PhoneNumber},  \n \t ESpecialization :{doctor.Specialization}");
+                                Console.WriteLine("---------------------------------------------------");
                             }
                         }
                         break;
@@ -310,12 +376,23 @@ namespace ClinicApplication
                         //view appointments
                         //all & future only
                         List<Appointment> appointments = patient.ViewAppointments();
+                        List<Doctor> doctors = patient.GetAvailableDoctors();
                         if (appointments.Count > 0)
                         {
                             Console.WriteLine("\nYour Appointments:");
-                            foreach (var appointment in appointments)
+                            foreach (var appointment in appointments )
                             {
-                                Console.WriteLine($"Appointment with Doctor ID {appointment.DoctorId} on {appointment.AppointmentTime}");
+                                Console.WriteLine("---------------------------------------------------");
+                                Console.WriteLine($"Appointment with Doctor :- ID {appointment.DoctorId} \n \t \t naming  on {appointment.AppointmentTime}");
+                                foreach (var doctor in doctors)
+                                {
+                                    if(doctor.Id == appointment.DoctorId)
+                                    {
+                                        Console.WriteLine($"Doctor Name : {doctor.Name} ,\n   \t Email :{doctor.Email} ,\n  \t Number :{doctor.PhoneNumber}");
+
+                                    }
+                                }
+                                Console.WriteLine("---------------------------------------------------");
                             }
                         }
                         else
@@ -323,7 +400,44 @@ namespace ClinicApplication
                             Console.WriteLine("You have no appointments.");
                         }
                         break;
+
                     case 3:
+                        //listing first
+                        //booking thn
+
+                        List<Doctor> allDoctorrs = patient.GetAvailableDoctors();
+
+                        Console.Write("These are available Doctor Specializationss: ");
+                        int count = 1;
+                        foreach (var doctor in allDoctorrs)
+                        {
+                                //specialization listing
+                                Console.WriteLine($"{count}. {doctor.Specialization}");
+                                count++;   
+                         }
+
+                        Console.Write("Enter Doctor Specialization: ");
+                        String specialization = Console.ReadLine();
+
+
+                        if (allDoctorrs.Count == 0)
+                        {
+                            Console.WriteLine("No Doctors found.");
+                        }
+                        else
+                        {
+                            foreach (var doctor in allDoctorrs)
+                            {
+                                if(doctor.Specialization == specialization)
+                                {
+                                    //doctor listing
+                                    Console.WriteLine("---------------------------------------------------");
+                                    Console.WriteLine($"Doctor ID: {doctor.Id}:-\n \t Name: {doctor.Name} \n \t Email: {doctor.Email} \n \t Number: {doctor.PhoneNumber},  \n  \t Specialization :{doctor.Specialization}");
+                                    Console.WriteLine("---------------------------------------------------");
+                                }
+                               
+                            }
+                        }
 
                         Console.Write("Enter Doctor ID: ");
                         int doctorId = int.Parse(Console.ReadLine());
@@ -336,7 +450,7 @@ namespace ClinicApplication
                             return;
                         }
 
-                        patient.BookAppointment(doctorId, appointmentTime);
+                        patient.BookAppointment(doctorId,patient.Id, appointmentTime);
 
                         //book appointment
 
@@ -357,10 +471,10 @@ namespace ClinicApplication
 
         }
 
-       
-            //main code
-            //main menu of 'prestige clinic :)'
-            static void Main(string[] args)
+       //-------------------------------------------------------------------------------------------------
+       //main code
+       //main menu of 'prestige clinic :)'
+       static void Main(string[] args)
         {
             
             Program program = new Program();

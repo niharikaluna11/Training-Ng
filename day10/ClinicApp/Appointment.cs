@@ -13,7 +13,7 @@ namespace ClinicApplication
         public int PatientId { get; set; }
         public int DoctorId { get; set; }
         public DateTime AppointmentTime { get; set; }
-        public TimeSpan Duration { get; private set; } = TimeSpan.FromMinutes(30);
+        public TimeSpan Duration { get; private set; } = TimeSpan.FromMinutes(40);
 
         public bool CheckAppointmentOverlap(int doctorId, DateTime appointmentTime)
         {
