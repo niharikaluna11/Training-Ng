@@ -1,0 +1,35 @@
+html {
+  font-size: 14px;
+ 
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+  
+}
+
+body {
+  margin-bottom: 160px;
+  color:black;
+  background-color:azure;
+
+}
+
+.custom-button {
+    color:purple;
+    background-color: white;
+}
+.custom-button:hover {
+     background-color: lightgray;
+}
+.text-main {
+    text-align: center !important;
+    color:darkblue
+}

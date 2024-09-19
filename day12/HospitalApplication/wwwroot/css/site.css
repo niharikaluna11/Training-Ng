@@ -1,0 +1,77 @@
+html {
+    font-size: 13px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 13px;
+    }
+
+    button {
+        font-size: 10px;
+    }
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: azure;
+}
+
+.doctor-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; 
+}
+
+.doctor-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px;
+    text-align: center;
+    width: 180px;
+
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s; 
+}
+.nav-item.ml-auto {
+    margin-left: auto;
+    padding-right: 35px; 
+   
+}
+.patient-logo {
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Keep the aspect ratio */
+    border-radius: 50%; /* Optional: makes the image round */
+}
+
+
+    .doctor-card:hover {
+        transform: scale(1.05); 
+    }
+
+    .doctor-card img {
+        border-radius: 50%;
+        width: 90px;
+        height: 90px; 
+        margin-bottom: 15px;
+    }
+
+.button {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    color: black;
+    background-color: lightcyan;
+    width: 120px;
+    cursor: pointer;
+}
+
+    .button:hover {
+        background-color: lightblue; 
+    }

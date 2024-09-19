@@ -1,0 +1,25 @@
+﻿@using FirstWebApp.Models
+@{
+    ViewData["Title"] = "Customer Details";
+}
+
+<h1>Welcome @ViewData["Customer Name"]</h1>
+
+<div>
+    <h2>Using ViewData</h2>
+    Customer Name: @ViewData["Customer Name"]
+    <br />
+    Customer Age: @ViewData["Customer Age"]
+    <br />
+    @* Explicit casting for ViewData object *@
+    Customer ID from ViewData object: @(((Customer)ViewData["Customer"]).Id)
+</div>
+
+<hr />
+
+<div>
+    <h2>Using ViewBag</h2>
+    Name: @ViewBag.Customer.Name
+    <br />
+    Age: @ViewBag.Customer.Age
+</div>
