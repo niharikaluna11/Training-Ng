@@ -12,4 +12,6 @@ DAY9:  C# DELEGATES : delegates, action delegates, func delegates
 DAY10: C# Nullable types ,Checked BLock ,Tuples,ErrorHandling, Threading,Task
 Day11: C# Logics DSA - HackerRank Qs
 DAY12: ASP NET Core Web Application with MVC (HTTP request & response, MVC, Model, View, Controller)
+DAY13: ASP NET Web Application using CRUD Operations
+
 
