@@ -1,0 +1,50 @@
+﻿@model IEnumerable<FirstApp.Models.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p class="text-sm-end">
+    <a asp-action="Create" style="color:#3a2f30">Create New</a>
+</p>
+
+
+
+<h1>Product Listing</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Product Image</th>
+            <th>Product Name</th>
+            <th>Price (&#x20b9;)</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td><img src="@product.Image" alt="@product.Image"></td>
+                <td>@product.Name</td>
+                <td>&#x20b9; @product.Price</td>
+               
+                <td>
+
+                    <a asp-action="Edit" asp-route-pid="@product.Id" class="btn btn-light">Update </a>
+
+                </td>
+
+                <td>
+
+                    <a asp-action="Delete" asp-route-pid="@product.Id" class="btn btn-light">Delete</a>
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+</table>

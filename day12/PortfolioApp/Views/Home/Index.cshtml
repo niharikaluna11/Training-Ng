@@ -1,0 +1,324 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<!--===== HEADER =====-->
+<header class="l-header">
+    <nav class="nav bd-grid">
+        <div>
+            <a href="#" class="nav__logo">Niharika Garg</a>
+        </div>
+
+        <div class="nav__menu" id="nav-menu">
+            <ul class="nav__list">
+                <li class="nav__item"><a href="#home" class="nav__link active-link">Home</a></li>
+                <li class="nav__item"><a href="#about" class="nav__link">About</a></li>
+                <li class="nav__item"><a href="#skills" class="nav__link">Skills</a></li>
+                <li class="nav__item"><a href="#work" class="nav__link">Work</a></li>
+                <li class="nav__item"><a href="#contact" class="nav__link">Contact</a></li>
+            </ul>
+        </div>
+
+        <div class="nav__toggle" id="nav-toggle">
+            <i class='bx bx-menu'></i>
+        </div>
+    </nav>
+</header>
+
+<main class="l-main">
+    <!--===== HOME =====-->
+    <section class="home bd-grid" id="home">
+        <div class="home__data">
+            <h1 class="home__title">Hi,<br>I'am <span class="home__title-color">Niharika Garg</span><br> Software Engineer </h1>
+
+            <a href="#contact" class="button">Contact</a>
+        </div>
+
+        <div class="home__social">
+            <a href="" class="home__social-icon"><i class='bx bxl-linkedin'></i></a>
+            <a href="" class="home__social-icon"><i class='bx bxl-behance'></i></a>
+            <a href="" class="home__social-icon"><i class='bx bxl-github'></i></a>
+        </div>
+
+        <div class="home__img">
+            <svg class="home__blob" viewBox="0 0 479 467" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                 <mask id="mask0" mask-type="alpha">
+                     <path d="M9.19024 145.964C34.1253 76.5814 114.865 54.7299 184.111 29.4823C245.804 6.98884 311.86 -14.9503 370.735 14.143C431.207 44.026 467.948 107.508 477.191 174.311C485.897 237.229 454.931 294.377 416.506 344.954C373.74 401.245 326.068 462.801 255.442 466.189C179.416 469.835 111.552 422.137 65.1576 361.805C17.4835 299.81 -17.1617 219.583 9.19024 145.964Z" />
+                 </mask>
+                <g mask="url(#mask0)">
+                    <path d="M9.19024 145.964C34.0253 76.5814 114.865 14.7299 184.111 29.4823C245.804 6.98884 311.86 -14.9503 370.735 14.143C431.207 44.026 467.948 107.508 477.191 174.311C485.897 237.229 454.931 294.377 416.506 344.954C373.74 401.245 326.068 462.801 255.442 466.189C179.416 469.835 111.552 422.137 65.1576 361.805C17.4835 299.81 -17.1617 219.583 9.19024 145.964Z" />
+                    <image class="home__blob-img" x="50" y="60" href="img/image-ng.png" />
+                </g>
+            </svg>
+        </div>
+    </section>
+
+   <!--===== ABOUT =====-->
+<section class="about section" id="about">
+    <h2 class="section-title">About</h2>
+
+    <div class="about__container bd-grid">
+        <div class="about__img">
+            <img src="img/ng-about.jpg" alt="Profile Picture">
+        </div>
+
+        <div>
+            <h2 class="about__subtitle">I'm Niharika Garg</h2>
+                <p class="about__text">
+                    I am a developer continuously learning new things and enhancing my skills in modern programming concepts and web design.<br>
+                    I am from Ghaziabad and completed my schooling at Ch. Chabil Dass Public School.<br>
+                    I graduated in 2024 from Banasthali Vidyapith in Information Technology with a CGPA of 9.19.<br>
+                    In my free time, I enjoy listening to music.
+                </p>
+
+        </div>
+    </div>
+</section>
+
+
+    <!--===== SKILLS =====-->
+    <!--===== SKILLS =====-->
+    <section class="skills section" id="skills">
+        <h2 class="section-title">Skills</h2>
+
+        <div class="skills__container bd-grid">
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bxl-html5 skills__icon'></i>
+                    <span class="skills__name">HTML5</span>
+                </div>
+                <div class="skills__bar skills__html"></div>
+                <div>
+                    <span class="skills__percentage">95%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bxl-css3 skills__icon'></i>
+                    <span class="skills__name">CSS3</span>
+                </div>
+                <div class="skills__bar skills__css"></div>
+                <div>
+                    <span class="skills__percentage">85%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bxl-javascript skills__icon'></i>
+                    <span class="skills__name">JavaScript</span>
+                </div>
+                <div class="skills__bar skills__js"></div>
+                <div>
+                    <span class="skills__percentage">65%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bxs-paint skills__icon'></i>
+                    <span class="skills__name">UX/UI</span>
+                </div>
+                <div class="skills__bar skills__ux"></div>
+                <div>
+                    <span class="skills__percentage">85%</span>
+                </div>
+            </div>
+            <!-- Additional Skills -->
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bxl-c-plus-plus skills__icon'></i>
+                    <span class="skills__name">C++</span>
+                </div>
+                <div class="skills__bar skills__cpp"></div>
+                <div>
+                    <span class="skills__percentage">80%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bxl-python skills__icon'></i>
+                    <span class="skills__name">Python</span>
+                </div>
+                <div class="skills__bar skills__python"></div>
+                <div>
+                    <span class="skills__percentage">75%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bx-data skills__icon'></i>
+                    <span class="skills__name">SQL</span>
+                </div>
+                <div class="skills__bar skills__sql"></div>
+                <div>
+                    <span class="skills__percentage">70%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bxl-aws skills__icon'></i>
+                    <span class="skills__name">AWS</span>
+                </div>
+                <div class="skills__bar skills__aws"></div>
+                <div>
+                    <span class="skills__percentage">70%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bx-git skills__icon'></i>
+                    <span class="skills__name">Git</span>
+                </div>
+                <div class="skills__bar skills__git"></div>
+                <div>
+                    <span class="skills__percentage">60%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bx-cloud skills__icon'></i>
+                    <span class="skills__name">CI/CD (Jenkins, GitLab CI, ArgoCD)</span>
+                </div>
+                <div class="skills__bar skills__cicd"></div>
+                <div>
+                    <span class="skills__percentage">75%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bx-box skills__icon'></i>
+                    <span class="skills__name">Containerization (Docker, Kubernetes)</span>
+                </div>
+                <div class=""></div>
+                <div>
+                    <span class="">80%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bx-cog skills__icon'></i>
+                    <span class="skills__name">IaC (Terraform)</span>
+                </div>
+                <div class="skills__bar skills__iac"></div>
+                <div>
+                    <span class="skills__percentage">70%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bx-wrench skills__icon'></i>
+                    <span class="skills__name">Configuration Management (Ansible)</span>
+                </div>
+                <div class="skills__bar skills__config"></div>
+                <div>
+                    <span class="skills__percentage">75%</span>
+                </div>
+            </div>
+            <div class="skills__data">
+                <div class="skills__names">
+                    <i class='bx bx-chart skills__icon'></i>
+                    <span class="skills__name">Monitoring (Prometheus, Grafana)</span>
+                </div>
+                <div class="skills__bar skills__monitoring"></div>
+                <div>
+                    <span class="skills__percentage">70%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!--===== WORK =====-->
+    <section class="work section" id="work">
+        <h2 class="section-title">Work</h2>
+
+        <div class="work__container bd-grid">
+            <a href="https://github.com/niharikaluna11/Training-Ng" class="work__img">
+                <img src="img/work3.jpg" alt="">
+                <div class="work__text">
+                    <div class="work__description">Training for C#</div>
+                    <div class="work__title">GitHub </div>
+                </div>
+                <div class="work__textt">
+                    
+                    <div >Project 1</div>
+                </div>
+            </a>
+            <a href="https://gitlab.com/NiharikaNG/ema1" class="work__img">
+                <img src="img/work4.jpg" alt="">
+                <div class="work__text">
+                    <div class="work__description">Employee Management Application</div>
+                    <div class="work__title">GitLab</div>
+                </div>
+                <div class="work__textt">
+
+                    <div>Project 2</div>
+                </div>
+            </a>
+            <a href="https://gitlab.com/NiharikaNG/git-k8s-ng" class="work__img">
+                <img src="img/work5.jpg" alt="">
+                <div class="work__text">
+                    <div class="work__description"> Kubernetes Application</div>
+                    <div class="work__title">GitLab</div>
+                </div>
+                <div class="work__textt">
+
+                    <div>Project 3</div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+
+    <!--===== CONTACT =====-->
+    <section class="contact section" id="contact">
+        <h2 class="section-title">Contact</h2>
+
+        <div class="contact__container bd-grid">
+            <div class="contact__item">
+                <a href="https://www.linkedin.com/in/niharika-ngg" class="contact__link" target="_blank">
+                    <img src="img/linkedin.svg" alt="LinkedIn" class="contact__icon">
+                    <span class="contact__text">LinkedIn</span>
+                </a>
+            </div>
+            <div class="contact__item">
+                <a href="https://github.com/niharikaluna11" class="contact__link" target="_blank">
+                    <img src="img/github.svg" alt="GitHub" class="contact__icon">
+                    <span class="contact__text">GitHub</span>
+                </a>
+            </div>
+            <div class="contact__item">
+                <a href="https://gitlab.com/NiharikaNG" class="contact__link" target="_blank">
+                    <img src="img/gitlab.svg" alt="GitLab" class="contact__icon">
+                    <span class="contact__text">GitLab</span>
+                </a>
+            </div>
+            <div class="contact__item">
+                <a href="mailto:niharika.garg@celsiortech.com" class="contact__link">
+                    <img src="img/maill.svg" alt="Email" class="contact__icon">
+                    <span class="contact__text">Email</span>
+                </a>
+            </div>
+            <div class="contact__item">
+                <a href="tel:+919205776903" class="contact__link">
+                    <img src="img/telephone.svg" alt="Phone" class="contact__icon">
+                    <span class="contact__text">Number: +91-9205776903</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+
+
+
+</main>
+
+<!--===== FOOTER =====-->
+<footer class="footer">
+    <p class="footer__title">Niharika garg NG :)</p>
+    <div class="footer__social">
+        <a href="#" class="footer__icon"><i class='bx bxl-facebook'></i></a>
+        <a href="#" class="footer__icon"><i class='bx bxl-instagram'></i></a>
+        <a href="#" class="footer__icon"><i class='bx bxl-twitter'></i></a>
+    </div>
+    <p class="footer__copy"> &NG ; All rigths reserved </p>
+</footer>

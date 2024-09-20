@@ -1,0 +1,49 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+}
+
+th {
+    background-color: #fcf1ef;
+}
+
+img {
+    width: 100px;
+    height: auto;
+}
+
+.btn {
+    padding: 10px 15px;
+    background-color: #bf8888;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+    .btn:hover {
+        background-color: #262222;
+        color: white;
+    }
