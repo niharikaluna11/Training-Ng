@@ -1,0 +1,42 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<ClinicApp.Models.Doctor>
+
+
+<h2>These Are The Available Doctors :) </h2>
+
+<p class="text-sm-end" style="text-align:right;">
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+
+<div class="row">
+    @foreach (var doctor in Model)
+    {
+        <div class="col-md-6">
+            <div class="doctor-card">
+                <div class="col-md-4">
+                    <img src="@doctor.Image" alt="Doctor Picture" class="img-fluid rounded" />
+                </div>
+                <div class="doctor-info col-md-8">
+                    <h4>@doctor.Name</h4>
+                    <p>Specialization: @doctor.Specialization</p>
+                    <p>Email: @doctor.Email</p>
+                    <p>Phone: @doctor.Phone</p>
+                    <div class="doctor-actions mt-3">
+                        <a asp-action="Edit" asp-route-did="@doctor.Id" class="btn btn-danger">Edit Details</a>
+                        <a asp-action="Delete" asp-route-did="@doctor.Id" class="btn btn-danger">Remove Doctor</a>
+                    </div>
+                </div>
+            </div>
+         
+
+        </div>
+    }
+</div>
+
+

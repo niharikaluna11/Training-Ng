@@ -1,0 +1,182 @@
+/* Global Styles */
+html, body {
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background-color: #f0f9ff; /* Light background color for the whole page */
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px; /* Increase font size for larger screens */
+    }
+}
+
+/* Margin and padding reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global Button Styles */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #1F305E;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #0c1324;
+        color: white;
+    }
+
+
+
+.btn-danger {
+    background-color: #1F305E;
+    color: white;
+}
+
+    .btn-danger:hover {
+        background-color: #0c1324;
+        color: white;
+    }
+
+/* Doctor Card Styles */
+.doctor-card {
+    background-color: #fcfcfc; /* Azure background for the doctor card */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex; /* Align items side by side */
+    align-items: center; /* Center vertically */
+}
+
+/* Image Styles inside doctor card */
+.col-md-4 {
+    flex-shrink: 0; /* Prevents the image container from shrinking */
+    margin-right: 20px; /* Space between image and text */
+}
+
+    .col-md-4 img {
+        width: 150px; /* Fixed width for uniform image size */
+        height: 150px; /* Fixed height for uniform image size */
+        border-radius: 50%; /* Makes the image circular */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+
+/* Style for the details section of the doctor card */
+.doctor-info {
+    flex: 1; /* Allows the details section to take up remaining space */
+}
+
+/* Doctor Actions Styling */
+.doctor-actions {
+    margin-top: 10px; /* Adjust margin for buttons */
+}
+
+
+
+/* Image Styles inside doctor card */
+.doctor-card img {
+    width: 150px; /* Fixed width for uniform image size */
+    height: 150px; /* Fixed height for uniform image size */
+    border-radius: 50%; /* Makes the image circular */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow around the image */
+    margin-right: 20px; /* Adds space between the image and the text */
+}
+
+/* Add a hover effect to the image */
+.doctor-card img:hover {
+    transform: scale(1.05); /* Slight zoom-in on hover */
+    transition: transform 0.3s ease-in-out; /* Smooth animation for the zoom effect */
+}
+
+
+.doctor-info h4 {
+    color: #142525; /* Blue color for doctor names */
+    margin-bottom: 10px;
+}
+
+.doctor-info p {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Doctor Actions Styling */
+.doctor-actions {
+    margin-top: 10px; /* Adjust the margin for buttons */
+}
+
+/* Spacing between buttons */
+.doctor-actions .btn {
+    margin-right: 10px;
+}
+
+/* Header styles */
+h1, h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Create Button Style */
+.text-sm-end {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+/* Validation Error Styles */
+.text-danger {
+    color: red;
+}
+
+/* Footer Margin */
+body {
+    margin-bottom: 60px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .doctor-card {
+        flex-direction: column; /* Stack image and text on smaller screens */
+        text-align: center; /* Center-align text on small screens */
+    }
+
+    .doctor-info {
+        margin-top: 15px; /* Adds space between the image and the text */
+    }
+}
+
+/* Custom Layout Styles */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
