@@ -1,267 +1,307 @@
 {
   "Files": [
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\ClinicApp.bundle.scp.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\obj\\Debug\\net6.0\\scopedcss\\projectbundle\\ClinicApp.bundle.scp.css",
       "PackagePath": "staticwebassets\\ClinicApp.bundle.scp.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\css\\site.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\favicon.ico",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\favicon.ico",
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc1.jpg",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\0896ef53-00af-432f-bcce-ec9799796ed2.webp",
+      "PackagePath": "staticwebassets\\images\\0896ef53-00af-432f-bcce-ec9799796ed2.webp"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\0a4101e9-24b9-4395-80b0-64583fc4769b.png",
+      "PackagePath": "staticwebassets\\images\\0a4101e9-24b9-4395-80b0-64583fc4769b.png"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\0d4c10fa-b70f-4058-8a59-a5c58a08a489.png",
+      "PackagePath": "staticwebassets\\images\\0d4c10fa-b70f-4058-8a59-a5c58a08a489.png"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\1de99261-191d-448b-9c74-703df4fc0168.png",
+      "PackagePath": "staticwebassets\\images\\1de99261-191d-448b-9c74-703df4fc0168.png"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\4b71cc88-19f9-444b-b626-84662b8069ab.jpg",
+      "PackagePath": "staticwebassets\\images\\4b71cc88-19f9-444b-b626-84662b8069ab.jpg"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\62a2f1b1-3619-48b6-89a3-401111b74e37.jpg",
+      "PackagePath": "staticwebassets\\images\\62a2f1b1-3619-48b6-89a3-401111b74e37.jpg"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\8c785c92-b8ed-4416-a5a8-274d33e65272.png",
+      "PackagePath": "staticwebassets\\images\\8c785c92-b8ed-4416-a5a8-274d33e65272.png"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\a1aa5bb2-b06a-41b6-bdce-55eaf5b83037.png",
+      "PackagePath": "staticwebassets\\images\\a1aa5bb2-b06a-41b6-bdce-55eaf5b83037.png"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\a7b5df7b-8a9d-43a2-9261-4d7493f8c7b9.jpg",
+      "PackagePath": "staticwebassets\\images\\a7b5df7b-8a9d-43a2-9261-4d7493f8c7b9.jpg"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\c0cdb7de-dfe5-4f5e-85d0-ebd7ce2e6910.png",
+      "PackagePath": "staticwebassets\\images\\c0cdb7de-dfe5-4f5e-85d0-ebd7ce2e6910.png"
+    },
+    {
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc1.jpg",
       "PackagePath": "staticwebassets\\images\\doc1.jpg"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc2.jpg",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc2.jpg",
       "PackagePath": "staticwebassets\\images\\doc2.jpg"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc3.jpg",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc3.jpg",
       "PackagePath": "staticwebassets\\images\\doc3.jpg"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc4.jpg",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc4.jpg",
       "PackagePath": "staticwebassets\\images\\doc4.jpg"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc5.jpg",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\images\\doc5.jpg",
       "PackagePath": "staticwebassets\\images\\doc5.jpg"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\js\\site.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\js\\site.js",
       "PackagePath": "staticwebassets\\js\\site.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\LICENSE",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\LICENSE",
       "PackagePath": "staticwebassets\\lib\\bootstrap"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.min.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-grid.rtl.min.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.min.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-reboot.rtl.min.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.min.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap-utilities.rtl.min.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.min.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\css\\bootstrap.rtl.min.css.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.js.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.bundle.min.js.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.js.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.esm.min.js.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.js.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map",
       "PackagePath": "staticwebassets\\lib\\bootstrap\\dist\\js\\bootstrap.min.js.map"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\LICENSE.txt"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation-unobtrusive\\jquery.validate.unobtrusive.min.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\LICENSE.md",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\LICENSE.md"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\dist\\additional-methods.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\additional-methods.min.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery-validation\\dist\\jquery.validate.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery-validation\\dist\\jquery.validate.min.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery\\LICENSE.txt",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery\\LICENSE.txt",
       "PackagePath": "staticwebassets\\lib\\jquery\\LICENSE.txt"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery\\dist\\jquery.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery\\dist\\jquery.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery\\dist\\jquery.min.js",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.js"
     },
     {
-      "Id": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
+      "Id": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\wwwroot\\lib\\jquery\\dist\\jquery.min.map",
       "PackagePath": "staticwebassets\\lib\\jquery\\dist\\jquery.min.map"
     },
     {

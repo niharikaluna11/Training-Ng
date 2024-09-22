@@ -7,10 +7,13 @@
 <h1>Edit</h1>
 
 <h4>Doctor</h4>
+<div>
+    <img style="width:150px;height:150px" src="@Model.Image" alt="Doctor Image" />
+</div>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Edit" asp-route-did="@Model.Id" method="post">
+        <form asp-action="Edit" asp-route-did="@Model.Id" method="post" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
            
             <div class="form-group">
@@ -35,7 +38,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Image" class="control-label"></label>
-                <input asp-for="Image" class="form-control" />
+                <input asp-for="Image" name="postedFile" type="file" class="form-control" />
                 <span asp-validation-for="Image" class="text-danger"></span>
             </div>
             <div class="form-group">

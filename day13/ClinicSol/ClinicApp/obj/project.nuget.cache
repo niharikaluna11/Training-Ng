@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "Kp/xpOlivmk=",
+  "dgSpecHash": "ero5foEAY40=",
   "success": true,
-  "projectFilePath": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\ClinicApp.csproj",
+  "projectFilePath": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\ClinicApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\niharika.garg.PYRAMIDINDIA\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
     "C:\\Users\\niharika.garg.PYRAMIDINDIA\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",

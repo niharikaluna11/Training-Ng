@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\ClinicApp.csproj": {}
+    "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\ClinicApp.csproj": {}
   },
   "projects": {
-    "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\ClinicApp.csproj": {
+    "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\ClinicApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\ClinicApp.csproj",
+        "projectUniqueName": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\ClinicApp.csproj",
         "projectName": "ClinicApp",
-        "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\ClinicApp.csproj",
+        "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\ClinicApp.csproj",
         "packagesPath": "C:\\Users\\niharika.garg.PYRAMIDINDIA\\.nuget\\packages\\",
-        "outputPath": "D:\\Niharikaluna-github\\Training-Ng\\Assignments\\ClinicSol\\ClinicApp\\obj\\",
+        "outputPath": "D:\\Niharikaluna-github\\Training-Ng\\day13\\ClinicSol\\ClinicApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\niharika.garg.PYRAMIDINDIA\\AppData\\Roaming\\NuGet\\NuGet.Config",
