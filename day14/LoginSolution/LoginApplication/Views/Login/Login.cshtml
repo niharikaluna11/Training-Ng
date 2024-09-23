@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@{
+    ViewBag.Title = "Login";
+} <div class="login-container">
+    <h1><i>Login</i></h1>
+    <form asp-action="Login" method="post">
+        <div class="mb-3">
+            <label for="username" class="form-label">Username:</label>
+            <input type="text" id="username" name="username" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">Password:</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-sm btn-outline-secondary  btn-custom">Login</button>
+        </div>
+
+       
+    </form>
+    <div class="options">
+        <a class="btn btn-outline-secondary  btn-sm">Forgot Password?</a>
+        <a class="btn btn-outline-secondary  btn-sm">Sign Up</a>
+       
+    </div>
+</div>
+
+@if (ViewBag.Error != null)
+{
+    <p style="color:rebeccapurple "> @ViewBag.Error</p>
+}
