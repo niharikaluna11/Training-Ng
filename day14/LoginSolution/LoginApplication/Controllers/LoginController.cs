@@ -24,6 +24,9 @@ namespace LoginApplication.Controllers
             }
             ViewBag.Error = "Invalid credentials";
             return View();
+
         }
+
     }
+
 }

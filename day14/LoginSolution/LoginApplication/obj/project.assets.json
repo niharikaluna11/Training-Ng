@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\niharika.garg.PYRAMIDINDIA\\source\\repos\\LoginSolution\\LoginApplication\\LoginApplication.csproj",
+      "projectUniqueName": "D:\\Niharikaluna-github\\Training-Ng\\day14\\LoginSolution\\LoginApplication\\LoginApplication.csproj",
       "projectName": "LoginApplication",
-      "projectPath": "C:\\Users\\niharika.garg.PYRAMIDINDIA\\source\\repos\\LoginSolution\\LoginApplication\\LoginApplication.csproj",
+      "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\day14\\LoginSolution\\LoginApplication\\LoginApplication.csproj",
       "packagesPath": "C:\\Users\\niharika.garg.PYRAMIDINDIA\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\niharika.garg.PYRAMIDINDIA\\source\\repos\\LoginSolution\\LoginApplication\\obj\\",
+      "outputPath": "D:\\Niharikaluna-github\\Training-Ng\\day14\\LoginSolution\\LoginApplication\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\niharika.garg.PYRAMIDINDIA\\AppData\\Roaming\\NuGet\\NuGet.Config",

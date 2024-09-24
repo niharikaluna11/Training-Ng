@@ -1,6 +1,6 @@
 ﻿namespace ClinicApp.Models
 {
-    public class Doctor
+    public class Doctor : IEquatable<Doctor>
     {
         public int Id { get; set; }
         public string Name { get; set; }
