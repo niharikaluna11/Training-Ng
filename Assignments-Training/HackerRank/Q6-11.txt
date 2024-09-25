@@ -1,0 +1,512 @@
+//Q6-11
+//https://www.hackerrank.com/challenges/grading/problem?isFullScreen=true
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'gradingStudents' function below.
+     *
+     * The function is expected to return an INTEGER_ARRAY.
+     * The function accepts INTEGER_ARRAY grades as parameter.
+     */
+
+    public static List<int> gradingStudents(List<int> grades)
+    {
+        
+        List<int> roundedGrades = new List<int>();
+
+        foreach (int grade in grades)
+        {
+            if (grade < 38)
+            {
+                // If the grade is less than 38, it remains the same.
+                roundedGrades.Add(grade);
+            }
+            else
+            {
+                // Calculate the next multiple of 5
+                int nextMultipleOf5 = ((grade / 5) + 1) * 5;
+
+                // Check if rounding is needed
+                if (nextMultipleOf5 - grade < 3)
+                {
+                    roundedGrades.Add(nextMultipleOf5);
+                }
+                else
+                {
+                    roundedGrades.Add(grade);
+                }
+            }
+        }
+
+        return roundedGrades;
+
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int gradesCount = Convert.ToInt32(Console.ReadLine().Trim());
+
+        List<int> grades = new List<int>();
+
+        for (int i = 0; i < gradesCount; i++)
+        {
+            int gradesItem = Convert.ToInt32(Console.ReadLine().Trim());
+            grades.Add(gradesItem);
+        }
+
+        List<int> result = Result.gradingStudents(grades);
+
+        textWriter.WriteLine(String.Join("\n", result));
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+-----------------------------------------------------------------------------
+//7) https://www.hackerrank.com/challenges/apple-and-orange/problem?isFullScreen=true
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'countApplesAndOranges' function below.
+     *
+     * The function accepts following parameters:
+     *  1. INTEGER s
+     *  2. INTEGER t
+     *  3. INTEGER a
+     *  4. INTEGER b
+     *  5. INTEGER_ARRAY apples
+     *  6. INTEGER_ARRAY oranges
+     */
+
+    public static void countApplesAndOranges(int s, int t, int a, int b, List<int> apples, List<int> oranges)
+    {
+
+        // Count the number of apples that land on the house
+        int appleCount = apples.Count(apple => (a + apple) >= s && (a + apple) <= t);
+        
+        // Count the number of oranges that land on the house
+        int orangeCount = oranges.Count(orange => (b + orange) >= s && (b + orange) <= t);
+        
+        // Print the results
+        Console.WriteLine(appleCount);
+        Console.WriteLine(orangeCount);
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int s = Convert.ToInt32(firstMultipleInput[0]);
+
+        int t = Convert.ToInt32(firstMultipleInput[1]);
+
+        string[] secondMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int a = Convert.ToInt32(secondMultipleInput[0]);
+
+        int b = Convert.ToInt32(secondMultipleInput[1]);
+
+        string[] thirdMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int m = Convert.ToInt32(thirdMultipleInput[0]);
+
+        int n = Convert.ToInt32(thirdMultipleInput[1]);
+
+        List<int> apples = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(applesTemp => Convert.ToInt32(applesTemp)).ToList();
+
+        List<int> oranges = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(orangesTemp => Convert.ToInt32(orangesTemp)).ToList();
+
+        Result.countApplesAndOranges(s, t, a, b, apples, oranges);
+    }
+}
+-----------------------------------------------------------------------------------------------
+//8) https://www.hackerrank.com/challenges/kangaroo/problem?isFullScreen=true
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'kangaroo' function below.
+     *
+     * The function is expected to return a STRING.
+     * The function accepts following parameters:
+     *  1. INTEGER x1
+     *  2. INTEGER v1
+     *  3. INTEGER x2
+     *  4. INTEGER v2
+     */
+
+    public static string kangaroo(int x1, int v1, int x2, int v2)
+    {
+ // If the kangaroos have the same jump rate
+        if (v1 == v2)
+        {
+            // They meet only if they start at the same position
+            return x1 == x2 ? "YES" : "NO";
+        }
+        
+        // Calculate the number of jumps needed for the kangaroos to meet
+        int deltaX = x2 - x1;
+        int deltaV = v1 - v2;
+
+        // Check if the number of jumps is a non-negative integer
+        if (deltaX % deltaV == 0 && deltaX / deltaV >= 0)
+        {
+            return "YES";
+        }
+        else
+        {
+            return "NO";
+        }
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int x1 = Convert.ToInt32(firstMultipleInput[0]);
+
+        int v1 = Convert.ToInt32(firstMultipleInput[1]);
+
+        int x2 = Convert.ToInt32(firstMultipleInput[2]);
+
+        int v2 = Convert.ToInt32(firstMultipleInput[3]);
+
+        string result = Result.kangaroo(x1, v1, x2, v2);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+----------------------------------------------------------------------------------------
+//9) https://www.hackerrank.com/challenges/between-two-sets/problem?isFullScreen=true
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+     // Function to compute GCD of two numbers
+    public static int GCD(int x, int y)
+    {
+        while (y != 0)
+        {
+            int temp = y;
+            y = x % y;
+            x = temp;
+        }
+        return x;
+    }
+
+    // Function to compute LCM of two numbers
+    public static int LCM(int x, int y)
+    {
+        return (x * y) / GCD(x, y);
+    }
+
+    // Function to compute LCM of an array
+    public static int LCM(List<int> arr)
+    {
+        return arr.Aggregate(LCM);
+    }
+
+    // Function to compute GCD of an array
+    public static int GCD(List<int> arr)
+    {
+        return arr.Aggregate(GCD);
+    }
+
+    // Main function to find numbers between the two arrays
+    public static int getTotalX(List<int> a, List<int> b)
+    {
+        // Find LCM of array a
+        int lcmA = LCM(a);
+
+        // Find GCD of array b
+        int gcdB = GCD(b);
+
+        // Count numbers that are multiples of lcmA and also divisors of gcdB
+        int count = 0;
+        for (int i = lcmA; i <= gcdB; i += lcmA)
+        {
+            if (gcdB % i == 0)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int n = Convert.ToInt32(firstMultipleInput[0]);
+
+        int m = Convert.ToInt32(firstMultipleInput[1]);
+
+        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+
+        List<int> brr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(brrTemp => Convert.ToInt32(brrTemp)).ToList();
+
+        int total = Result.getTotalX(arr, brr);
+
+        textWriter.WriteLine(total);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+--------------------------------------------------------------------------------------
+
+//10) https://www.hackerrank.com/challenges/breaking-best-and-worst-records/problem?isFullScreen=true
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'breakingRecords' function below.
+     *
+     * The function is expected to return an INTEGER_ARRAY.
+     * The function accepts INTEGER_ARRAY scores as parameter.
+     */
+
+    public static List<int> breakingRecords(List<int> scores)
+    {
+  // Initialize counters and record values
+        int maxCount = 0;
+        int minCount = 0;
+        int maxScore = scores[0];
+        int minScore = scores[0];
+        
+        // Iterate through the scores starting from the second game
+        for (int i = 1; i < scores.Count; i++)
+        {
+            int currentScore = scores[i];
+            
+            // Check for new maximum record
+            if (currentScore > maxScore)
+            {
+                maxScore = currentScore;
+                maxCount++;
+            }
+            
+            // Check for new minimum record
+            if (currentScore < minScore)
+            {
+                minScore = currentScore;
+                minCount++;
+            }
+        }
+        
+        // Return the result as a list with counts of breaking records
+        return new List<int> { maxCount, minCount };
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int n = Convert.ToInt32(Console.ReadLine().Trim());
+
+        List<int> scores = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(scoresTemp => Convert.ToInt32(scoresTemp)).ToList();
+
+        List<int> result = Result.breakingRecords(scores);
+
+        textWriter.WriteLine(String.Join(" ", result));
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+---------------------------------------------------------------------------------------------
+
+//11) https://www.hackerrank.com/challenges/the-birthday-bar/problem?isFullScreen=true
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'birthday' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY s
+     *  2. INTEGER d
+     *  3. INTEGER m
+     */
+
+    public static int birthday(List<int> s, int d, int m)
+    {
+ int count = 0;
+        int n = s.Count;
+        
+        // Check if the chocolate bar has fewer squares than the segment length
+        if (n < m)
+        {
+            return count;
+        }
+        
+        // Calculate the sum of the first segment of size m
+        int segmentSum = s.Take(m).Sum();
+        
+        // Check if the first segment meets the criteria
+        if (segmentSum == d)
+        {
+            count++;
+        }
+        
+        // Slide the window across the array
+        for (int i = m; i < n; i++)
+        {
+            segmentSum += s[i] - s[i - m];
+            if (segmentSum == d)
+            {
+                count++;
+            }
+        }
+        
+        return count;
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int n = Convert.ToInt32(Console.ReadLine().Trim());
+
+        List<int> s = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(sTemp => Convert.ToInt32(sTemp)).ToList();
+
+        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int d = Convert.ToInt32(firstMultipleInput[0]);
+
+        int m = Convert.ToInt32(firstMultipleInput[1]);
+
+        int result = Result.birthday(s, d, m);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}

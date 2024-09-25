@@ -1,0 +1,97 @@
+//9) https://www.hackerrank.com/challenges/between-two-sets/problem?isFullScreen=true
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+     // Function to compute GCD of two numbers
+    public static int GCD(int x, int y)
+    {
+        while (y != 0)
+        {
+            int temp = y;
+            y = x % y;
+            x = temp;
+        }
+        return x;
+    }
+
+    // Function to compute LCM of two numbers
+    public static int LCM(int x, int y)
+    {
+        return (x * y) / GCD(x, y);
+    }
+
+    // Function to compute LCM of an array
+    public static int LCM(List<int> arr)
+    {
+        return arr.Aggregate(LCM);
+    }
+
+    // Function to compute GCD of an array
+    public static int GCD(List<int> arr)
+    {
+        return arr.Aggregate(GCD);
+    }
+
+    // Main function to find numbers between the two arrays
+    public static int getTotalX(List<int> a, List<int> b)
+    {
+        // Find LCM of array a
+        int lcmA = LCM(a);
+
+        // Find GCD of array b
+        int gcdB = GCD(b);
+
+        // Count numbers that are multiples of lcmA and also divisors of gcdB
+        int count = 0;
+        for (int i = lcmA; i <= gcdB; i += lcmA)
+        {
+            if (gcdB % i == 0)
+            {
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int n = Convert.ToInt32(firstMultipleInput[0]);
+
+        int m = Convert.ToInt32(firstMultipleInput[1]);
+
+        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+
+        List<int> brr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(brrTemp => Convert.ToInt32(brrTemp)).ToList();
+
+        int total = Result.getTotalX(arr, brr);
+
+        textWriter.WriteLine(total);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}

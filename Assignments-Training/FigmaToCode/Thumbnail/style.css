@@ -1,0 +1,167 @@
+/* General Page Style */
+body {
+    background-color: rgba(49, 19, 97, 1);
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif;
+
+}
+ /* Default link color */
+        a {
+            color: black; /* Color before visit */
+            text-decoration: none; /* Optional: remove underline */
+        }
+
+        /* Color change after link is visited */
+        a:visited {
+            color: white; /* Color after visit */
+        }
+/* Container holding the main content and right-side section */
+.container {
+    display: flex;
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    justify-content: space-between;
+    padding: 20px;
+    box-sizing: border-box;
+    gap: 20px; /* Space between content and right-side */
+}
+
+/* Content div (left side) */
+.content {
+    flex: 1 1 300px; /* Grow and shrink with a minimum width */
+    color: white;
+    font-size: 1.5rem;
+    box-sizing: border-box;
+}
+
+.left-side {
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+/* Right Side div holding the glare and shadow-boxes */
+.right-side {
+    position: relative;
+    flex: 1 1 300px; /* Grow and shrink with a minimum width */
+    display: flex;
+    justify-content: space-between;
+    gap: 7px; /* Space between the shadow-box columns */
+    box-sizing: border-box;
+}
+
+/* Glare as background for the right side */
+.glare {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(217.68% 217.68% at 27.97% 49.05%, #b9c7c9 0%, rgba(177, 232, 240, 0) 100%);
+    opacity: 0.4;
+    z-index: 0; /* Make sure it's behind the shadow-boxes */
+    border-radius: 10%;
+    filter: blur(120px);
+}
+
+/* Shadowed boxes container */
+.shadow-boxes1, .shadow-boxes2, .shadow-boxes3 {
+    display: flex;
+    flex-direction: column;
+    gap: 12px; 
+    z-index: 1; /* Ensure the boxes are on top of the glare */
+    flex: 1; /* Allow columns to take equal available space */
+    /* justify-content: space-between; */
+}
+
+/* Style for each individual box */
+.box {
+    background-color: #d7d7d7;
+    opacity: 0.9;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(78, 76, 76, 0.1);
+    text-align: center;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden; /* Prevent image overflow */
+}
+
+/* Add image background to each box */
+.box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the entire box area */
+    border-radius: 8px;
+}
+
+/* Variable sizes for the boxes in each column */
+.shadow-boxes1 .box:nth-child(1),
+.shadow-boxes2 .box:nth-child(1),
+.shadow-boxes3 .box:nth-child(1) {
+    height: 180px;
+}
+
+.shadow-boxes1 .box:nth-child(2),
+.shadow-boxes2 .box:nth-child(2),
+.shadow-boxes3 .box:nth-child(2) {
+    height: 80px;
+}
+
+.shadow-boxes1 .box:nth-child(3),
+.shadow-boxes2 .box:nth-child(3),
+.shadow-boxes3 .box:nth-child(3) {
+    height: 105px;
+}
+
+.shadow-boxes1 .box:nth-child(4),
+.shadow-boxes2 .box:nth-child(4),
+.shadow-boxes3 .box:nth-child(4) {
+    height: 95px;
+}
+
+.shadow-boxes1 .box:nth-child(5),
+.shadow-boxes2 .box:nth-child(5),
+.shadow-boxes3 .box:nth-child(5) {
+    height: 160px;
+}
+
+/* Responsive Adjustments */
+@media screen and (max-width: 800px) {
+    .container {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+
+    .content, .right-side {
+        width: 100%;
+    }
+
+    .right-side {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .shadow-boxes1, .shadow-boxes2, .shadow-boxes3 {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .shadow-boxes1 .box,
+    .shadow-boxes2 .box,
+    .shadow-boxes3 .box {
+        width: calc(50% - 10px);
+        /* margin-bottom: 10px; */
+    }
+}
+
+@media screen and (max-width: 800px) {
+    .shadow-boxes1 .box,
+    .shadow-boxes2 .box,
+    .shadow-boxes3 .box {
+        width: 100%;
+    }
+}

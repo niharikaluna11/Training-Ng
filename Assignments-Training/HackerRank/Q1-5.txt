@@ -1,0 +1,341 @@
+//Q1-5
+//https://www.hackerrank.com/challenges/plus-minus/problem?isFullScreen=true
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'plusMinus' function below.
+     *
+     * The function accepts INTEGER_ARRAY arr as parameter.
+     */
+
+    public static void plusMinus(List<int> arr)
+    {
+        
+        int n = arr.Count;
+        int positiveCount = 0;
+        int negativeCount = 0;
+        int zeroCount = 0;
+
+        // Count positive, negative, and zero elements
+        foreach (int num in arr)
+        {
+            if (num > 0)
+            {
+                positiveCount++;
+            }
+            else if (num < 0)
+            {
+                negativeCount++;
+            }
+            else
+            {
+                zeroCount++;
+            }
+        }
+
+        // Calculate ratios
+        double positiveRatio = (double)positiveCount / n;
+        double negativeRatio = (double)negativeCount / n;
+        double zeroRatio = (double)zeroCount / n;
+
+        // Print the results to 6 decimal places
+        Console.WriteLine(positiveRatio.ToString("F6"));
+        Console.WriteLine(negativeRatio.ToString("F6"));
+        Console.WriteLine(zeroRatio.ToString("F6"));
+    
+
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        int n = Convert.ToInt32(Console.ReadLine().Trim());
+
+        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+
+        Result.plusMinus(arr);
+    }
+}
+
+-----------------------------------------------------------------------------------------------------------
+//https://www.hackerrank.com/challenges/staircase/problem?isFullScreen=true
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'staircase' function below.
+     *
+     * The function accepts INTEGER n as parameter.
+     */
+
+    public static void staircase(int n)
+    {
+        for (int i = 1; i <= n; i++)
+        {
+            // Print spaces
+            for (int j = 0; j < n - i; j++)
+            {
+                Console.Write(" ");
+            }
+            
+            // Print hashes
+            for (int k = 0; k < i; k++)
+            {
+                Console.Write("#");
+            }
+            
+            // Move to the next line
+            Console.WriteLine();
+        }
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        int n = Convert.ToInt32(Console.ReadLine().Trim());
+
+        Result.staircase(n);
+    }
+}
+
+-------------------------------------------------------------------------------------------------------
+//https://www.hackerrank.com/challenges/mini-max-sum/problem?isFullScreen=true
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'miniMaxSum' function below.
+     *
+     * The function accepts INTEGER_ARRAY arr as parameter.
+     */
+
+    public static void miniMaxSum(List<int> arr)
+    {
+ // Calculate the total sum of the array
+        long totalSum = arr.Sum(x => (long)x);
+        
+        // Initialize min and max sums
+        long minSum = long.MaxValue;
+        long maxSum = long.MinValue;
+        
+        // Calculate min and max sums by excluding one element at a time
+        foreach (int num in arr)
+        {
+            long currentSum = totalSum - num;
+            if (currentSum < minSum)
+            {
+                minSum = currentSum;
+            }
+            if (currentSum > maxSum)
+            {
+                maxSum = currentSum;
+            }
+        }
+        
+        // Print the results
+        Console.WriteLine($"{minSum} {maxSum}");
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+
+        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+
+        Result.miniMaxSum(arr);
+    }
+}
+-------------------------------------------------------------------------------------------------------
+
+//https://www.hackerrank.com/challenges/birthday-cake-candles/problem?isFullScreen=true
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'birthdayCakeCandles' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts INTEGER_ARRAY candles as parameter.
+     */
+
+    public static int birthdayCakeCandles(List<int> candles)
+    {
+         // Find the maximum height of the candles
+        int maxHeight = candles.Max();
+        
+        // Count how many candles have that maximum height
+        int count = candles.Count(candle => candle == maxHeight);
+        
+        return count;
+
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int candlesCount = Convert.ToInt32(Console.ReadLine().Trim());
+
+        List<int> candles = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(candlesTemp => Convert.ToInt32(candlesTemp)).ToList();
+
+        int result = Result.birthdayCakeCandles(candles);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+-------------------------------------------------------------------------------------------------------------
+//https://www.hackerrank.com/challenges/time-conversion/problem?isFullScreen=true
+
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'timeConversion' function below.
+     *
+     * The function is expected to return a STRING.
+     * The function accepts STRING s as parameter.
+     */
+
+    public static string timeConversion(string s)
+    {
+        // Extract the period (AM/PM)
+        string period = s.Substring(s.Length - 2);
+        // Extract the hour, minute, and second
+        string hour = s.Substring(0, 2);
+        string minute = s.Substring(3, 2);
+        string second = s.Substring(6, 2);
+        
+        int hourInt = int.Parse(hour);
+        
+        // Convert the hour based on the period
+        if (period == "AM")
+        {
+            if (hourInt == 12)
+            {
+                hour = "00"; // Midnight case
+            }
+        }
+        else // PM case
+        {
+            if (hourInt != 12)
+            {
+                hourInt += 12; // Convert PM hour to 24-hour format
+                hour = hourInt.ToString("D2");
+            }
+        }
+        
+        // Return the formatted time
+        return $"{hour}:{minute}:{second}";
+
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string s = Console.ReadLine();
+
+        string result = Result.timeConversion(s);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-----------------------------------------------------------------------------------------------------

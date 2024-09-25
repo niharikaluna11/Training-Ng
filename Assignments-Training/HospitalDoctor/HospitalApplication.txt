@@ -1,0 +1,199 @@
+//Program.cs
+namespace HospitalApplication
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+            }
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Doctor}/{action=Index}/{id?}");
+
+            app.Run();
+        }
+    }
+}
+--------------------------------------------------------------------------------------------------------
+//Views/Doctor/index.cshtml
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+@model IEnumerable<HospitalApplication.Models.Doctor>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Doctor List</title>
+    <link rel="stylesheet" type="text/css" href="~/css/site.css" />
+</head>
+<body>
+    
+    <h2>These Are The Available Doctors  :-) </h2>
+    <div class="doctor-list">
+        @foreach (var doctor in Model)
+        {
+            <div class="doctor-card">
+                <img src="@doctor.Picture" alt="Doctor Picture" height="100" width="100" />
+                <h4>@doctor.Name</h4>
+                <p> @doctor.Specialization</p>
+                <p> @doctor.Email</p>
+                <p> @doctor.Phone</p>
+                <button class="button">Book Appointment</button>
+            </div>
+           
+        }
+    </div>
+</body>
+</html>
+
+--------------------------------------------------------------------------------------------------------
+
+//Models/Doctor.cs
+
+namespace HospitalApplication.Models
+{
+    public class Doctor
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Specialization { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string Picture { get; set; } // URL or path to the doctor's picture
+    }
+}
+-------------------------------------------------------------------------------------------------------------
+
+//controller/DoctorController
+
+using HospitalApplication.Models;
+using Microsoft.AspNetCore.Mvc;
+
+namespace HospitalApplication.Controllers
+{
+    public class DoctorController : Controller
+    {
+        private static List<Doctor> doctors = new List<Doctor>
+        {
+            new Doctor { Id = 1, Name = "Dr. John Smith", Specialization = "Cardiologist", Email = "john.smith@example.com", Phone = "123-456-7890", Picture = "/images/doc1.jpg" },
+            new Doctor { Id = 2, Name = "Dr. Cole Doe", Specialization = "Dermatologist", Email = "cole.doe@example.com", Phone = "234-567-8901", Picture = "/images/doc2.jpg" },
+            new Doctor { Id = 3, Name = "Dr. Jack Sparrow", Specialization = "Pediatrician", Email = "jack@example.com", Phone = "345-678-9012", Picture = "/images/doc3.jpg" },
+            new Doctor { Id = 4, Name = "Dr. Jules Peter", Specialization = "Dermatologist", Email = "jules@example.com", Phone = "234-567-8901", Picture = "/images/doc4.jpg" },
+            new Doctor { Id = 5, Name = "Dr. Emily Holland ", Specialization = "Pediatrician", Email = "emily@example.com", Phone = "345-678-9012", Picture = "/images/doc5.jpg" }
+
+        };
+        public IActionResult Index()
+        {
+            ViewData["Patient"] = "Niharika Garg";
+
+            return View(doctors);
+        }
+    }
+}
+
+------------------------------------------------------------------------------------------------------------
+
+//css/site.js
+
+html {
+    font-size: 13px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 13px;
+    }
+
+    button {
+        font-size: 10px;
+    }
+}
+
+body {
+    margin-bottom: 60px;
+    background-color: azure;
+}
+
+.doctor-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around; 
+}
+
+.doctor-card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 15px;
+    text-align: center;
+    width: 180px;
+
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s; 
+}
+.nav-item.ml-auto {
+    margin-left: auto;
+    padding-right: 35px; 
+   
+}
+.patient-logo {
+    width: 20px; /* Adjust size as needed */
+    height: 20px; /* Keep the aspect ratio */
+    border-radius: 50%; /* Optional: makes the image round */
+}
+
+
+    .doctor-card:hover {
+        transform: scale(1.05); 
+    }
+
+    .doctor-card img {
+        border-radius: 50%;
+        width: 90px;
+        height: 90px; 
+        margin-bottom: 15px;
+    }
+
+.button {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    text-align: center;
+    color: black;
+    background-color: lightcyan;
+    width: 120px;
+    cursor: pointer;
+}
+
+    .button:hover {
+        background-color: lightblue; 
+    }
+
+------------------------------------------------------------------------------------------------------------------------
+
+//images/doc1,doc2,doc3,doc4,doc5

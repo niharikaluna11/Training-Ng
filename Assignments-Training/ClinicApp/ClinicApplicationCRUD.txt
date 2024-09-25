@@ -1,0 +1,640 @@
+//HomeController-Index Page
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome To Perstige Hospital :) </h1>
+   @*  <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
+    <img src="https://th.bing.com/th/id/OIP.Ljju8ghUBkn-w2xCQKQ-EwHaFX?w=239&h=180&c=7&r=0&o=5&pid=1.7" alt="Doctor Picture" height="300" width="500" />
+
+</div>
+
+
+----------------------------------------------------------------------------------------
+
+//DoctorController
+using Microsoft.AspNetCore.Mvc;
+using ClinicApp.Models;
+using System.Security.Cryptography;
+using Microsoft.Extensions.Logging;
+
+
+
+namespace ClinicApp.Controllers
+{
+    public class DoctorController : Controller
+
+    {
+
+        private IWebHostEnvironment _environment;
+        static string wwwPath;
+        static string path;
+        static int Count = 6;
+        static List<Doctor> doctors = new List<Doctor>
+        {
+            new Doctor { Id = 1, Name = "Dr. John Smith", Specialization = "Cardiologist", Email = "john.smith@example.com", Phone = "123-456-7890", Image = "/images/doc1.jpg" },
+            new Doctor { Id = 2, Name = "Dr. Cole Doe", Specialization = "Dermatologist", Email = "cole.doe@example.com", Phone = "234-567-8901", Image = "/images/doc2.jpg" },
+            new Doctor { Id = 3, Name = "Dr. Jack Sparrow", Specialization = "Pediatrician", Email = "jack@example.com", Phone = "345-678-9012", Image = "/images/doc3.jpg" },
+            new Doctor { Id = 4, Name = "Dr. Jules Peter", Specialization = "Dermatologist", Email = "jules@example.com", Phone = "234-567-8901", Image = "/images/doc4.jpg" },
+            new Doctor { Id = 5, Name = "Dr. Emily Holland ", Specialization = "Pediatrician", Email = "emily@example.com", Phone = "345-678-9012", Image = "/images/doc5.jpg" },
+            new Doctor { Id = 6, Name = "Dr. July Holland ", Specialization = "Pediatrician", Email = "July@example.com", Phone = "335-378-9444", Image = "/images/doc5.jpg" }
+
+        };
+        public DoctorController( IWebHostEnvironment Environment) {
+            _environment = Environment;
+            wwwPath = _environment.WebRootPath;
+            path = Path.Combine(wwwPath, "Images");
+        }
+        public IActionResult Index()
+        {
+            return View(doctors);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            Doctor doctor = new Doctor();
+            return View(doctor);
+        }
+
+
+        [HttpPost]
+        public IActionResult Create(Doctor doctor, IFormFile postedFile)
+        {
+            // Ensure the Images directory exists
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            if (postedFile != null && postedFile.Length > 0)
+            {
+                string fileName = Path.GetFileName(postedFile.FileName);
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fileName);
+                string fullPath = Path.Combine(path, uniqueFileName);
+
+                using (FileStream stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    postedFile.CopyTo(stream);
+                }
+
+                // Ensure the image path is correct (relative to wwwroot)
+                doctor.Image = Path.Combine("/Images", uniqueFileName);
+            }
+            Count++;
+            doctor.Id = Count;
+            doctors.Add(doctor);
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int did)
+        {
+            Doctor doctor= doctors.FirstOrDefault(d => d.Id == did);
+            return View(doctor);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int did, Doctor doctor, IFormFile postedFile)
+        {
+            Doctor olddoctor = doctors.FirstOrDefault(d => d.Id == did);
+           
+                olddoctor.Name = doctor.Name;
+                olddoctor.Specialization = doctor.Specialization;
+                olddoctor.Email = doctor.Email;
+                olddoctor.Phone = doctor.Phone;
+
+           
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            if (postedFile != null && postedFile.Length > 0)
+            {
+                string fileName = Path.GetFileName(postedFile.FileName);
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(fileName);
+                string fullPath = Path.Combine(path, uniqueFileName);
+
+                using (FileStream stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    postedFile.CopyTo(stream);
+                }
+
+                // Ensure the image path is correct (relative to wwwroot)
+                olddoctor.Image = Path.Combine("/Images", uniqueFileName);
+            }
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public IActionResult Delete(int did)
+        {
+            Doctor doctor = doctors.FirstOrDefault(d => d.Id == did);
+            return View(doctor);
+        }
+
+        [HttpPost]
+
+        public IActionResult Delete(int did, Doctor doctor)
+        {
+            Doctor doctorToDelete = doctors.FirstOrDefault(p => p.Id == did);
+            if (doctorToDelete != null)
+            {
+                doctors.Remove(doctorToDelete);
+            }
+            else
+            {
+                // Handle case where the product is not found
+                return NotFound();
+            }
+
+            return RedirectToAction("Index");
+        }
+
+    }
+}
+
+---------------------------------------------------------------------------------------------
+
+//Models-Doctor.cs
+namespace ClinicApp.Models
+{
+    public class Doctor
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Specialization { get; set; }
+        public string Email { get; set; }
+        public string Phone { get; set; }
+        public string? Image { get; set; }
+        public bool Equals(Doctor? other)
+        {
+            return this.Id == other.Id;
+
+        }
+    }
+}
+
+--------------------------------------------------------------------------------------------------
+
+//View
+//Doctor-Index
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<ClinicApp.Models.Doctor>
+
+
+<h2>These Are The Available Doctors :) </h2>
+
+<p class="text-sm-end" style="text-align:right;">
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+
+<div class="row">
+    @foreach (var doctor in Model)
+    {
+        <div class="col-md-6">
+            <div class="doctor-card">
+                <div class="col-md-4">
+                    <img src="@doctor.Image" alt="Doctor Picture" class="img-fluid rounded" />
+                </div>
+                <div class="doctor-info col-md-8">
+                    <h4>@doctor.Name</h4>
+                    <p>Specialization: @doctor.Specialization</p>
+                    <p>Email: @doctor.Email</p>
+                    <p>Phone: @doctor.Phone</p>
+                    <div class="doctor-actions mt-3">
+                        <a asp-action="Edit" asp-route-did="@doctor.Id" class="btn btn-danger">Edit Details</a>
+                        <a asp-action="Delete" asp-route-did="@doctor.Id" class="btn btn-danger">Remove Doctor</a>
+                    </div>
+                </div>
+            </div>
+         
+
+        </div>
+    }
+</div>
+
+
+-------------------------------------------------------------------------------------------------------
+
+//View
+//Doctor-Create
+
+@model ClinicApp.Models.Doctor
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Doctor</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Specialization" class="control-label"></label>
+                <input asp-for="Specialization" class="form-control" />
+                <span asp-validation-for="Specialization" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" name="postedFile" type="file" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            
+                <a asp-action="Index" class="btn btn-primary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+-------------------------------------------------------------------------------------------
+
+//View
+//Doctor-Edit
+
+@model ClinicApp.Models.Doctor
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Doctor</h4>
+<div>
+    <img style="width:150px;height:150px" src="@Model.Image" alt="Doctor Image" />
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" asp-route-did="@Model.Id" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+           
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Specialization" class="control-label"></label>
+                <input asp-for="Specialization" class="form-control" />
+                <span asp-validation-for="Specialization" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Phone" class="control-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Image" class="control-label"></label>
+                <input asp-for="Image" name="postedFile" type="file" class="form-control" />
+                <span asp-validation-for="Image" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            
+                <a asp-action="Index" class="btn btn-primary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+
+
+-------------------------------------------------------------------------------------------
+
+//View
+//Doctor-Delete
+
+
+@model ClinicApp.Models.Doctor
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Doctor</h4>
+    <div>
+        <img style="width:150px;height:150px" src="@Model.Image" alt="Doctor Image" />
+
+    </div>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Specialization)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Specialization)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Phone)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Phone)
+        </dd>
+     
+    </dl>
+    
+    <form asp-action="Delete" asp-route-did="@Model.Id" method="post" enctype="multipart/form-data">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+    </form>
+</div>
+--------------------------------------------------------------------------------
+
+
+//programs.cs
+
+
+namespace ClinicApp
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            builder.Services.AddControllersWithViews();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+
+            app.UseRouting();
+
+            app.UseAuthorization();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Doctor}/{action=Index}/{id?}");
+
+            app.Run();
+        }
+    }
+}
+
+---------------------------------------------------------------------------
+
+
+//Site-css
+/* Global Styles */
+html, body {
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background-color: #f0f9ff; /* Light background color for the whole page */
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px; /* Increase font size for larger screens */
+    }
+}
+
+/* Margin and padding reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Global Button Styles */
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.3s;
+}
+
+.btn-primary {
+    background-color: #1F305E;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #0c1324;
+        color: white;
+    }
+
+
+
+.btn-danger {
+    background-color: #1F305E;
+    color: white;
+}
+
+    .btn-danger:hover {
+        background-color: #0c1324;
+        color: white;
+    }
+
+/* Doctor Card Styles */
+.doctor-card {
+    background-color: #fcfcfc; /* Azure background for the doctor card */
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    display: flex; /* Align items side by side */
+    align-items: center; /* Center vertically */
+}
+
+/* Image Styles inside doctor card */
+.col-md-4 {
+    flex-shrink: 0; /* Prevents the image container from shrinking */
+    margin-right: 20px; /* Space between image and text */
+}
+
+    .col-md-4 img {
+        width: 150px; /* Fixed width for uniform image size */
+        height: 150px; /* Fixed height for uniform image size */
+        border-radius: 50%; /* Makes the image circular */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    }
+
+/* Style for the details section of the doctor card */
+.doctor-info {
+    flex: 1; /* Allows the details section to take up remaining space */
+}
+
+/* Doctor Actions Styling */
+.doctor-actions {
+    margin-top: 10px; /* Adjust margin for buttons */
+}
+
+
+
+/* Image Styles inside doctor card */
+.doctor-card img {
+    width: 150px; /* Fixed width for uniform image size */
+    height: 150px; /* Fixed height for uniform image size */
+    border-radius: 50%; /* Makes the image circular */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow around the image */
+    margin-right: 20px; /* Adds space between the image and the text */
+}
+
+/* Add a hover effect to the image */
+.doctor-card img:hover {
+    transform: scale(1.05); /* Slight zoom-in on hover */
+    transition: transform 0.3s ease-in-out; /* Smooth animation for the zoom effect */
+}
+
+
+.doctor-info h4 {
+    color: #142525; /* Blue color for doctor names */
+    margin-bottom: 10px;
+}
+
+.doctor-info p {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Doctor Actions Styling */
+.doctor-actions {
+    margin-top: 10px; /* Adjust the margin for buttons */
+}
+
+/* Spacing between buttons */
+.doctor-actions .btn {
+    margin-right: 10px;
+}
+
+/* Header styles */
+h1, h2 {
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Create Button Style */
+.text-sm-end {
+    text-align: right;
+    margin-bottom: 20px;
+}
+
+/* Form Styles */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-control {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+}
+
+/* Validation Error Styles */
+.text-danger {
+    color: red;
+}
+
+/* Footer Margin */
+body {
+    margin-bottom: 60px;
+}
+
+/* Media Queries for Responsive Design */
+@media (max-width: 768px) {
+    .doctor-card {
+        flex-direction: column; /* Stack image and text on smaller screens */
+        text-align: center; /* Center-align text on small screens */
+    }
+
+    .doctor-info {
+        margin-top: 15px; /* Adds space between the image and the text */
+    }
+}
+
+/* Custom Layout Styles */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+

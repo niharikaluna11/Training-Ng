@@ -1,0 +1,306 @@
+//Q12-Q17
+//12) https://www.hackerrank.com/challenges/divisible-sum-pairs/problem?isFullScreen=true
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'divisibleSumPairs' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts following parameters:
+     *  1. INTEGER n
+     *  2. INTEGER k
+     *  3. INTEGER_ARRAY ar
+     */
+
+    public static int divisibleSumPairs(int n, int k, List<int> ar)
+    {
+         int count = 0;
+
+        // Iterate over all pairs
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = i + 1; j < n; j++)
+            {
+                // Check if the sum of the pair is divisible by k
+                if ((ar[i] + ar[j]) % k == 0)
+                {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int n = Convert.ToInt32(firstMultipleInput[0]);
+
+        int k = Convert.ToInt32(firstMultipleInput[1]);
+
+        List<int> ar = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arTemp => Convert.ToInt32(arTemp)).ToList();
+
+        int result = Result.divisibleSumPairs(n, k, ar);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+
+-------------------------------------------------------------------------------------------------
+
+//13) https://www.hackerrank.com/challenges/migratory-birds/problem?isFullScreen=true
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'migratoryBirds' function below.
+     *
+     * The function is expected to return an INTEGER.
+     * The function accepts INTEGER_ARRAY arr as parameter.
+     */
+
+    public static int migratoryBirds(List<int> arr)
+    {
+// Dictionary to store the frequency of each bird type
+        Dictionary<int, int> frequency = new Dictionary<int, int>();
+        
+        // Populate the dictionary with frequencies
+        foreach (var bird in arr)
+        {
+            if (frequency.ContainsKey(bird))
+            {
+                frequency[bird]++;
+            }
+            else
+            {
+                frequency[bird] = 1;
+            }
+        }
+        
+        // Find the bird type with the maximum frequency
+        int maxFrequency = frequency.Values.Max();
+        int mostFrequentBird = frequency
+            .Where(kvp => kvp.Value == maxFrequency)
+            .Select(kvp => kvp.Key)
+            .Min();
+        
+        return mostFrequentBird;
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int arrCount = Convert.ToInt32(Console.ReadLine().Trim());
+
+        List<int> arr = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(arrTemp => Convert.ToInt32(arrTemp)).ToList();
+
+        int result = Result.migratoryBirds(arr);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+-----------------------------------------------------------------------------------------------------------
+
+//14) https://www.hackerrank.com/challenges/day-of-the-programmer/problem?isFullScreen=true
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'dayOfProgrammer' function below.
+     *
+     * The function is expected to return a STRING.
+     * The function accepts INTEGER year as parameter.
+     */
+
+    public static string dayOfProgrammer(int year)
+    {
+ // Define the result date in the format dd.mm.yyyy
+        string result = "";
+
+        if (year < 1918)
+        {
+            // Julian calendar leap year check
+            bool isLeapYear = (year % 4 == 0);
+            if (isLeapYear)
+            {
+                result = $"12.09.{year}";
+            }
+            else
+            {
+                result = $"13.09.{year}";
+            }
+        }
+        else if (year == 1918)
+        {
+            // Transition year with special February configuration
+            result = $"26.09.{year}";
+        }
+        else
+        {
+            // Gregorian calendar leap year check
+            bool isLeapYear = (year % 400 == 0) || (year % 4 == 0 && year % 100 != 0);
+            if (isLeapYear)
+            {
+                result = $"12.09.{year}";
+            }
+            else
+            {
+                result = $"13.09.{year}";
+            }
+        }
+
+        return result;
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        TextWriter textWriter = new StreamWriter(@System.Environment.GetEnvironmentVariable("OUTPUT_PATH"), true);
+
+        int year = Convert.ToInt32(Console.ReadLine().Trim());
+
+        string result = Result.dayOfProgrammer(year);
+
+        textWriter.WriteLine(result);
+
+        textWriter.Flush();
+        textWriter.Close();
+    }
+}
+------------------------------------------------------------------------------------------------------------
+
+//15) https://www.hackerrank.com/challenges/bon-appetit/problem?isFullScreen=true
+using System.CodeDom.Compiler;
+using System.Collections.Generic;
+using System.Collections;
+using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
+using System.Text.RegularExpressions;
+using System.Text;
+using System;
+
+class Result
+{
+
+    /*
+     * Complete the 'bonAppetit' function below.
+     *
+     * The function accepts following parameters:
+     *  1. INTEGER_ARRAY bill
+     *  2. INTEGER k
+     *  3. INTEGER b
+     */
+
+    public static void bonAppetit(List<int> bill, int k, int b)
+    {
+ // Calculate the total cost of items Anna and Brian shared
+        int totalCost = bill.Sum();
+        
+        // The cost of the item Anna did not eat
+        int annaItemCost = bill[k];
+        
+        // The total cost that should be shared between Anna and Brian
+        int sharedCost = (totalCost - annaItemCost) / 2;
+        
+        // Compare what Anna was charged to the correct share
+        if (b == sharedCost)
+        {
+            Console.WriteLine("Bon Appetit");
+        }
+        else
+        {
+            Console.WriteLine(b - sharedCost);
+        }
+    }
+
+}
+
+class Solution
+{
+    public static void Main(string[] args)
+    {
+        string[] firstMultipleInput = Console.ReadLine().TrimEnd().Split(' ');
+
+        int n = Convert.ToInt32(firstMultipleInput[0]);
+
+        int k = Convert.ToInt32(firstMultipleInput[1]);
+
+        List<int> bill = Console.ReadLine().TrimEnd().Split(' ').ToList().Select(billTemp => Convert.ToInt32(billTemp)).ToList();
+
+        int b = Convert.ToInt32(Console.ReadLine().Trim());
+
+        Result.bonAppetit(bill, k, b);
+    }
+}
+---------------------------------------------------------------------

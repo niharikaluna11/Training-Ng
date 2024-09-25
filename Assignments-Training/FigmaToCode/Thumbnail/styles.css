@@ -1,0 +1,29 @@
+.header {
+    background-color: rgba(17, 24, 39, 1);
+    color: white;
+    padding: 20px;
+    text-align: left;
+}
+
+.content {
+    font-size: 18px;
+    margin-top: 80px;
+    width: 55%;
+}
+
+@media screen and (max-width: 800px) {
+    .content {
+        font-size: 15px;
+        width: 100%;
+    }
+}
+.footer {
+   
+    padding: 20px 0;
+}
+
+.footer-img {
+    width: 20px; /* Adjust the size as needed */
+    height: auto; /* Maintains aspect ratio */
+    margin-left: 20px; /* Space between images */
+}

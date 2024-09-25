@@ -1,0 +1,62 @@
+18.https://www.hackerrank.com/challenges/encryption/problem?isFullScreen=true
+
+#include <bits/stdc++.h>
+
+using namespace std;
+
+/*
+ * Complete the 'encryption' function below.
+ *
+ * The function is expected to return a STRING.
+ * The function accepts STRING s as parameter.
+ */
+
+string encryption(string s) {
+ // Remove spaces from the input string
+    s.erase(remove(s.begin(), s.end(), ' '), s.end());
+    
+    int L = s.length();
+    
+    // Calculate the number of rows and columns for the grid
+    int rows = floor(sqrt(L));
+    int cols = ceil(sqrt(L));
+    
+    // Ensure that rows * cols >= L
+    if (rows * cols < L) {
+        rows = cols;
+    }
+    
+    // Build the result by reading column by column
+    string result = "";
+    for (int col = 0; col < cols; ++col) {
+        for (int row = 0; row < rows; ++row) {
+            int index = row * cols + col;
+            if (index < L) {
+                result += s[index];
+            }
+        }
+        // Add a space between columns (but not after the last one)
+        if (col < cols - 1) {
+            result += " ";
+        }
+    }
+    
+    return result;
+
+}
+
+int main()
+{
+    ofstream fout(getenv("OUTPUT_PATH"));
+
+    string s;
+    getline(cin, s);
+
+    string result = encryption(s);
+
+    fout << result << "\n";
+
+    fout.close();
+
+    return 0;
+}
