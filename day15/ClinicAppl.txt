@@ -1,0 +1,7 @@
+
+2) 
+Create a Login page patient
+Create the appointment page for patient
+a) Show calendar control for date and time selection- ensure doctor does not end with duplicate booking :(
+b) If possible List the doctors(Name) and while selecting use Id(Optional)/use doctor Id in textbox
+

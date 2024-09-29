@@ -9,6 +9,7 @@
         Pending,
         Cancelled
     }
+
     public class Order : IEquatable<Order>
     {
         public int OrderNumber { get; set; }

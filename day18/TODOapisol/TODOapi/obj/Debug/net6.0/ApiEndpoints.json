@@ -1,0 +1,12 @@
+[
+  {
+    "ContainingType": "TODOapi.Controllers.TodoController",
+    "Method": "ViewTask",
+    "RelativePath": "api/Todo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

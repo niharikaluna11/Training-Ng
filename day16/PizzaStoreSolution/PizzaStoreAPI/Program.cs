@@ -18,6 +18,7 @@ namespace PizzaStoreAPI
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+
             #region RepositoryInjection
             builder.Services.AddScoped<IRepository<int, Pizza>, PizzaRepository>();
             builder.Services.AddScoped<IRepository<int, Customer>, CustomerRepository>();
@@ -31,6 +32,7 @@ namespace PizzaStoreAPI
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<ICartService, CartService>();
             #endregion
+
 
             var app = builder.Build();
 
