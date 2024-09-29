@@ -17,3 +17,4 @@ DAY14: Dependency Injection - Singleton, Scoped, Transient; Loose Coupling
 DAY15: MVC - ViewModel ( A model that is created only for View),API - DTO(Data Transfer object),Web Application - Page/API
 DAY16: API Application with ASP Net Application
 DAY17: Revision of things :) 
+DAY18: Revision of things :) 
