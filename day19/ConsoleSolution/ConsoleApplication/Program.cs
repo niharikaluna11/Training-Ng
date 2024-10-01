@@ -6,11 +6,7 @@
 
         void TestEmployee()
         {
-            //Employee employee = new Employee();
-            //employee = null;
-            //GC.Collect();
-
-            //using is used to call aclass i.e disposable
+            
             using (Employee employee = new Employee())
             {
                 Console.WriteLine(employee.Name);
@@ -26,14 +22,7 @@
 
             }
 
-            //Employee employee = new Employee(); // No using statement
-            //Console.WriteLine(employee.Name);
-
-            //employee = null; // Allow the object to be collected
-            //GC.Collect();    // Force garbage collection
-            //GC.WaitForPendingFinalizers(); // Wait for finalizers to complete
-
-
+         
         }
 
         //product class used
@@ -69,8 +58,8 @@
         {
             Program program = new Program();
             program.TestEmployee();
-            //program.HandleProduct();
-            //program.HandlingPrivateConstructor();
+            program.HandleProduct();
+            program.HandlingPrivateConstructor();
         }
 
     }

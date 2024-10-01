@@ -3,7 +3,7 @@
 2) create 2 Interfaces with method and explain how the ambiguity  will be resolved.
 
 3) Creational - Factory, Builder, Singleton
-
+---------------------------------------------------------------------------------------------------------
 
 using System;
 using System.Collections.Generic;
