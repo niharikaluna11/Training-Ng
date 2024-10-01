@@ -18,3 +18,4 @@ DAY15: MVC - ViewModel ( A model that is created only for View),API - DTO(Data T
 DAY16: API Application with ASP Net Application
 DAY17: Revision of things :) 
 DAY18: Revision of things :) 
+DAY19: Learning of given topics :) 
