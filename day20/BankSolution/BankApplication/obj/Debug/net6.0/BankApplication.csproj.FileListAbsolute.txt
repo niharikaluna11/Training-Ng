@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\BankApplication.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\BankApplication.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\BankApplication.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\BankApplication.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\BankApplication.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\bin\Debug\net6.0\BankApplication.exe
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\bin\Debug\net6.0\BankApplication.deps.json
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\bin\Debug\net6.0\BankApplication.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\bin\Debug\net6.0\BankApplication.dll
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\bin\Debug\net6.0\BankApplication.pdb
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\BankApplication.dll
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\refint\BankApplication.dll
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\BankApplication.pdb
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\BankApplication.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\New folder\BankSolution\BankApplication\obj\Debug\net6.0\ref\BankApplication.dll
