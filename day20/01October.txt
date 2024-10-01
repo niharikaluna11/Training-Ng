@@ -1,0 +1,223 @@
+1) Implement the POC for Abstract class using Accounts class example
+
+2) create 2 Interfaces with method and explain how the ambiguity  will be resolved.
+
+3) Creational - Factory, Builder, Singleton
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FactoryPatternApp
+{
+    internal abstract class Account
+    {
+        public string AccountType { get; set; }
+        public double Balance { get; set; }
+        public long AccountNumber { get; set; }
+
+        public Account(string accountType, double balance, long accountNumber)
+        {
+            AccountType = accountType;
+            Balance = balance;
+            AccountNumber = accountNumber;
+        }
+
+        public void PrintStatement()
+        {
+            Console.WriteLine($"Account Number: {AccountNumber}");
+            Console.WriteLine($"Account Type: {AccountType}");
+            Console.WriteLine($"Balance: {Balance}");
+        }
+
+        public abstract void Deposit(double amount);
+        public abstract void Withdraw(double amount);
+    }
+}
+-------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FactoryPatternApp
+{
+    internal class CurrentAccount : Account
+    {
+        public CurrentAccount(double balance, long accountNumber) : base("Current", balance, accountNumber)
+        {
+        }
+
+        public override void Deposit(double amount)
+        {
+            if(amount<5000)
+            {
+                Balance += amount;
+                Console.WriteLine("Amount deposit success.");
+                PrintStatement();
+            }
+            else if(amount > 5000)
+            {
+                Balance = Balance + amount - 100;
+                Console.WriteLine("Amount deposit success. Rs. 100 deducted for cash deposit");
+            }
+            else
+                Console.WriteLine("Invalid amount. Deposit failed");
+        }
+
+        public override void Withdraw(double amount)
+        {
+            if (amount < Balance)
+            {
+                Balance -= amount;
+                Console.WriteLine("Amount withdrawn successfully.");
+                PrintStatement();
+            }
+            else
+                Console.WriteLine("Insufficient balance. Withdrawal failed.");
+        }
+    }
+}
+-----------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FactoryPatternApp
+{
+    internal class SavingsAccount : Account
+    {
+        public SavingsAccount(double balance, long accountNumber) : base("Savings", balance, accountNumber)
+        {
+        }
+
+        public override void Deposit(double amount)
+        {
+            if (amount >0)
+            {
+                Balance += amount;
+                Console.WriteLine("Amount deposit success.");
+                PrintStatement();
+            }
+            else
+                Console.WriteLine("Invalid amount. Deposit failed");
+        }
+
+        public override void Withdraw(double amount)
+        {
+            if ((Balance-amount) > 5000)
+            {
+                Balance -= amount;
+                Console.WriteLine("Amount withdrawn successfully.");
+                PrintStatement();
+            }
+            else
+                Console.WriteLine("Insufficient balance. Withdrawal failed.");
+        }
+    }
+}
+------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FactoryPatternApp
+{
+    internal interface IAccountFactory
+    {
+        public Account CreateAccount(string accountType, long accountNumber);
+    }
+}
+---------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FactoryPatternApp
+{
+    internal class AccountFactory : IAccountFactory
+    {
+        public Account CreateAccount(string accountType,  long accountNumber)
+        {
+            if (accountType == "Current")
+                return new CurrentAccount(10000, accountNumber);
+            else if (accountType == "Savings")
+                return new SavingsAccount(5000, accountNumber);
+            else
+                throw new Exception("Invalid account type");
+        }
+    }
+}
+---------------------------------------------------------
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace FactoryPatternApp
+{
+    internal class Bank
+    {
+        List<Account> accounts = new List<Account>();
+        IAccountFactory accountFactory = new AccountFactory();
+
+        void AddAccount(string accountType,  long accountNumber)
+        {
+            Account account = accountFactory.CreateAccount(accountType,  accountNumber);
+            accounts.Add(account);
+        }
+        public void CustomerInteraction()
+        {
+            int choice = 0;
+            do
+            {
+                Console.WriteLine("Enter the account type you wish to create");
+                string accountType = Console.ReadLine() ?? "Savings";
+                long accountNumber = 0;
+                if(accounts.Count > 0)
+                    accountNumber = accounts.Max(a => a.AccountNumber) + 1;
+                else
+                    accountNumber = 10001;
+                AddAccount(accountType, accountNumber ); // 0 and 0 are dummy values
+                Console.WriteLine("Do you want to add another account. enter 0 to stop. Any number to continue adding");
+                choice = Convert.ToInt32(Console.ReadLine());
+
+            } while (choice != 0);
+
+        }
+
+        internal void PrintAccounts()
+        {
+            foreach (var account in accounts)
+            {
+                account.PrintStatement();
+                Console.WriteLine("*********************************");
+            }
+        }
+    }
+}
+----------------------------------------------------------
+namespace FactoryPatternApp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Bank icici = new Bank();
+            icici.CustomerInteraction();
+            icici.PrintAccounts();
+        }
+    }
+}
+
