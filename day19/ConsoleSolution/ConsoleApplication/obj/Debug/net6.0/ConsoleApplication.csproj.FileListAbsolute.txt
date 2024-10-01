@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\bin\Debug\net6.0\ConsoleApplication.exe
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\bin\Debug\net6.0\ConsoleApplication.deps.json
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\bin\Debug\net6.0\ConsoleApplication.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\bin\Debug\net6.0\ConsoleApplication.dll
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\bin\Debug\net6.0\ConsoleApplication.pdb
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\ConsoleApplication.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\ConsoleApplication.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\ConsoleApplication.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\ConsoleApplication.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\ConsoleApplication.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\ConsoleApplication.dll
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\refint\ConsoleApplication.dll
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\ConsoleApplication.pdb
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\ConsoleApplication.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day19\ConsoleSolution\ConsoleApplication\obj\Debug\net6.0\ref\ConsoleApplication.dll
