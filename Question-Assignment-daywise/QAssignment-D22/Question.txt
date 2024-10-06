@@ -43,6 +43,11 @@ A course may have many students
 A course is taught by only one Instructor
 A schedule may be used for many courses 
 
+Student M to M Instructor
+1 COurse -Student M 
+1 Schedule - Course M 
+1 Instructor- M Course  
+
 
 ------------------------------------------------------------------
 

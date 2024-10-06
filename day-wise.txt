@@ -20,5 +20,7 @@ DAY17: Revision of things :)
 DAY18: Revision of things :) 
 DAY19: Learning of given topics :  Destructor, Indexer, Operator Overloading,private constructor,Inner classes,static constructor
 DAY20: Learning of given topics :  Need for Abstract class,Methods in interface (Why), Design Pattern Learning
+DAY21: RDBMS Basics: Normalization, ER diagram, and other topics
+DAY22: Assignment Given
 
 
