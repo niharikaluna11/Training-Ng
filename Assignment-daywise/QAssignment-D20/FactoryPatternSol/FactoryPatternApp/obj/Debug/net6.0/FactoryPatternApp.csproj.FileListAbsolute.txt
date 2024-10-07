@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\FactoryPatternApp.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\FactoryPatternApp.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\FactoryPatternApp.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\FactoryPatternApp.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\FactoryPatternApp.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\bin\Debug\net6.0\FactoryPatternApp.exe
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\bin\Debug\net6.0\FactoryPatternApp.deps.json
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\bin\Debug\net6.0\FactoryPatternApp.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\bin\Debug\net6.0\FactoryPatternApp.dll
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\bin\Debug\net6.0\FactoryPatternApp.pdb
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\FactoryPatternApp.dll
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\refint\FactoryPatternApp.dll
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\FactoryPatternApp.pdb
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\FactoryPatternApp.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\Question-Assignment-daywise\QAssignment-D20\FactoryPatternSol\FactoryPatternApp\obj\Debug\net6.0\ref\FactoryPatternApp.dll
