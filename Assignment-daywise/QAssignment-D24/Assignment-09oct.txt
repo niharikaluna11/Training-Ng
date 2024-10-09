@@ -1,0 +1,141 @@
+--Use Northwind database for the following queries
+use Northwind
+
+--2) Print the product from the category 'Dairy Products'
+SELECT P.ProductID ID, P.ProductName ProductName , C.CategoryName
+FROM Products AS P 
+JOIN Categories AS C 
+ON P.CategoryID=C.CategoryID
+WHERE C.CategoryName='Dairy Products'
+
+
+--3) Print the products supplied by 'Tokyo Traders'
+SELECT P.ProductID,P.ProductName,P.QuantityPerUnit,P.UnitPrice,P.SupplierID,S.ContactName,S.CompanyName
+FROM Products AS P
+LEFT JOIN Suppliers AS S
+ON P.SupplierID=S.SupplierID
+WHERE S.CompanyName='Tokyo Traders'
+
+SELECT * FROM Products Where SupplierID IN
+(SELECT SupplierID FROM Suppliers Where CompanyName='Tokyo Traders')
+
+
+--4) Print the categories in which 'Tokyo Traders' supply products
+SELECT * FROM Categories WHERE CategoryID IN
+(SELECT CategoryID FROM Products WHERE SupplierID IN
+(SELECT SupplierID FROM Suppliers WHERE CompanyName='Tokyo Traders'))
+
+--5) Print all orders by customers from 'Spain'
+SELECT * FROM Orders WHERE CustomerID IN
+(SELECT CustomerID FROM Customers WHERE Country='Spain')
+
+--6) Print the Customer name and the freight charge
+SELECT C.CustomerID CustomerID, C.ContactName Name, SUM(O.Freight) AS TotalFreight
+FROM Customers C
+JOIN Orders O ON O.CustomerID = C.CustomerID
+GROUP BY C.CustomerID, C.ContactName;
+
+
+--7) Print product name and quantity sold for all orders
+SELECT ProductName,Quantity
+FROM products AS p
+LEFT OUTER JOIN [Order Details] AS o
+ON p.ProductID=o.ProductID
+
+
+--8) print the products that are billed and the unbilled products with the price and sale price and the difference
+SELECT p.ProductName ProductName, 
+       p.UnitPrice AS OriginalPrice, 
+       o.UnitPrice AS SalesPrice, 
+       ( p.UnitPrice - o.UnitPrice ) AS PriceDifference
+FROM Products AS p
+LEFT JOIN  [Order Details] AS o
+ON p.ProductID = o.ProductID
+WHERE o.OrderID IS NULL
+OR o.OrderID IS NOT NULL;
+
+
+--9) Print the order number, Customer name, Product name and the quantity sold for all orders
+SELECT o.OrderID OrderNumber, c.ContactName CustomerName, p.ProductName ProductName, od.Quantity
+FROM Orders AS o
+JOIN Customers AS c
+ON o.CustomerID = c.CustomerID
+JOIN [Order Details] AS od
+ON o.OrderID = od.OrderID
+JOIN Products AS p
+ON od.ProductID = p.ProductID;
+
+
+--10) Print the total order amount for every order(price*quantity)+freight
+SELECT o.OrderID OrderID, 
+       SUM(od.Quantity * od.UnitPrice) + o.Freight AS TotalOrderAmount
+FROM Orders AS o
+JOIN [Order Details] AS od
+ON o.OrderID = od.OrderID
+GROUP BY o.OrderID, o.Freight;
+
+
+--11) Print the customer name, Phone, shipper name, phone for every order
+SELECT c.ContactName CustomerName, 
+       c.Phone AS CustomerPhone, 
+       s.CompanyName ShipperName, 
+       s.Phone AS ShipperPhone
+FROM Orders AS o
+JOIN Customers AS c
+ON o.CustomerID = c.CustomerID
+JOIN Shippers AS s
+ON o.ShipVia = s.ShipperID;
+
+
+--12) print the shipper name and number of order by the shipper and the total freight charge
+SELECT s.CompanyName ShipperName, 
+       COUNT(o.OrderID) AS NumberOfOrders, 
+       SUM(o.Freight) AS TotalFreight
+FROM Shippers AS s
+JOIN Orders AS o
+ON s.ShipperID = o.ShipVia
+GROUP BY s.CompanyName;
+
+
+
+--13) Print the product name, customer name, total quantity bought for all products sold by employees from 'USA'
+SELECT p.ProductName Product_Name, 
+       c.ContactName Customer_Name, 
+       SUM(od.Quantity) AS TotalQuantity
+FROM Products AS p
+JOIN [Order Details] AS od
+ON p.ProductID = od.ProductID
+JOIN Orders AS o
+ON od.OrderID = o.OrderID
+JOIN Customers AS c
+ON o.CustomerID = c.CustomerID
+JOIN Employees AS e
+ON o.EmployeeID = e.EmployeeID
+WHERE e.Country = 'USA'
+GROUP BY p.ProductName, c.ContactName;
+
+
+--14) Print the product name, category and the total sale amount sorted by category, Include all products and all categories
+SELECT p.ProductName ProductName, 
+       cat.CategoryName Category, 
+       SUM(od.Quantity * od.UnitPrice) AS TotalSaleAmount
+FROM Products AS p
+JOIN Categories AS cat
+ON p.CategoryID = cat.CategoryID
+LEFT JOIN [Order Details] AS od
+ON p.ProductID = od.ProductID
+GROUP BY p.ProductName, cat.CategoryName
+ORDER BY cat.CategoryName;
+
+
+--15) Print the category name and the total sale for category for all
+SELECT cat.CategoryName ,
+       SUM(od.Quantity * od.UnitPrice) AS TotalSaleAmount
+FROM Categories AS cat
+JOIN Products AS p
+ON cat.CategoryID = p.CategoryID
+JOIN [Order Details] AS od
+ON p.ProductID = od.ProductID
+GROUP BY cat.CategoryName;
+
+
