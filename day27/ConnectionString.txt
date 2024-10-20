@@ -1,0 +1,1 @@
+ SqlConnection conn = new SqlConnection("Server=5CD413DKS0\\DEMOINSTANCE;Integrated Security=true;Initial Catalog=NorthWind;TrustServerCertificate=True");

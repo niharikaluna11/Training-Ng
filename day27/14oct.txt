@@ -1,0 +1,48 @@
+using Microsoft.Data.SqlClient;
+
+namespace DatabaseConnectionApp
+{
+    internal class Program
+    {
+        SqlConnection conn = new SqlConnection("Server=G3SLAPTOP\\SQLEXPRESS;Integrated Security=true;Initial Catalog=NorthWind;TrustServerCertificate=True");
+
+        public Program()
+        {
+           
+        }
+
+        void GetProductDeatilsFromDatabase()
+        {
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = conn;
+            cmd.CommandText = "SELECT * FROM Products";
+            try
+            {
+                conn.Open();
+                SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+
+                    Console.WriteLine($"Name: \t{reader["ProductName"]}");
+                    Console.WriteLine($"Price: \t${reader["UnitPrice"]}");
+                    Console.WriteLine("-------------------------------------");
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally
+            {
+                conn.Close();
+
+            }
+        }
+       static void Main(string[] args)
+        {
+            Program program = new Program();
+            program.GetProductDeatilsFromDatabase();
+            Console.WriteLine("Hello, World!");
+        }
+    }
+}
