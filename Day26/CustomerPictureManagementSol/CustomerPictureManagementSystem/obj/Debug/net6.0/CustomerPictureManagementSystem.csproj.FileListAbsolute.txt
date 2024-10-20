@@ -1,0 +1,15 @@
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\bin\Debug\net6.0\CustomerPictureManagementSystem.exe
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\bin\Debug\net6.0\CustomerPictureManagementSystem.deps.json
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\bin\Debug\net6.0\CustomerPictureManagementSystem.runtimeconfig.json
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\bin\Debug\net6.0\CustomerPictureManagementSystem.dll
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\bin\Debug\net6.0\CustomerPictureManagementSystem.pdb
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\CustomerPictureManagementSystem.GeneratedMSBuildEditorConfig.editorconfig
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\CustomerPictureManagementSystem.AssemblyInfoInputs.cache
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\CustomerPictureManagementSystem.AssemblyInfo.cs
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\CustomerPictureManagementSystem.csproj.CoreCompileInputs.cache
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\CustomerPictureManagementSystem.sourcelink.json
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\CustomerPictureManagementSystem.dll
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\refint\CustomerPictureManagementSystem.dll
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\CustomerPictureManagementSystem.pdb
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\CustomerPictureManagementSystem.genruntimeconfig.cache
+D:\Niharikaluna-github\Training-Ng\day25\CustomerPictureManagementSol\CustomerPictureManagementSystem\obj\Debug\net6.0\ref\CustomerPictureManagementSystem.dll
