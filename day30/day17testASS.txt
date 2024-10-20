@@ -1,0 +1,577 @@
+using AutoMapper;
+using EFFirstAPI.Context;
+using EFFirstAPI.Exceptions;
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models.DTO;
+using EFFirstAPI.Models;
+using EFFirstAPI.Repositories;
+using EFFirstAPI.Services;
+using Microsoft.EntityFrameworkCore;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EFFirstTest
+{
+    internal class ProductServiceTesting
+    {
+        DbContextOptions options;
+        ProductRepository repository;
+        ShoppingContext shoppingContext;
+        Mock<IMapper> mapper;
+
+        [SetUp]
+        public void Setup()
+        {
+            options = new DbContextOptionsBuilder<ShoppingContext>()
+                .UseInMemoryDatabase("Test")
+                .Options;
+
+            shoppingContext = new ShoppingContext(options);
+            repository = new ProductRepository(shoppingContext);
+            mapper = new Mock<IMapper>();
+        }
+
+        [Test]
+
+        public async Task CreateProductTesting()
+        {
+            //Arrange
+
+            var product = new ProductDTO
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+            var productEntity = new Product
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+
+            mapper.Setup(m => m.Map<Product>(product)).Returns(productEntity);  //dummying the method to return the result for testing
+            IProductService productService = new ProductService(repository, mapper.Object);
+
+            //Act
+
+            var result = await productService.CreateProduct(product);
+
+            //Assert
+            Assert.AreEqual(1, result);
+        }
+
+        [Test]
+
+        public async Task GetAllProuctTesting()
+        {
+            var product = new ProductDTO
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+            var productEntity = new Product
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+
+            mapper.Setup(m => m.Map<Product>(product)).Returns(productEntity);
+            IProductService productService = new ProductService(repository, mapper.Object);
+
+            //Act
+            await productService.CreateProduct(product);
+            var result = await productService.GetAllProduct();
+
+            //Assert
+            Assert.NotNull(result);
+        }
+
+        [Test]
+        [TestCase(1)]
+        public async Task GetProductTesting(int id)
+        {
+            var product = new ProductDTO
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+            var productEntity = new Product
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+
+            mapper.Setup(m => m.Map<Product>(product)).Returns(productEntity);
+            IProductService productService = new ProductService(repository, mapper.Object);
+
+            //Act
+            await productService.CreateProduct(product);
+            var result = await productService.GetProduct(id);
+            //Assert
+            Assert.AreEqual(result.Id, id);
+        }
+
+        [Test]
+        [TestCase(80, 1)]
+        [TestCase(90, 1)]
+        public async Task UpdatePriceTesting(float price, int id)
+        {
+            var product = new ProductDTO
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+            var productEntity = new Product
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+
+            mapper.Setup(m => m.Map<Product>(product)).Returns(productEntity);
+            IProductService productService = new ProductService(repository, mapper.Object);
+
+            //Act
+            await productService.CreateProduct(product);
+            var result = await productService.UpdateProductPrice(price, id);
+            //Assert
+            Assert.AreEqual(result.Price, price);
+        }
+
+        //Exception Testing
+
+
+        [Test]
+        [TestCase("Not Found in Product", 1)]
+
+        public async Task NotFoundExceptionTesting(string msg, int id)
+        {
+            //Arrange
+            IProductService productService = new ProductService(repository, mapper.Object);
+
+            //Act
+            var exception = Assert.ThrowsAsync<NotFoundException>(async () => await productService.GetProduct(id));
+
+            //Assert
+            Assert.That(exception.Message, Is.EqualTo(msg));
+
+        }
+
+        [Test]
+        [TestCase("Product Price Update Fail", 1, 30)]
+
+        public async Task NotUpdateExceptionTesting(string msg, int id, float price)
+        {
+
+            //Arrange
+            IProductService productService = new ProductService(repository, mapper.Object);
+
+            //Act
+
+            //var exception = Assert.ThrowsAsync<NotUpdateException>(async () => await productService.UpdateProductPrice(price,id))
+            Assert.ThrowsAsync<NotUpdateException>(async () => await productService.UpdateProductPrice(price, id));
+
+            //Assert
+            //Assert.That(exception.Message, Is.EqualTo(msg));
+
+        }
+
+        [Test]
+        [TestCase("Product Price Update Fail", 999, 30)]
+        public async Task UpdatePriceNotFoundExceptionTesting(string msg, int id, float price)
+        {
+            // Arrange
+            repository = new ProductRepository(shoppingContext); // Reset repository for clean state
+            IProductService productService = new ProductService(repository, mapper.Object);
+
+            // Act & Assert
+            var exception = Assert.ThrowsAsync<NotUpdateException>(async () => await productService.UpdateProductPrice(price, id));
+            Assert.That(exception.Message, Is.EqualTo(msg));
+        }
+
+        [Test]
+        public async Task GetAllProduct_ThrowsCollectionEmptyException()
+        {
+            // Arrange
+            var mockRepo = new Mock<IRepository<int, Product>>();
+            mockRepo.Setup(repo => repo.GetAll()).ThrowsAsync(new CollectionEmptyException("Product"));
+            IProductService productService = new ProductService(mockRepo.Object, mapper.Object);
+
+            // Act & Assert
+            var exception = Assert.ThrowsAsync<CollectionEmptyException>(async () => await productService.GetAllProduct());
+            Assert.That(exception.Message, Is.EqualTo("Empty Collection - Product"));
+        }
+
+        [Test]
+        public async Task GetAllProduct_ReturnsProducts()
+        {
+            // Arrange
+            var mockRepo = new Mock<IRepository<int, Product>>();
+            var products = new List<Product>
+            {
+                new Product { Id = 1, Name = "Product 1", Price = 10.0f, Quantity = 5 },
+                new Product { Id = 2, Name = "Product 2", Price = 20.0f, Quantity = 10 }
+            };
+            mockRepo.Setup(repo => repo.GetAll()).ReturnsAsync(products);
+            IProductService productService = new ProductService(mockRepo.Object, mapper.Object);
+
+            // Act
+            var result = await productService.GetAllProduct();
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.AreEqual(2, result.Count());
+        }
+
+    }
+}
+
+---------------------------------------------------
+
+using EFFirstAPI.Context;
+using EFFirstAPI.Models;
+using EFFirstAPI.Repositories;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using EFFirstAPI.Exceptions;
+
+namespace EFFirstTest
+{
+    public class ProductRepositoryTest
+    {
+        DbContextOptions options;
+        ProductRepository repository;
+        ShoppingContext shoppingContext;
+
+        [SetUp]
+        public void Setup()
+        {
+            options = new DbContextOptionsBuilder<ShoppingContext>()
+                .UseInMemoryDatabase("Test")
+                .Options;
+
+            shoppingContext = new ShoppingContext(options);
+            repository = new ProductRepository(shoppingContext);
+        }
+
+        //[Test]
+
+        //[TestCase("Product1", 100, 5, "","Test Product 1", 1)]
+        //[TestCase("Product2", 100, 5, "","Test Product 2", 2)]
+
+        //public async Task TestAdd(string name, float price, int qty, string image, string desc, int id)
+        //{
+        //    //Arrange
+
+        //    Product product = new Product
+        //    {
+        //        Name = name,
+        //        Price = price,
+        //        Quantity = qty,
+        //        BasicImage = image,
+        //        Description = desc
+        //    };
+        //    //Act
+
+
+        //    var result = await repository.Add(product);
+
+        //    //Assert
+        //    Assert.AreEqual(id, result.Id);
+        //}
+
+        [Test]
+        [TestCase("Product3", 100, 5, "", "Test Product 3", 3)]
+        public async Task GetProductTest(string name, float price, int qty, string image, string desc, int id)
+        {
+            //Arrange
+            Product product = new Product
+            {
+                Name = name,
+                Price = price,
+                Quantity = qty,
+                BasicImage = image,
+                Description = desc
+            };
+
+            //Act
+
+            await repository.Add(product);
+            var getProduct = await repository.Get(id);
+
+            //Assert
+            Assert.AreEqual(getProduct.Id, id);
+
+        }
+
+        [Test]
+        public async Task GetAllProductTest()
+        {
+            //Arrange
+            Product product = new Product
+            {
+                Name = "Product4",
+                Price = 100,
+                Quantity = 5,
+                BasicImage = "Test Product",
+                Description = "Test Product"
+            };
+
+            //Act
+
+            await repository.Add(product);
+            var getProduct = await repository.GetAll();
+
+            //Assert
+            Assert.NotNull(getProduct);
+
+        }
+
+        [Test]
+        [TestCase("Product1", 100, 5, "", "Test Product 1", 1)]
+        public async Task DeleteProduct(string name, float price, int qty, string image, string desc, int id)
+        {
+            //Arrange
+            Product product = new Product
+            {
+                Name = name,
+                Price = price,
+                Quantity = qty,
+                BasicImage = image,
+                Description = desc
+            };
+
+            //Act
+
+            await repository.Add(product);
+            var deleteProduct = await repository.Delete(id);
+
+            //Assert
+            Assert.AreEqual(deleteProduct.Id, id);
+
+        }
+
+        //Exception Testing
+
+        [Test]
+        [TestCase("TestAdd1", 120, 4, "", "Test description for Product", 1)]
+
+        public async Task TestCouldNotAddException(string name, float price, int quantity, string image, string desc, int id)
+        {
+            //Arrange
+            Product product = new Product
+            {
+                Name = null,
+                Price = price,
+                Quantity = quantity,
+                BasicImage = image,
+                Description = desc
+            };
+
+            //Assert
+            Assert.ThrowsAsync<CouldNotAddException>(async () => await repository.Add(product));
+
+        }
+
+        [Test]
+        [TestCase(2)]
+
+        public async Task TestNotFoundException(int id)
+        {
+            var exception = Assert.ThrowsAsync<NotFoundException>(async () => await repository.Delete(id));
+            Assert.That(exception.Message, Is.EqualTo("Not Found in Product for delete"));
+        }
+
+
+        [Test]
+        public async Task TestCollectionEmptyException()
+        {
+            var exception = Assert.ThrowsAsync<CollectionEmptyException>(async () => await repository.GetAll());
+            Assert.That(exception.Message, Is.EqualTo("Empty Collection - Products"));
+        }
+    }
+}
+
+
+-------------------------------------
+
+using AutoMapper;
+using EFFirstAPI.Context;
+using EFFirstAPI.Controllers;
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models.DTO;
+using EFFirstAPI.Models;
+using EFFirstAPI.Repositories;
+using EFFirstAPI.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EFFirstTest
+{
+    public class ProductControllerTesting
+    {
+        DbContextOptions options;
+        ProductRepository repository;
+        ShoppingContext shoppingContext;
+        private Mock<ILogger<ProductController>> loggerController;
+        Mock<IMapper> mapper;
+        IProductService productService;
+
+        [SetUp]
+        public void Setup()
+        {
+            options = new DbContextOptionsBuilder<ShoppingContext>()
+                .UseInMemoryDatabase("Test")
+                .Options;
+
+            shoppingContext = new ShoppingContext(options);
+            repository = new ProductRepository(shoppingContext);
+            loggerController = new Mock<ILogger<ProductController>>();
+            mapper = new Mock<IMapper>();
+            productService = new ProductService(repository, mapper.Object);
+        }
+
+        [Test]
+        [TestCase("Test Product1", 300, 10)]
+        [TestCase("Test Product2", 200, 20)]
+        public async Task AddProductControllerTest(string name, float price, int qty)
+        {
+            //Arrange
+            var product = new ProductDTO
+            {
+                Name = name,
+                Price = price,
+                Quantity = qty,
+            };
+            var productEntity = new Product
+            {
+                Name = name,
+                Price = price,
+                Quantity = qty
+            };
+            mapper.Setup(m => m.Map<Product>(product)).Returns(productEntity);
+            var controller = new ProductController(productService, loggerController.Object);
+            //Act
+            var result = await controller.CreateProduct(product);
+            Assert.IsNotNull(result);
+            var resultObject = result as OkObjectResult;
+            // Assert
+            Assert.IsNotNull(resultObject);
+            Assert.AreEqual(200, resultObject.StatusCode);
+        }
+
+        [Test]
+        [TestCase("Test Product1", 300, 10, 200, 1)]
+        [TestCase("Test Product2", 200, 20, 300, 2)]
+        public async Task updateProductPriceControllerTest(string name, float price, int qty, float updatePrice, int id)
+        {
+            //Arrange
+            var product = new ProductDTO
+            {
+                Name = name,
+                Price = price,
+                Quantity = qty,
+            };
+            var productEntity = new Product
+            {
+                Name = name,
+                Price = price,
+                Quantity = qty
+            };
+            mapper.Setup(m => m.Map<Product>(product)).Returns(productEntity);
+            var controller = new ProductController(productService, loggerController.Object);
+            //Act
+            await controller.CreateProduct(product);
+            var result = await controller.UpdateProductPrice(updatePrice, id);
+            Assert.IsNotNull(result);
+            var resultObject = result as OkObjectResult;
+            // Assert
+            Assert.IsNotNull(resultObject);
+            Assert.AreEqual(200, resultObject.StatusCode);
+        }
+
+        //Exceptions Testing
+
+        [Test]
+        public async Task CreateProduct_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+            var mockProductService = new Mock<IProductService>();
+            var mockLogger = new Mock<ILogger<ProductController>>();
+            var controller = new ProductController(mockProductService.Object, mockLogger.Object);
+
+            var productDto = new ProductDTO
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+
+            mockProductService.Setup(service => service.CreateProduct(productDto))
+                .ThrowsAsync(new Exception("An error occurred"));
+
+            // Act
+            var result = await controller.CreateProduct(productDto) as ObjectResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, result.StatusCode);
+        }
+
+        [Test]
+        public async Task UpdateProductPrice_ReturnsInternalServerError_OnException()
+        {
+            // Arrange
+
+            var productDto = new ProductDTO
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+
+            var productEntity = new Product
+            {
+                Name = "Test Product",
+                Price = 10.0f,
+                Quantity = 100
+            };
+            mapper.Setup(m => m.Map<Product>(productDto)).Returns(productEntity);
+            var controller = new ProductController(productService, loggerController.Object);
+            // Act
+            await controller.CreateProduct(productDto);
+            var result = await controller.UpdateProductPrice(1900, 7) as ObjectResult;
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.AreEqual(StatusCodes.Status500InternalServerError, result.StatusCode);
+            Assert.AreEqual("Product Price Update Fail", result.Value);
+        }
+
+    }
+
+}
+
+-----------------------------
