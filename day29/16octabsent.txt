@@ -1,0 +1,510 @@
+AutoMapper.Extensions.Microsoft.DependencyInjection
+-----------------------------------------------------------------------
+
+
+namespace EFCoreFirstAPI.Models
+{
+    public class Customer
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public int Age { get; set; }
+        public DateTime DateOfBirth { get; set; }
+
+        public Cart Cart { get; set; }
+
+        public IEnumerable<Order> Orders { get; set; }
+        public Customer()
+        {
+            Orders = new List<Order>();
+            Cart = new Cart();
+        }
+
+    }
+}
+----------------------------------------------
+namespace EFCoreFirstAPI.Models
+{
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+        public float Price { get; set; }
+        public string BasicImage { get; set; } = string.Empty;
+        public IEnumerable<OrderDetail> OrderDetails { get; set; }
+        public Product()
+        {
+            OrderDetails = new List<OrderDetail>();
+        }
+    }
+}
+-----------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace EFCoreFirstAPI.Models
+{
+    public class Order
+    {
+        [Key]
+        public int OrderNumber { get; set; }
+        public int CustomerId { get; set; }
+        public DateTime OrderDate { get; set; }
+        public float TotalValue { get; set; }
+        public string OrderStatus { get; set; } = string.Empty;
+
+        public Customer Customer { get; set; }
+        public IEnumerable<OrderDetail> OrderDetails { get; set; }
+        public Order()
+        {
+            Customer = new Customer();
+            OrderDetails = new List<OrderDetail>();
+        }
+    }
+}
+-------------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+
+namespace EFCoreFirstAPI.Models
+{
+    public class OrderDetail
+    {
+        [Key]
+        public int SNo { get; set; }
+        public int OrderNumber { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public float Price { get; set; }
+        public Order Order { get; set; }
+        public Product Product { get; set; }
+        public OrderDetail()
+        {
+            Order = new Order();
+            Product = new Product();
+        }
+    }
+}
+--------------------------------------------------
+namespace EFCoreFirstAPI.Models
+{
+    public class Cart
+    {
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
+        public DateTime CreationDate { get; set; }
+        public IEnumerable<CartItem> CartItems { get; set; }
+        public Cart()
+        {
+            CartItems = new List<CartItem>();
+        }
+    }
+}
+-----------------------------------------------------
+using System.ComponentModel.DataAnnotations;
+using System.Data.Common;
+
+namespace EFCoreFirstAPI.Models
+{
+    public class CartItem
+    {
+        public int SNo { get; set; }
+        public int CartId { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        
+
+        public Cart Cart { get; set; }
+        public Product Product { get; set; }
+        public CartItem()
+        {
+            Cart = new Cart();
+            Product = new Product();
+        }
+    }
+}
+--------------------------------------------------------
+using EFCoreFirstAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFCoreFirstAPI.Contexts
+{
+    public class ShoppingContext : DbContext
+    {
+        public ShoppingContext(DbContextOptions contextOptions):base(contextOptions)
+        {
+
+        }
+        public DbSet<Customer>  Customers { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+
+        override protected void OnModelCreating(ModelBuilder modelBuilder)
+        {
+           modelBuilder.Entity<CartItem>().HasKey(ci=>ci.SNo).HasName("PK_CartItem");
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o=>o.Customer)
+                .WithMany(c=>c.Orders)
+                .HasForeignKey(o => o.CustomerId)
+                .HasConstraintName("FK_Order_Customer");
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Product)
+                .WithMany(p => p.OrderDetails)
+                .HasForeignKey(od => od.ProductId)
+                .HasConstraintName("FK_OrderDetail_Product");
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Order)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(od => od.OrderNumber)
+                .HasConstraintName("FK_OrderDetail_Order");
+
+            modelBuilder.Entity<Cart>()
+                .HasOne(c => c.Customer)
+                .WithOne(c => c.Cart)
+                .HasForeignKey<Cart>(c => c.CustomerId)
+                .HasConstraintName("FK_Cart_Customer");
+
+
+        }
+
+    }
+}
+---------------------------------------------------------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=G3SLAPTOP\\SQLEXPRESS;Integrated Security=true;Initial Catalog=dbShopping16Oct24;TrustServerCertificate=True"
+  }
+}
+------------------------------------------------------------------------------------
+using EFCoreFirstAPI.Contexts;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFCoreFirstAPI
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+
+            #region Contexts
+            builder.Services.AddDbContext<ShoppingContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+            #endregion
+
+
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseAuthorization();
+
+
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
+}
+----------------------------------------------------
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Contexts;
+using EFCoreFirstAPI.Exceptions;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFCoreFirstAPI.Repositories
+{
+    public class CustomerRepository : IRepository<int, Customer>
+    {
+        private readonly ShoppingContext _context;
+
+        public CustomerRepository(ShoppingContext shoppingContext) 
+        { 
+            _context = shoppingContext;
+        }
+
+        public async Task<Customer> Add(Customer entity)
+        {
+            try
+            {
+                _context.Customers.Add(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new CouldNotAddException("Customer");
+            }
+        }
+
+        public async Task<Customer> Delete(int key)
+        {
+           var customer = await Get(key);
+            if (customer != null)
+            {
+                _context.Customers.Remove(customer);
+                await _context.SaveChangesAsync();
+                return customer;
+            }
+            throw new NotFoundException("Customer for delete");
+        }
+
+        public async Task<Customer> Get(int key)
+        {
+            var customer = _context.Customers.FirstOrDefault(c => c.Id == key);
+            return customer;
+        }
+
+        public async Task<IEnumerable<Customer>> GetAll()
+        {
+            var customers = await _context.Customers.ToListAsync();
+            if(customers.Count == 0)
+            {
+                throw new CollectionEmptyException("Customers");
+            }
+            return customers;
+        }
+
+        public async Task<Customer> Update(int key, Customer entity)
+        {
+            var customer = await Get(key);
+            if (customer != null)
+            {
+                customer.Name = entity.Name;
+                customer.Email = entity.Email;
+                customer.Phone = entity.Phone;
+                customer.Age = entity.Age;
+                customer.DateOfBirth = entity.DateOfBirth;
+                await _context.SaveChangesAsync();
+                return customer;
+            }
+            throw new NotFoundException("Customer for delete");
+        }
+    }
+}
+--------------------------------------------
+namespace EFCoreFirstAPI.Models.DTOs
+{
+    public class CustomerDTO
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public DateTime DateOfBirth { get; set; }
+    }
+}
+
+--------------------------------------------
+
+using EFCoreFirstAPI.Models.DTOs;
+
+namespace EFCoreFirstAPI.Interfaces
+{
+    public interface ICustomerBasicService
+    {
+        Task<int> CreateCustomer(CustomerDTO customer);
+    }
+}
+------------------------------------------------
+using AutoMapper;
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Models.DTOs;
+
+namespace EFCoreFirstAPI.Services
+{
+    public class CustomerBasicService : ICustomerBasicService
+    {
+        private readonly IRepository<int, Customer> _customerRepository;
+        private readonly IMapper _mapper;
+
+        public CustomerBasicService(IRepository<int,Customer> customerRepository,IMapper mapper) 
+        { 
+            _customerRepository = customerRepository;
+            _mapper = mapper;
+        }
+        public async Task<int> CreateCustomer(CustomerDTO customer)
+        {
+            //Customer newCustomer = MapCustomerDTOToCustomer(customer);
+            Customer newCustomer = _mapper.Map<Customer>(customer);
+
+            newCustomer.Age = CalculateAgeFromDateTime(customer.DateOfBirth);
+            var addedCustomer = await _customerRepository.Add(newCustomer);
+            return addedCustomer.Id;
+        }
+
+        //private Customer MapCustomerDTOToCustomer(CustomerDTO customer)
+        //{
+        //    return new Customer
+        //    {
+        //        Name = customer.Name,
+        //        Email = customer.Email,
+        //        Phone = customer.Phone,
+        //        DateOfBirth = customer.DateOfBirth
+        //    };
+        //}
+
+        int CalculateAgeFromDateTime(DateTime dateOfBirth)
+        {
+            var today = DateTime.Today;
+            var age = today.Year - dateOfBirth.Year;
+            if (dateOfBirth.Date > today.AddYears(-age)) age--;
+            return age;
+        }
+    }
+}
+
+-----------------------------------------------------------------------
+using EFCoreFirstAPI.Contexts;
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Repositories;
+using EFCoreFirstAPI.Services;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFCoreFirstAPI
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+
+            #region Contexts
+            builder.Services.AddDbContext<ShoppingContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+            #endregion
+
+            #region OtherServices
+            builder.Services.AddAutoMapper(typeof(Customer));
+            #endregion
+
+            #region Repositories
+            builder.Services.AddScoped<IRepository<int, Customer>, CustomerRepository>();
+            #endregion
+
+            #region Services
+            builder.Services.AddScoped<ICustomerBasicService, CustomerBasicService>();
+            #endregion
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseAuthorization();
+
+
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
+}
+
+-------------------------------------------------------------
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Models.DTOs;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EFCoreFirstAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CustomerController : ControllerBase
+    {
+        private readonly ICustomerBasicService _customerService;
+
+        public CustomerController(ICustomerBasicService customerService)
+        {
+            _customerService = customerService;
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateCustomer(CustomerDTO customer)
+        {
+            try
+            {
+                var customerId = await _customerService.CreateCustomer(customer);
+                return Ok(customerId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+    }
+}
+-------------------------------------------------------
+using AutoMapper;
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Models.DTOs;
+
+namespace EFCoreFirstAPI.Mappers
+{
+    public class CustomerProfile :Profile
+    {
+        public CustomerProfile()
+        {
+            CreateMap<Customer, CustomerDTO>();
+            CreateMap<CustomerDTO, Customer>();
+        }
+    }
+}
+
+-----------------------------------------------------------------
+Create the repository for Product
+Implement the Add Product, Update Product Price - In one Controller
+Get all products, Get Product By ID - In one Controller
+
+
+Add another model which will help to add more than one image for the product
+Create the table
+Create repository 
+Implement add images for product as end point.
+
+

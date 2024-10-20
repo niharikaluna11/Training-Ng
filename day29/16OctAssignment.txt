@@ -1,0 +1,996 @@
+EF core with API
+Create the repository for Product
+Implement the Add Product, Update Product Price - In one Controller
+Get all products, Get Product By ID - In one Controller
+
+
+Add another model which will help to add more than one image for the product
+Create the table
+Create repository
+Implement add images for product as end point.
+-----------------------------------------------
+
+shopping context-context
+
+using EFFirstAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFFirstAPI.Context
+{
+    public class ShoppingContext : DbContext
+    {
+        //injection done in program file
+        public ShoppingContext(DbContextOptions contextOptions)  : base(contextOptions) 
+        { }
+
+        public DbSet<Customer> Customers { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+
+        public DbSet<ProductImage> ProductImages { get; set; }
+
+        override protected void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<CartItem>().HasKey(ci => ci.SNo).HasName("PK_CartItem");
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Customer)
+                .WithMany(c => c.Orders)
+                .HasForeignKey(o => o.CustomerId)
+                .HasConstraintName("FK_Order_Customer");
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Product)
+                .WithMany(p => p.OrderDetails)
+                .HasForeignKey(od => od.ProductId)
+                .HasConstraintName("FK_OrderDetail_Product");
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Order)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(od => od.OrderNumber)
+                .HasConstraintName("FK_OrderDetail_Order");
+
+            modelBuilder.Entity<Cart>()
+                .HasOne(c => c.Customer)
+                .WithOne(c => c.Cart)
+                .HasForeignKey<Cart>(c => c.CustomerId)
+                .HasConstraintName("FK_Cart_Customer");
+
+            modelBuilder.Entity<ProductImage>()
+                .HasOne(pi => pi.Product)
+                .WithMany(p => p.ProductImages)
+                .HasForeignKey(pi => pi.ProductId)
+                .HasConstraintName("FK_ProductImage_Product");
+        }
+
+
+    }
+}
+
+
+---------------------------------------
+All controllers
+--------------------------
+
+
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models.DTO;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EFFirstAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CustomerController : ControllerBase
+    {
+        private readonly ICustomerService _customerBasicService;
+
+        public CustomerController(ICustomerService cutomerBasicService)
+        {
+            _customerBasicService = cutomerBasicService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCustomer(CustomerDTO customer)
+        {
+            try
+            {
+                var customerId = await _customerBasicService.CreateCustomer(customer);
+                return Ok(customerId);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+    }
+}
+
+----------------------------------
+
+using EFFirstAPI.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EFFirstAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class GetProductController : ControllerBase
+    {
+        private IProductService _productService;
+
+        public GetProductController(IProductService productService)
+        {
+            _productService = productService;
+        }
+
+        [HttpGet("getAllProducts")]
+        public async Task<IActionResult> GetAllProducts()
+        {
+            try
+            {
+                var products = await _productService.GetAllProduct();
+                return Ok(products);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet("getProductById")]
+        public async Task<IActionResult> GetProduct(int Id)
+        {
+            try
+            {
+                var product = await _productService.GetProduct(Id);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+    }
+}
+
+----------------------------
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models.DTO;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EFFirstAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductController : ControllerBase
+    {
+        private IProductService _productService;
+        private readonly ILogger<ProductController> _logger;
+
+        // private readonly ILogger _logger;
+
+        public ProductController(IProductService productService, ILogger<ProductController> logger)
+        {
+            _productService = productService;
+            _logger = logger;
+        }
+
+        [HttpPost("CreateProduct")]
+        public async Task<IActionResult> CreateProduct(ProductDTO product)
+        {
+            try
+            {
+                var productId = await _productService.CreateProduct(product);
+                _logger.LogInformation("Product Added");
+                return Ok(productId);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpPatch("UpdateProductPrice")]
+
+        public async Task<IActionResult> UpdateProductPrice(float price, int productId)
+        {
+            try
+            {
+                var product = await _productService.UpdateProductPrice(price, productId);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+    }
+}
+
+------------------------------
+
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models.DTO;
+using Microsoft.AspNetCore.Mvc;
+
+namespace EFFirstAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductImageController : ControllerBase
+    {
+        private readonly IProductImageService _service;
+
+        public ProductImageController(IProductImageService productImageService)
+        {
+            _service = productImageService;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateProductImage(ProductImageDTO productImage)
+        {
+            try
+            {
+                var newProductImage = await _service.CreateProductImage(productImage);
+                return Ok(newProductImage);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+    }
+}
+
+--------------------------------------
+
+interfaces all
+------------------------------
+namespace EFFirstAPI.Interfaces
+{
+    public interface ICalculate
+    {
+        int Add(int num1, int num2);
+    }
+}
+
+-------------------------
+using EFFirstAPI.Models.DTO;
+
+namespace EFFirstAPI.Interfaces
+{
+    public interface ICustomerService
+    {
+        Task<int> CreateCustomer(CustomerDTO customer);
+    }
+}
+
+-----------------------
+using EFFirstAPI.Models;
+using EFFirstAPI.Models.DTO;
+
+namespace EFFirstAPI.Interfaces
+{
+    public interface IProductImageService
+    {
+        Task<ProductImage> CreateProductImage(ProductImageDTO product);
+    }
+}
+
+----------------------------
+using EFFirstAPI.Models;
+using EFFirstAPI.Models.DTO;
+
+namespace EFFirstAPI.Interfaces
+{
+    public interface IProductService
+    {
+        Task<int> CreateProduct(ProductDTO product);
+
+        Task<Product> UpdateProductPrice(float price, int Id);
+
+        Task<IEnumerable<Product>> GetAllProduct();
+        Task<Product> GetProduct(int Id);
+    }
+}
+
+-------------------------------------
+namespace EFFirstAPI.Interfaces
+{
+    //generic repo i
+    public interface IRepository<K, T> where T : class
+    {
+        Task<T> Get(K key);
+        Task<IEnumerable<T>> GetAll();
+        Task<T> Add(T entity);
+        Task<T> Delete(int key);
+
+      
+    }
+}
+
+----------------------------------------
+
+all mappers
+--------------------------------
+
+using AutoMapper;
+using EFFirstAPI.Models.DTO;
+using EFFirstAPI.Models;
+
+namespace EFFirstAPI.Mappers
+{
+    public class CustomerProfile : Profile
+    {
+        public CustomerProfile()
+        {
+            CreateMap<Customer, CustomerDTO>();
+            CreateMap<CustomerDTO, Customer>();
+        }
+    }
+}
+
+------------------------
+
+using AutoMapper;
+using EFFirstAPI.Models.DTO;
+using EFFirstAPI.Models;
+
+namespace EFFirstAPI.Mappers
+{
+    public class ProductImageProfile : Profile
+    {
+        public ProductImageProfile()
+        {
+            CreateMap<ProductImage, ProductImageDTO>();
+            CreateMap<ProductImageDTO, ProductImage>();
+
+        }
+    }
+}
+---------------------------
+using AutoMapper;
+using EFFirstAPI.Models.DTO;
+using EFFirstAPI.Models;
+
+namespace EFFirstAPI.Mappers
+{
+    public class ProductProfile : Profile
+    {
+        public ProductProfile()
+        {
+            CreateMap<Product, ProductDTO>();
+            CreateMap<ProductDTO, Product>();
+        }
+    }
+}
+
+=-----------------------
+all models
+---------------------
+namespace EFFirstAPI.Models
+{
+    public class Cart
+    {
+        public int Id { get; set; }
+        public int CustomerId { get; set; }
+        public Customer Customer { get; set; }
+        public DateTime CreationDate { get; set; }
+        public IEnumerable<CartItem> CartItems { get; set; }
+        public Cart()
+        {
+            CartItems = new List<CartItem>();
+        }
+    }
+}
+namespace EFFirstAPI.Models
+{
+    public class CartItem
+    {
+        public int SNo { get; set; }
+        public int CartId { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+
+        public Cart Cart { get; set; }
+        public Product Product { get; set; }
+        public CartItem()
+        {
+            Cart = new Cart();
+            Product = new Product();
+        }
+    }
+}
+namespace EFFirstAPI.Models
+{
+    public class Customer
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public int Age { get; set; }
+        public DateTime DateOfBirth { get; set; }
+
+        public Cart Cart { get; set; }
+
+        public IEnumerable<Order> Orders { get; set; }
+        public Customer()
+        {
+            Orders = new List<Order>();
+            Cart = new Cart();
+        }
+    }
+}
+using System.ComponentModel.DataAnnotations;
+
+namespace EFFirstAPI.Models
+{
+    public class Order
+    {
+        [Key]
+        public int OrderNumber { get; set; }
+        public int CustomerId { get; set; }
+        public DateTime OrderDate { get; set; }
+        public float TotalValue { get; set; }
+        public string OrderStatus { get; set; } = string.Empty;
+
+        public Customer Customer { get; set; }
+        public IEnumerable<OrderDetail> OrderDetails { get; set; }
+        public Order()
+        {
+            Customer = new Customer();
+            OrderDetails = new List<OrderDetail>();
+        }
+    
+}
+}
+using System.ComponentModel.DataAnnotations;
+
+namespace EFFirstAPI.Models
+{
+    public class OrderDetail
+    {
+        [Key]
+        public int SNo { get; set; }
+        public int OrderNumber { get; set; }
+        public int ProductId { get; set; }
+        public int Quantity { get; set; }
+        public float Price { get; set; }
+        public Order Order { get; set; }
+        public Product Product { get; set; }
+
+        
+        public OrderDetail()
+        {
+            Order = new Order();
+            Product = new Product();
+        }
+    }
+}
+namespace EFFirstAPI.Models
+{
+    public class Product
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+        public float Price { get; set; }
+        public string BasicImage { get; set; } = string.Empty;
+
+        public List<ProductImage> ProductImages { get; set; }
+        public IEnumerable<OrderDetail> OrderDetails { get; set; }
+        public Product()
+        {
+           ProductImages = new List<ProductImage>();
+            OrderDetails = new List<OrderDetail>();
+        }
+    }
+}
+using System.ComponentModel.DataAnnotations;
+
+namespace EFFirstAPI.Models
+{
+    public class ProductImage
+    {
+        [Key]
+        public int Id { get; set; }
+        public int ProductId { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
+
+        public Product Product { get; set; }
+
+        public ProductImage()
+        {
+
+        }
+    }
+}
+---------------------
+all models dtos
+namespace EFFirstAPI.Models.DTO
+{
+    public class CustomerDTO
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public DateTime DateOfBirth { get; set; }
+    }
+}
+namespace EFFirstAPI.Models.DTO
+{
+    public class ProductDTO
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public int Quantity { get; set; }
+        public float Price { get; set; }
+        public string BasicImage { get; set; } = string.Empty;
+    }
+}
+namespace EFFirstAPI.Models.DTO
+{
+    public class ProductImageDTO
+    {
+        public int ProductId { get; set; }
+        public string ImageUrl { get; set; } = string.Empty;
+    }
+}
+------------------------------------
+all repos
+--------------------------
+using EFFirstAPI.Context;
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models;
+using EFFirstAPI.Exceptions;
+using Microsoft.EntityFrameworkCore;
+
+//repo mai crud krte hai
+
+namespace EFFirstAPI.Repositories
+{
+    //generic repo use kia
+    public class CustomerRepository : IRepository<int, Customer>
+    {
+        private readonly ShoppingContext _context;
+
+        public CustomerRepository(ShoppingContext shoppingContext)
+        {
+            _context = shoppingContext;
+        }
+
+        public async Task<Customer> Add(Customer entity)
+        {
+            try
+            {
+                _context.Customers.Add(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                throw new CouldNotAddException("Customer");
+            }
+        }
+
+        public async Task<Customer> Delete(int key)
+        {
+            var customer = await Get(key);
+            if (customer != null)
+            {
+                _context.Customers.Remove(customer);
+                await _context.SaveChangesAsync();
+                return customer;
+            }
+            throw new NotFoundException("Customer for delete");
+        }
+
+        public async Task<Customer> Get(int key)
+        {
+            var customer = _context.Customers.FirstOrDefault(c => c.Id == key);
+            return customer;
+        }
+
+        public async Task<IEnumerable<Customer>> GetAll()
+        {
+            var customers = await _context.Customers.ToListAsync();
+            if (customers.Count == 0)
+            {
+                throw new CollectionEmptyException("Customers");
+            }
+            return customers;
+        }
+
+        public async Task<Customer> Update(int key, Customer entity)
+        {
+            var customer = await Get(key);
+            if (customer != null)
+            {
+                customer.Name = entity.Name;
+                customer.Email = entity.Email;
+                customer.Phone = entity.Phone;
+                customer.Age = entity.Age;
+                customer.DateOfBirth = entity.DateOfBirth;
+                await _context.SaveChangesAsync();
+                return customer;
+            }
+            throw new NotFoundException("Customer for delete");
+        }
+    }
+
+}using EFFirstAPI.Context;
+using EFFirstAPI.Exceptions;
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFFirstAPI.Repositories
+{
+    public class ProductImageRepository : IRepository<int, ProductImage>
+    {
+        private readonly ShoppingContext _context;
+
+        public ProductImageRepository(ShoppingContext shoppingContext)
+        {
+            _context = shoppingContext;
+        }
+
+        public async Task<ProductImage> Add(ProductImage entity)
+        {
+            try
+            {
+                await _context.ProductImages.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception)
+            {
+                throw new CouldNotAddException("Product Image");
+            }
+        }
+
+        public async Task<ProductImage> Delete(int key)
+        {
+            var productImage = await Get(key);
+            if (productImage != null)
+            {
+                _context.ProductImages.Remove(productImage);
+                return productImage;
+            }
+            throw new NotFoundException("Product Image for delete");
+        }
+
+        public async Task<ProductImage> Get(int key)
+        {
+            var productImages = await GetAll();
+            var productImage = productImages.FirstOrDefault(pi => pi.Id == key);
+            if (productImage == null)
+            {
+                throw new NotFoundException("Product Image");
+            }
+            return productImage;
+        }
+
+        public async Task<IEnumerable<ProductImage>> GetAll()
+        {
+            var productImages = await _context.ProductImages.ToListAsync();
+            if (productImages.Count == 0)
+            {
+                throw new CollectionEmptyException("Products");
+            }
+            return productImages;
+        }
+    }
+}
+using EFFirstAPI.Context;
+using EFFirstAPI.Exceptions;
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFFirstAPI.Repositories
+{
+    public class ProductRepository : IRepository<int, Product>
+    {
+        private readonly ShoppingContext _context;
+
+        public ProductRepository(ShoppingContext shoppingContext)
+        {
+            _context = shoppingContext;
+        }
+        public async Task<Product> Add(Product entity)
+        {
+            try
+            {
+                await _context.Products.AddAsync(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+
+            }
+            catch (Exception)
+            {
+                throw new CouldNotAddException("Product");
+            }
+        }
+
+      
+
+        public async Task<Product> Delete(int key)
+        {
+            var product = await Get(key);
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                await _context.SaveChangesAsync();
+                return product;
+            }
+            throw new NotFoundException("Product for delete");
+        }
+
+        public async Task<Product> Get(int key)
+        {
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == key);
+            return product;
+        }
+
+        public async Task<IEnumerable<Product>> GetAll()
+        {
+            var products = await _context.Products.ToListAsync();
+            if (products.Count == 0)
+            {
+                throw new CollectionEmptyException("Products");
+            }
+            return products;
+        }
+    }
+}
+-------------
+all services
+--------------
+using EFFirstAPI.Interfaces;
+
+namespace EFFirstAPI.Services
+{
+    public class CalculateService : ICalculate
+    {
+        public int Add(int num1, int num2)
+        {
+            int result = num1 + num2;
+            return result;
+        }
+    }
+}
+using AutoMapper;
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models.DTO;
+using EFFirstAPI.Models;
+
+namespace EFFirstAPI.Services
+{
+    public class CustomerService : ICustomerService
+    {
+        private readonly IRepository<int, Customer> _customerRepo;
+        private readonly IMapper _mapper;
+
+        public CustomerService(IRepository<int, Customer> customerRepository, IMapper mapper)
+        {
+            _customerRepo = customerRepository;
+            _mapper = mapper;
+        }
+        public async Task<int> CreateCustomer(CustomerDTO customer)
+        {
+            //Customer newCustomer = MapCustomerDTOToCustomer(customer);
+            Customer newCustomer = _mapper.Map<Customer>(customer);
+            newCustomer.Age = CalculateAgeFromDateTime(customer.DateOfBirth);
+            var addedCustomer = await _customerRepo.Add(newCustomer);
+            return addedCustomer.Id;
+        }
+
+        //private Customer MapCustomerDTOToCustomer(CustomerDTO customer) {
+        //    return new Customer
+        //    {
+        //        Name = customer.Name,
+        //        Email = customer.Email,
+        //        Phone = customer.Phone,
+        //        DateOfBirth = customer.DateOfBirth
+        //    };
+        //}
+
+        private int CalculateAgeFromDateTime(DateTime dateOfBirth)
+        {
+            var today = DateTime.Today;
+            var age = today.Year - dateOfBirth.Year;
+            if (dateOfBirth.Date > today.AddYears(-age)) age--;
+            return age;
+        }
+    }
+}
+using AutoMapper;
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models.DTO;
+using EFFirstAPI.Models;
+
+namespace EFFirstAPI.Services
+{
+    public class ProductImageService : IProductImageService
+    {
+        private readonly IRepository<int, ProductImage> _productImageRepo;
+        private readonly IMapper _mapper;
+
+        public ProductImageService(IRepository<int, ProductImage> productImageRepository, IMapper mapper)
+        {
+            _productImageRepo = productImageRepository;
+            _mapper = mapper;
+        }
+
+        public async Task<ProductImage> CreateProductImage(ProductImageDTO productImage)
+        {
+            ProductImage newProductImage = _mapper.Map<ProductImage>(productImage);
+            var addedProductImage = await _productImageRepo.Add(newProductImage);
+            return addedProductImage;
+        }
+    }
+}
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models;
+using EFFirstAPI.Exceptions;
+using EFFirstAPI.Models.DTO;
+using EFFirstAPI.Mappers;
+using AutoMapper;
+
+
+namespace EFFirstAPI.Services
+{
+    public class ProductService : IProductService
+    {
+        private readonly IRepository<int, Product> _productRepo;
+        private readonly IMapper _mapper;
+
+        public ProductService(IRepository<int, Product> productRepository, IMapper mapper)
+        {
+            _productRepo = productRepository;
+            _mapper = mapper;
+        }
+        public async Task<int> CreateProduct(ProductDTO product)
+        {
+            Product newProduct = _mapper.Map<Product>(product);
+            var addProduct = await _productRepo.Add(newProduct);
+            return addProduct.Id;
+        }
+
+        public async Task<IEnumerable<Product>> GetAllProduct()
+        {
+            try
+            {
+                var products = await _productRepo.GetAll();
+                return products;
+            }
+            catch (CollectionEmptyException)
+            {
+                throw new CollectionEmptyException("Product");
+            }
+        }
+
+        public async Task<Product> GetProduct(int Id)
+        {
+            try
+            {
+                var product = await _productRepo.Get(Id);
+                if (product != null)
+                {
+                    return product;
+                }
+                throw new NotFoundException("Product");
+            }
+            catch (Exception)
+            {
+                throw new NotFoundException("Product");
+            }
+        }
+
+        public async Task<Product> UpdateProductPrice(float price, int Id)
+        {
+            var oldProduct = await _productRepo.Get(Id);
+            if (oldProduct != null)
+            {
+                oldProduct.Price = price;
+                return oldProduct;
+            }
+            throw new NotUpdateException("Product Price Update Fail");
+        }
+     // Task<Product> UpdateProductPrice(float price, int Id);
+    }
+}
+------------------
+program firl
+using EFFirstAPI.Context;
+using EFFirstAPI.Interfaces;
+using EFFirstAPI.Models;
+using EFFirstAPI.Repositories;
+using EFFirstAPI.Services;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFFirstAPI
+{
+    //fluent api 
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            #region Contexts
+            builder.Services.AddDbContext<ShoppingContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+            #endregion
+
+
+            #region
+            builder.Services.AddAutoMapper(typeof(Customer));
+            //builder.Services.AddAutoMapper(typeof(ProductImage));
+            #endregion
+
+            #region Repositories
+            builder.Services.AddScoped<IRepository<int, Customer>, CustomerRepository>();
+            builder.Services.AddScoped<IRepository<int, Product>, ProductRepository>();
+            builder.Services.AddScoped<IRepository<int, ProductImage>, ProductImageRepository>();
+            #endregion
+
+            #region Services
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IProductImageService, ProductImageService>();
+            #endregion
+            // Add services to the container.
+
+            // Add services to the container.
+
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseAuthorization();
+
+
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
+}
+----------------------
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=5CD413DKS0\\DEMOINSTANCE;Integrated Security=true;Initial Catalog=NG16Oct;TrustServerCertificate=True"
+  }
+}
+
+
