@@ -1,0 +1,499 @@
+using System.ComponentModel.DataAnnotations;
+
+namespace EFCoreFirstAPI.Models
+{
+    public enum Roles
+    {
+        Admin,
+        Supplier,
+        Customer,
+        Employee
+    }
+    public class User
+    {
+        [Key]
+        public string Username { get; set; } = string.Empty;
+        public byte[] Password { get; set; }
+        public byte[] HashKey { get; set; }
+        public Roles Role { get; set; }
+        public Customer Customer { get; set; }
+
+    }
+}
+
+--------------------------------------------
+namespace EFCoreFirstAPI.Models.DTOs
+{
+    public class UserCreateDTO
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public Roles Role { get; set; } 
+    }
+}
+--------------------------------------------
+
+namespace EFCoreFirstAPI.Models.DTOs
+{
+    public class LoginResponseDTO
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Token { get; set; } = string.Empty;
+        
+    }
+}
+
+
+--------------------------------------------
+
+namespace EFCoreFirstAPI.Models.DTOs
+{
+    public class ErrorResponseDTO
+    {
+        public int ErrorNumber { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
+    }
+}
+
+
+--------------------------------------------
+
+namespace EFCoreFirstAPI.Models
+{
+    public class Customer
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public int Age { get; set; }
+        public DateTime DateOfBirth { get; set; }
+
+        public Cart Cart { get; set; }
+
+        public IEnumerable<Order> Orders { get; set; }
+
+        public string Username { get; set; }
+
+        
+        public User User { get; set; }
+        public Customer()
+        {
+            Orders = new List<Order>();
+            Cart = new Cart();
+        }
+
+    }
+}
+
+
+--------------------------------------------
+namespace EFCoreFirstAPI.Models.DTOs
+{
+    public class LoginRequestDTO
+    {
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+}
+
+--------------------------------------------
+
+
+using EFCoreFirstAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFCoreFirstAPI.Contexts
+{
+    public class ShoppingContext : DbContext
+    {
+        public ShoppingContext(DbContextOptions contextOptions):base(contextOptions)
+        {
+
+        }
+        public DbSet<Customer>  Customers { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+
+        override protected void OnModelCreating(ModelBuilder modelBuilder)
+        {
+           modelBuilder.Entity<CartItem>().HasKey(ci=>ci.SNo).HasName("PK_CartItem");
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o=>o.Customer)
+                .WithMany(c=>c.Orders)
+                .HasForeignKey(o => o.CustomerId)
+                .HasConstraintName("FK_Order_Customer");
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Product)
+                .WithMany(p => p.OrderDetails)
+                .HasForeignKey(od => od.ProductId)
+                .HasConstraintName("FK_OrderDetail_Product");
+
+            modelBuilder.Entity<OrderDetail>()
+                .HasOne(od => od.Order)
+                .WithMany(o => o.OrderDetails)
+                .HasForeignKey(od => od.OrderNumber)
+                .HasConstraintName("FK_OrderDetail_Order");
+
+            modelBuilder.Entity<Cart>()
+                .HasOne(c => c.Customer)
+                .WithOne(c => c.Cart)
+                .HasForeignKey<Cart>(c => c.CustomerId)
+                .HasConstraintName("FK_Cart_Customer");
+
+            modelBuilder.Entity<Customer>()
+                .HasOne(c=>c.User)
+                .WithOne(u=>u.Customer)
+                .HasForeignKey<Customer>(c => c.Username)
+                .HasConstraintName("FK_Customer_User");
+        }
+
+    }
+}
+
+
+--------------------------------------------
+using EFCoreFirstAPI.Contexts;
+using EFCoreFirstAPI.Exceptions;
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Models;
+using Microsoft.EntityFrameworkCore;
+
+namespace EFCoreFirstAPI.Repositories
+{
+    public class UserRepository : IRepository<string, User>
+    {
+        private readonly ShoppingContext _context;
+        private readonly ILogger<UserRepository> _logger;
+
+        public UserRepository(ShoppingContext context, ILogger<UserRepository> logger)
+        {
+            _context = context;
+            _logger = logger;
+        }
+        public async Task<User> Add(User entity)
+        {
+            try
+            {
+                _context.Users.Add(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Could not add user");
+                throw new CouldNotAddException("User");
+            }
+        }
+
+        public async Task<User> Delete(string key)
+        {
+            var user = await Get(key);
+            if(user == null)
+            {
+                throw new NotFoundException("User");
+            }
+            try
+            {
+                _context.Users.Remove(user);
+                await _context.SaveChangesAsync();
+                return user;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Could not delete user");
+                throw new Exception("Unable to delete");
+            }
+        }
+
+        public async Task<User> Get(string key)
+        {
+            try
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == key);
+                return user;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Could not get user");
+                throw new NotFoundException("User");
+            }
+        }
+
+        public async Task<IEnumerable<User>> GetAll()
+        {
+            var users = await _context.Users.ToListAsync();
+            if(users.Count == 0)
+            {
+                throw new CollectionEmptyException("Users");
+            }
+            return users;
+        }
+
+        public async Task<User> Update(string key, User entity)
+        {
+            var user = await Get(key);
+            if (user == null)
+            {
+                throw new NotFoundException("User");
+            }
+            try
+            {
+                _context.Users.Update(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Could not update user details");
+                throw new Exception("Unable to modify user object");
+            }
+        }
+    }
+}
+
+
+
+--------------------------------------------
+
+using EFCoreFirstAPI.Contexts;
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Repositories;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
+using NUnit.Framework.Internal;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EFCoreTest
+{
+    class UserRepositoryTest
+    {
+        DbContextOptions options;
+        ShoppingContext context;
+        UserRepository repository;
+        Mock<ILogger<UserRepository>> logger;
+
+        [SetUp]
+        public void Setup()
+        {
+            options = new DbContextOptionsBuilder<ShoppingContext>()
+            .UseInMemoryDatabase("TestAdd")
+              .Options;
+            context = new ShoppingContext(options);
+            logger = new Mock<ILogger<UserRepository>>();
+            repository = new UserRepository(context, logger.Object);
+        }
+
+        [Test]
+        public async Task TestAdd()
+        {
+            User user = new User
+            {
+                Username = "TestUser",
+                Password = Encoding.UTF8.GetBytes("TestPassword"),
+                HashKey = Encoding.UTF8.GetBytes("TestHashKey"),
+                Role = Roles.Admin
+            };
+            var addedUser = await repository.Add(user);
+            Assert.IsTrue(addedUser.Username == user.Username);
+        }
+
+        [Test]
+        public async Task TesGet()
+        {
+            User user = new User
+            {
+                Username = "TestUser",
+                Password = Encoding.UTF8.GetBytes("TestPassword"),
+                HashKey = Encoding.UTF8.GetBytes("TestHashKey"),
+                Role = Roles.Admin
+            };
+            var addedUser = await repository.Add(user);
+
+            var getUser = await repository.Get(user.Username);
+            Assert.IsNotNull(getUser);
+        }
+    }
+}
+------------------------------------------------
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Models.DTOs;
+
+namespace EFCoreFirstAPI.Interfaces
+{
+    public interface IUserService
+    {
+        public Task<LoginResponseDTO> Autheticate(LoginRequestDTO loginUser);
+        public Task<LoginResponseDTO> Register(UserCreateDTO registerUser);
+    }
+}
+
+
+--------------------------------------------
+
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Models.DTOs;
+using EFCoreFirstAPI.Repositories;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace EFCoreFirstAPI.Services
+{
+    public class UserService : IUserService
+    {
+        private readonly IRepository<string, User> _userRepository;
+        private readonly ILogger<UserService> _logger;
+
+
+        public UserService(IRepository<string, User> userRepository, ILogger<UserService> logger) 
+        {
+            _userRepository = userRepository;
+            _logger = logger;
+            
+        }
+        public async Task<LoginResponseDTO> Autheticate(LoginRequestDTO loginUser)
+        {
+            var user = await _userRepository.Get(loginUser.Username);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            HMACSHA256 hmac = new HMACSHA256(user.HashKey);
+            byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginUser.Password));
+            for (int i = 0; i < passwordHash.Length; i++)
+            {
+                if (passwordHash[i] != user.Password[i])
+                {
+                    throw new Exception("Invalid username or password");
+                }
+            }
+            return new LoginResponseDTO()
+            {
+                Username = user.Username
+            };
+        }
+
+        public async Task<LoginResponseDTO> Register(UserCreateDTO registerUser)
+        {
+            HMACSHA256 hmac = new HMACSHA256();
+            byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password));
+            User user = new User()
+            {
+                Username = registerUser.Username,
+                Password = passwordHash,
+                HashKey = hmac.Key,
+                Role = registerUser.Role
+            };
+            try
+            {
+                var addesUser = await _userRepository.Add(user);
+                LoginResponseDTO response = new LoginResponseDTO()
+                {
+                    Username = user.Username
+                };
+                return response;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Could not register user");
+                throw new Exception("Could not register user");
+            }
+        }
+
+    }
+}
+
+
+
+--------------------------------------------
+
+using EFCoreFirstAPI.Contexts;
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Models.DTOs;
+using EFCoreFirstAPI.Repositories;
+using EFCoreFirstAPI.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EFCoreTest
+{
+    internal class UserServiceTest
+    {
+        DbContextOptions options;
+        ShoppingContext context;
+        UserRepository repository;
+        Mock<ILogger<UserRepository>> loggerUserRepo;
+        Mock<ILogger<UserService>> loggerUserService;
+        [SetUp]
+        public void Setup()
+        {
+            options = new DbContextOptionsBuilder<ShoppingContext>()
+            .UseInMemoryDatabase("TestAdd")
+              .Options;
+            context = new ShoppingContext(options);
+            loggerUserRepo = new Mock<ILogger<UserRepository>>();
+            loggerUserService = new Mock<ILogger<UserService>>();
+            repository = new UserRepository(context, loggerUserRepo.Object);
+        }
+
+        [Test]
+        [TestCase("TestUser", "TestPassword", "TestHashKey", Roles.Admin)]
+        public async Task TestAdd(string username, string password, string hashKey, Roles role)
+        {
+            var user = new UserCreateDTO
+            {
+                Username = username,
+                Password = password,
+                Role = role
+            };
+            var userService = new UserService(repository, loggerUserService.Object);
+            var addedUser = await userService.Register(user);
+            Assert.IsTrue(addedUser.Username == user.Username);
+        }
+
+        [TestCase("TestUser", "TestPassword", "TestHashKey")]
+        public async Task TestAuthenticate(string username, string password, string hashKey)
+        {
+            var user = new UserCreateDTO
+            {
+                Username = "TestUser",
+                Password = "TestPassword",
+                Role = Roles.Admin
+            };
+            var userService = new UserService(repository, loggerUserService.Object);
+            var addedUser = await userService.Register(user);
+            var loggedInUser = await userService.Autheticate(new LoginRequestDTO
+            {
+                Username = user.Username,
+                Password = user.Password
+            });
+            Assert.IsTrue(addedUser.Username == loggedInUser.Username);
+        }
+
+    }
+}
+
+
+--------------------------------------------
+
+
+--------------------------------------------
