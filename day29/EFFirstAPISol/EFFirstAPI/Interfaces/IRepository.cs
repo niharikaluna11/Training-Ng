@@ -6,7 +6,7 @@
         Task<T> Get(K key);
         Task<IEnumerable<T>> GetAll();
         Task<T> Add(T entity);
-        Task<T> Delete(int key);
+        Task<T> Delete(K key);
 
       
     }

@@ -24,6 +24,7 @@ namespace EFFirstAPI
 
             #region
             builder.Services.AddAutoMapper(typeof(Customer));
+          //  builder.Services.AddAutoMapper(typeof(User));
             //builder.Services.AddAutoMapper(typeof(ProductImage));
             #endregion
 
@@ -31,12 +32,14 @@ namespace EFFirstAPI
             builder.Services.AddScoped<IRepository<int, Customer>, CustomerRepository>();
             builder.Services.AddScoped<IRepository<int, Product>, ProductRepository>();
             builder.Services.AddScoped<IRepository<int, ProductImage>, ProductImageRepository>();
+            builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
             #endregion
 
             #region Services
             builder.Services.AddScoped<ICustomerService, CustomerService>();
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IProductImageService, ProductImageService>();
+            builder.Services.AddScoped<IUserService, UserService>();
             #endregion
             // Add services to the container.
 

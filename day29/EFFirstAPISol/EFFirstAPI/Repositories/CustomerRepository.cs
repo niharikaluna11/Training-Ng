@@ -70,6 +70,7 @@ namespace EFFirstAPI.Repositories
                 customer.Phone = entity.Phone;
                 customer.Age = entity.Age;
                 customer.DateOfBirth = entity.DateOfBirth;
+               
                 await _context.SaveChangesAsync();
                 return customer;
             }

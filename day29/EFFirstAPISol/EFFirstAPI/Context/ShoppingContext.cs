@@ -18,6 +18,8 @@ namespace EFFirstAPI.Context
 
         public DbSet<ProductImage> ProductImages { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         override protected void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<CartItem>().HasKey(ci => ci.SNo).HasName("PK_CartItem");
@@ -51,6 +53,16 @@ namespace EFFirstAPI.Context
                 .WithMany(p => p.ProductImages)
                 .HasForeignKey(pi => pi.ProductId)
                 .HasConstraintName("FK_ProductImage_Product");
+
+
+            modelBuilder.Entity<Customer>()
+               .HasOne(c => c.User)
+               .WithOne(u => u.Customer)
+               .HasForeignKey<Customer>(c => c.Username)
+               .HasConstraintName("FK_Customer_User");
+
+        
+
         }
 
 

@@ -100,7 +100,14 @@ namespace EFFirstAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique();
 
                     b.ToTable("Customers");
                 });
@@ -215,6 +222,27 @@ namespace EFFirstAPI.Migrations
                     b.ToTable("ProductImages");
                 });
 
+            modelBuilder.Entity("EFFirstAPI.Models.User", b =>
+                {
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte[]>("HashKey")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("Password")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
+
+                    b.HasKey("Username");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("EFFirstAPI.Models.Cart", b =>
                 {
                     b.HasOne("EFFirstAPI.Models.Customer", "Customer")
@@ -244,6 +272,18 @@ namespace EFFirstAPI.Migrations
                     b.Navigation("Cart");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("EFFirstAPI.Models.Customer", b =>
+                {
+                    b.HasOne("EFFirstAPI.Models.User", "User")
+                        .WithOne("Customer")
+                        .HasForeignKey("EFFirstAPI.Models.Customer", "Username")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_Customer_User");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("EFFirstAPI.Models.Order", b =>
@@ -314,6 +354,12 @@ namespace EFFirstAPI.Migrations
                     b.Navigation("OrderDetails");
 
                     b.Navigation("ProductImages");
+                });
+
+            modelBuilder.Entity("EFFirstAPI.Models.User", b =>
+                {
+                    b.Navigation("Customer")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

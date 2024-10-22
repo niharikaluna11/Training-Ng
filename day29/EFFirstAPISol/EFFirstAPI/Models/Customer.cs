@@ -17,5 +17,10 @@
             Orders = new List<Order>();
             Cart = new Cart();
         }
+        public string Username { get; set; }
+
+
+        public User User { get; set; }
+      
     }
 }

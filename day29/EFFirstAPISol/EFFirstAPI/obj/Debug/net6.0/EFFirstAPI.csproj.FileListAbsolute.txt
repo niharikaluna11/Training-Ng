@@ -5,6 +5,8 @@ D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6
 D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\EFFirstAPI.runtimeconfig.json
 D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\EFFirstAPI.dll
 D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\EFFirstAPI.pdb
+D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\AutoMapper.dll
+D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
 D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\Humanizer.dll
 D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
 D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
@@ -68,5 +70,3 @@ D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\obj\Debug\net6
 D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\obj\Debug\net6.0\EFFirstAPI.pdb
 D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\obj\Debug\net6.0\EFFirstAPI.genruntimeconfig.cache
 D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\obj\Debug\net6.0\ref\EFFirstAPI.dll
-D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\AutoMapper.dll
-D:\Niharikaluna-github\Training-Ng\day29\EFFirstAPISol\EFFirstAPI\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
