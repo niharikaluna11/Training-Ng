@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "6z1l3Mx3cMeJcJW3ZAfxXyxxjhFSeUa1YCQjyEeAKMg=",
+  "Source": "ReportClaimApplication",
+  "BasePath": "_content/ReportClaimApplication",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

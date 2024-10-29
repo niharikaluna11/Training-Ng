@@ -1,0 +1,16 @@
+Data to Collect ( Requirements):
+Insured Policy Details:
+Policy Number: A dropdown or search option for selecting the policy number.
+Type of Claim: A dropdown to select types like Death, Critical Illness, Accident, etc.
+Date of Incident: A date picker for selecting the date of the event.
+Claimant Details:
+Claimant Name: Text input for entering the name.
+Phone Number: Text input for the claimant's phone number.
+Email: Text input for the claimant's email.
+Document Upload:
+Upload Section: Steps on how to upload relevant documents (death certificate, medical reports, etc.).
+Upload functionality for documents (PDF, JPEG, PNG formats).
+Terms and Conditions:
+Checkbox to accept the terms and conditions before submission.
+Submit: A button to submit the form data to the server.
+If this has to be the frontend, then create API end points which will facilitate the application.

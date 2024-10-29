@@ -1,0 +1,49 @@
+[
+  {
+    "ContainingType": "Claims_AssignmentApplication.Controllers.ClaimSubmissionController",
+    "Method": "GetAllClaims",
+    "RelativePath": "api/ClaimSubmission/GetAllClaims",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Claims_AssignmentApplication.Controllers.ClaimSubmissionController",
+    "Method": "SubmitClaim",
+    "RelativePath": "api/ClaimSubmission/SubmitClaim",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "claimRequest",
+        "Type": "Claims_AssignmentApplication.Models.DTOs.ClaimRequestDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Claims_AssignmentApplication.Controllers.ClaimSubmissionController",
+    "Method": "UploadDocument",
+    "RelativePath": "api/ClaimSubmission/UploadDocument/{claimId}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "claimId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "documentUpload",
+        "Type": "Claims_AssignmentApplication.Models.DTOs.DocumentUploadDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

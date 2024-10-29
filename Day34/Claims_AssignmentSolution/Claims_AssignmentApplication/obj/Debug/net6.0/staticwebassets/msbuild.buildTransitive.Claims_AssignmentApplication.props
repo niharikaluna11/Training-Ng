@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\buildMultiTargeting\Claims_AssignmentApplication.props" />
+</Project>
