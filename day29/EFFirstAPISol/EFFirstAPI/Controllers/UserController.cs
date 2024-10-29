@@ -18,7 +18,7 @@ namespace EFFirstAPI.Controllers
             _logger = logger;
         }
         [HttpPost("Register")]
-        public async Task<ActionResult> Register(UserDTO createDTO)
+        public async Task<ActionResult<LoginResponseDTO>> Register(UserDTO createDTO)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace EFFirstAPI.Controllers
         }
 
         [HttpPost("Login")]
-        public async Task<ActionResult> Login(LoginResponseDTO requestDTO)
+        public async Task<ActionResult<LoginResponseDTO>> Login(LoginResponseDTO requestDTO)
         {
             try
             {

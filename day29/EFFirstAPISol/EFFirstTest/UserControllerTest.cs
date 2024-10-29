@@ -73,38 +73,11 @@ namespace EFFirstTest
             var result = await _controller.Register(userDto);
             Assert.IsNotNull(result);
             // Assert
-            var okResult = result as OkObjectResult;
+            var okResult = result.Result as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
         }
 
-  /*      [Test]
-        public async Task Register_ShouldReturnBadRequest_OnException()
-        {
-            // Arrange
-            var userDto = new UserDTO
-            {
-                Username = "TestUser",
-                Password = "TestPassword",
-                Role = Roles.User
-            };
-
-            // Simulate an exception during the registration process
-            _service = new Mock<UserService>(_repository, _loggerService.Object).Object;
-
-            _controller = new UserController(_service, _loggerController.Object);
-            var mockService = new Mock<IUserService>();
-            mockService.Setup(s => s.Register(It.IsAny<UserDTO>())).ThrowsAsync(new Exception("Registration failed"));
-
-            // Act
-            var result = await _controller.Register(userDto);
-
-            // Assert
-            var badRequestResult = result.Result as BadRequestObjectResult;
-            Assert.IsNotNull(badRequestResult);
-            Assert.AreEqual(400, badRequestResult.StatusCode);
-        }
-  */
         [Test]
         [TestCase("adminuser", "password2", Roles.Admin)]
         public async Task Login_ShouldReturnOk(string username, string password, Roles role)
@@ -118,37 +91,26 @@ namespace EFFirstTest
                 Role = role
             };
 
-            // Register user first (as a prerequisite)
-           var result= await _controller.Register(userDto);
 
-           
+            // Register user first (as a prerequisite)
+
+            var result1 = await _controller.Register(userDto);
+            Assert.IsNotNull(result1);
+
+            var loginresponse = new LoginResponseDTO
+            {
+                Username = username,
+                Password = password
+            };
+            
+            var result2= await _controller.Login(loginresponse);
+            Assert.IsNotNull(result2);
+
             // Assert
-            var okResult = result as OkObjectResult;
+            var okResult = result2.Result as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
         }
-
-      /*  [Test]
-        public async Task Login_ShouldReturnUnauthorized_OnInvalidCredentials()
-        {
-            // Arrange
-            var loginDto = new LoginResponseDTO
-            {
-                Username = "invalidUser",
-                Token = "invalidToken"
-            };
-
-            // Act
-            var result = await _controller.Login(loginDto);
-
-            // Assert
-            var unauthorizedResult = result.Result as UnauthorizedObjectResult;
-            Assert.IsNotNull(unauthorizedResult);
-            Assert.AreEqual(401, unauthorizedResult.StatusCode);
-        }
-
-*/
-
 
     }
 }
