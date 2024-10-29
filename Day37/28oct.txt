@@ -1,0 +1,429 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=G3SLAPTOP\\SQLEXPRESS;Integrated Security=true;Initial Catalog=dbShopping16Oct24;TrustServerCertificate=True"
+  },
+  "JWT": {
+  "SecretKey": "This is the dummy secret key for the project. Please change it."
+  }
+}
+-------------------------------------------
+
+using EFCoreFirstAPI.Models.DTOs;
+
+namespace EFCoreFirstAPI.Interfaces
+{
+    public interface ITokenService
+    {
+        public Task<string> GenerateToken(UserTokenDTO user);
+    }
+}
+------------------------------------------------
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Models.DTOs;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+
+namespace EFCoreFirstAPI.Services
+{
+    public class TokenService : ITokenService
+    {
+        private readonly string _secretKey;
+
+        public TokenService(IConfiguration configuration)
+        {
+            _secretKey = configuration["JWT:SecretKey"];
+        }
+        public virtual async Task<string> GenerateToken(UserTokenDTO user)
+        {
+            string _token = string.Empty;
+            var _claims = new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.GivenName, user.Username),
+                    new Claim("Role", user.Role),
+
+                };
+
+            var _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
+
+            var _credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
+
+            var _tokenDescriptor = new JwtSecurityToken(
+               
+                claims: _claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: _credentials
+            );
+
+            _token = new JwtSecurityTokenHandler().WriteToken(_tokenDescriptor);
+            return _token;
+        }
+    }
+}
+---------------------------------------------------------------------
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Models.DTOs;
+using EFCoreFirstAPI.Repositories;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace EFCoreFirstAPI.Services
+{
+    public class UserService : IUserService
+    {
+        private readonly IRepository<string, User> _userRepository;
+        private readonly ILogger<UserService> _logger;
+        private readonly ITokenService _tokenService;
+
+        public UserService(IRepository<string, User> userRepository, 
+            ITokenService tokenService,
+            ILogger<UserService> logger) 
+        {
+            _userRepository = userRepository;
+            _logger = logger;
+            _tokenService = tokenService;
+
+
+        }
+        public async Task<LoginResponseDTO> Autheticate(LoginRequestDTO loginUser)
+        {
+            var user = await _userRepository.Get(loginUser.Username);
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+            HMACSHA256 hmac = new HMACSHA256(user.HashKey);
+            byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginUser.Password));
+            for (int i = 0; i < passwordHash.Length; i++)
+            {
+                if (passwordHash[i] != user.Password[i])
+                {
+                    throw new Exception("Invalid username or password");
+                }
+            }
+            return new LoginResponseDTO()
+            {
+                Username = user.Username,
+                Token = await _tokenService.GenerateToken(new UserTokenDTO()
+                {
+                    Username = user.Username,
+                    Role = user.Role.ToString()
+                })
+
+            };
+        }
+
+        public async Task<LoginResponseDTO> Register(UserCreateDTO registerUser)
+        {
+            HMACSHA256 hmac = new HMACSHA256();
+            byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password));
+            User user = new User()
+            {
+                Username = registerUser.Username,
+                Password = passwordHash,
+                HashKey = hmac.Key,
+                Role = registerUser.Role
+            };
+            try
+            {
+                var addesUser = await _userRepository.Add(user);
+                LoginResponseDTO response = new LoginResponseDTO()
+                {
+                    Username = user.Username
+                };
+                return response;
+            }
+            catch(Exception e)
+            {
+                _logger.LogError(e, "Could not register user");
+                throw new Exception("Could not register user");
+            }
+        }
+
+    }
+}
+
+---------------------------------------------------------
+
+using EFCoreFirstAPI.Contexts;
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Models.DTOs;
+using EFCoreFirstAPI.Repositories;
+using EFCoreFirstAPI.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Moq;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EFCoreTest
+{
+    internal class UserServiceTest
+    {
+        DbContextOptions options;
+        ShoppingContext context;
+        UserRepository repository;
+        Mock<ILogger<UserRepository>> loggerUserRepo;
+        Mock<ILogger<UserService>> loggerUserService;
+        Mock<TokenService> mockTokenService;
+        Mock<IConfiguration> mockConfiguration;
+        [SetUp]
+        public void Setup()
+        {
+            options = new DbContextOptionsBuilder<ShoppingContext>()
+            .UseInMemoryDatabase("TestAdd")
+              .Options;
+            context = new ShoppingContext(options);
+            loggerUserRepo = new Mock<ILogger<UserRepository>>();
+            loggerUserService = new Mock<ILogger<UserService>>();
+            repository = new UserRepository(context, loggerUserRepo.Object);
+            mockConfiguration = new Mock<IConfiguration>();
+            mockTokenService = new Mock<TokenService>(mockConfiguration.Object);
+            mockTokenService.Setup(t => t.GenerateToken(It.IsAny<UserTokenDTO>())).ReturnsAsync("TestToken");
+
+        }
+
+        [Test]
+        [TestCase("TestUser2", "TestPassword2", "TestHashKey", Roles.Admin)]
+        public async Task TestAdd(string username, string password, string hashKey, Roles role)
+        {
+            var user = new UserCreateDTO
+            {
+                Username = username,
+                Password = password,
+                Role = role
+            };
+            var userService = new UserService(repository,mockTokenService.Object, loggerUserService.Object);
+            var addedUser = await userService.Register(user);
+            Assert.IsTrue(addedUser.Username == user.Username);
+        }
+
+        [TestCase("TestUser1", "TestPassword1", "TestHashKey1")]
+        public async Task TestAuthenticate(string username, string password, string hashKey)
+        {
+            var user = new UserCreateDTO
+            {
+                Username = "TestUser1",
+                Password = "TestPassword1",
+                Role = Roles.Admin
+            };
+            var userService = new UserService(repository, mockTokenService.Object, loggerUserService.Object);
+            var addedUser = await userService.Register(user);
+            var loggedInUser = await userService.Autheticate(new LoginRequestDTO
+            {
+                Username = user.Username,
+                Password = user.Password
+            });
+            Assert.IsTrue(addedUser.Username == loggedInUser.Username);
+        }
+
+    }
+}
+
+------------------------------------------------------------------
+
+namespace EFCoreFirstAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ProductController : ControllerBase
+    {
+        private readonly IProductService _productService;
+        private readonly ILogger<ProductController> _logger;
+
+        public ProductController(IProductService productService,ILogger<ProductController> logger)
+        {
+            _productService = productService;
+            _logger = logger;
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddProduct(ProductDTO product)
+        {
+            try
+            {
+                var result = await _productService.AddNewProduct(product);
+                _logger.LogInformation("Product Added");
+                return Ok("Product Added");
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return BadRequest(ex.Message);
+            }
+        }
+    }
+}
+
+-----------------------------------------------------------------
+
+
+namespace EFCoreFirstAPI.Services
+{
+    public class TokenService : ITokenService
+    {
+        private readonly string _secretKey;
+
+        public TokenService(IConfiguration configuration)
+        {
+            _secretKey = configuration["JWT:SecretKey"];
+        }
+        public virtual async Task<string> GenerateToken(UserTokenDTO user)
+        {
+            string _token = string.Empty;
+            var _claims = new[]
+                {
+                    new Claim(JwtRegisteredClaimNames.GivenName, user.Username),
+                    new Claim("Role", user.Role),
+
+                };
+
+            var _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
+
+            var _credentials = new SigningCredentials(_key, SecurityAlgorithms.HmacSha256);
+
+            var _tokenDescriptor = new JwtSecurityToken(
+               
+                claims: _claims,
+                expires: DateTime.Now.AddDays(1),
+                signingCredentials: _credentials
+            );
+
+            _token = new JwtSecurityTokenHandler().WriteToken(_tokenDescriptor);
+            return _token;
+        }
+    }
+}
+--------------------------------------------------
+using EFCoreFirstAPI.Contexts;
+using EFCoreFirstAPI.Interfaces;
+using EFCoreFirstAPI.Misc;
+using EFCoreFirstAPI.Models;
+using EFCoreFirstAPI.Repositories;
+using EFCoreFirstAPI.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System.Text;
+
+
+
+namespace EFCoreFirstAPI
+{
+    public class Program
+    {
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(args);
+
+            // Add services to the container.
+            #region Filters
+            builder.Services.AddScoped<CustomExceptionFilter>();
+            #endregion
+
+            #region Contexts
+            builder.Services.AddDbContext<ShoppingContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
+            #endregion
+
+            #region OtherServices
+            builder.Services.AddAutoMapper(typeof(Customer));
+            builder.Services.AddAutoMapper(typeof(Product));
+            #endregion
+
+            #region Authentication
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:SecretKey"]))
+                    };
+                });
+            #endregion
+
+            #region Repositories
+            builder.Services.AddScoped<IRepository<int, Customer>, CustomerRepository>();
+            builder.Services.AddScoped<IRepository<int, Product>, ProductRepository>();
+            builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
+            #endregion
+
+            #region Services
+            builder.Services.AddScoped<ICustomerBasicService, CustomerBasicService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<ITokenService, TokenService>();
+            #endregion
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type=ReferenceType.SecurityScheme,
+                                Id="Bearer"
+                            }
+                        },
+                        new string[]{}
+                    }
+                });
+            });
+
+            var app = builder.Build();
+
+            // Configure the HTTP request pipeline.
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
+
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+
+            app.MapControllers();
+
+            app.Run();
+        }
+    }
+}
