@@ -1,0 +1,61 @@
+Models  :-
+User Model
+Complaint Model
+Organization Model
+Profile Model
+
+----------------------
+
+DTOs  :-
+UserTokenDTO containing Username and Role 
+RegisterUserDTO containing username password role
+LoginResponse & LoginRequest DTO for login work
+ErrorResponseDTo for error 
+
+--------------------------
+
+
+
+
+
+
+Mappers
+To map between models and DTOs, you can use a library like AutoMapper. Here’s an example of how to configure mappings:
+
+Install AutoMapper NuGet Package
+
+mathematica
+Copy code
+Install-Package AutoMapper
+Create Mapping Profile
+
+csharp
+Copy code
+public class MappingProfile : Profile
+{
+    public MappingProfile()
+    {
+        CreateMap<UserDTO, User>();
+        CreateMap<User, UserDTO>();
+        
+        CreateMap<ComplaintDTO, Complaint>();
+        CreateMap<Complaint, ComplaintDTO>();
+        
+        CreateMap<OrganizationDTO, Organization>();
+        CreateMap<Organization, OrganizationDTO>();
+        
+        CreateMap<CommentDTO, Comment>();
+        CreateMap<Comment, CommentDTO>();
+        
+        CreateMap<ProfileDTO, Profile>();
+        CreateMap<Profile, ProfileDTO>();
+    }
+}
+Initialize AutoMapper in Startup
+
+csharp
+Copy code
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddAutoMapper(typeof(MappingProfile));
+    // Other service configurations...

@@ -1,0 +1,128 @@
+[
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
+    "Method": "GetOrganizationProfile",
+    "RelativePath": "api/Profile/organization/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
+    "Method": "UpdateOrganizationProfile",
+    "RelativePath": "api/Profile/organization/{userId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updateDto",
+        "Type": "ComplaintTicketAPI.Models.DTO.OrganizationProfileDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
+    "Method": "GetUserProfile",
+    "RelativePath": "api/Profile/user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
+    "Method": "UpdateUserProfile",
+    "RelativePath": "api/Profile/user/{userId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updateDto",
+        "Type": "ComplaintTicketAPI.Models.DTO.ProfileUpdateDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserController",
+    "Method": "GetAvailableRoles",
+    "RelativePath": "api/User/AvailableRoles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserController",
+    "Method": "GetAvailableTypes",
+    "RelativePath": "api/User/AvailableTypesOFOrganization",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserController",
+    "Method": "LoginUser",
+    "RelativePath": "api/User/LoginOFUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entity",
+        "Type": "ComplaintTicketAPI.Models.DTO.LoginRequestDTO",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserController",
+    "Method": "UserRegistration",
+    "RelativePath": "api/User/RegistrationOFUser",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entity",
+        "Type": "ComplaintTicketAPI.Models.DTO.RegisterUserDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  }
+]

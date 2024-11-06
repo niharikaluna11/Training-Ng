@@ -1,0 +1,95 @@
+﻿
+
+                           Explanation of the Flowchart
+
+Start: The process begins with the user accessing the Complaint Ticket App.
+
+User Registration: Users (Admin, Normal User, Organization, or Agent) must register first.
+
+User Login: After registration, users log in using JWT tokens for authentication.
+
+User Role Check: The system checks if the logged-in user is an organization:
+
+If Yes: The user can view complaints, review status, and generate reports.
+If No: The normal user can submit a complaint.
+Submitting a Complaint: Users fill out the complaint form with details such as 
+category, description, attachments, organization to complain against, 
+and priority level (Low, Medium, High, Urgent).
+
+Submit Request: After submitting the complaint, the system processes the request.
+
+View My Complaints: Users can view their submitted complaints and track their status.
+
+Edit Profile: Users have the option to edit their profiles and update personal information.
+
+Logout: Users can log out of the application.
+
+End: The process ends after the user logs out.
+
+
+
+
+                                +---------------------+
+                                |      Start          |
+                                +---------------------+
+                                          |
+                                          v
+                                +---------------------+
+                                | User Registration   |
+                                | (Admin, Normal User,|
+                                | Organization, Agent)|
+                                +---------------------+
+                                          |
+                                          v
+                                +---------------------+
+                                |   User Login        |
+                                |   (JWT Token)       |
+                                +---------------------+
+                                          |
+                                          v
+                            +-------------------------------+
+                            |   Is User an Organization?    |
+                            +-------------------------------+
+                             /               |               \
+                            /                |                \
+                          Yes                User            Admin
+                          /                  |                |
+                         v                   v                v
+           +---------------------+  +---------------------+  +---------------------+
+           |  View Complaints    |  |   Submit Complaint   |  |   Manage Users      |
+           |  (Review Status)    |  |   (Category,        |  |   (Add/Edit/Delete) |
+           |   Generate Reports   |  |   Description,      |  +---------------------+
+           +---------------------+  |   Attachments,      |
+                                    |   Organization,      |
+                                    |   Priority)         |
+                                    +---------------------+
+                                             |
+                                             v
+                                    +---------------------+
+                                    |    Submit Request   |
+                                    +---------------------+
+                                             |
+                                             v
+                                    +---------------------+
+                                    |   View My Complaints|
+                                    |   (Status Tracking) |
+                                    +---------------------+
+                                             |
+                                             v
+                                    +---------------------+
+                                    |   Edit Profile      |
+                                    | (Update Information)|
+                                    +---------------------+
+                                             |
+                                             v
+                                +---------------------+
+                                |   Logout            |
+                                +---------------------+
+                                          |
+                                          v
+                                +---------------------+
+                                |       End           |
+                                +---------------------+
+
+
+                             
