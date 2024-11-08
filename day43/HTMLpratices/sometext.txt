@@ -1,0 +1,151 @@
+    <script>
+        const clickEvent = () => {
+            fetch('https://dummyjson.com/products')
+                .then(response => response.json())
+                .then(json => {
+                    const products = json.products;
+                    const cardsContainer = document.querySelector('.cards');
+                    
+                    // Clear existing content
+                    cardsContainer.innerHTML = '';
+
+                    // Create a card for each product
+                    products.forEach(product => {
+                        const card = document.createElement('article');
+                        card.classList.add('card');
+                        
+
+                        
+
+                        const figure = document.createElement('figure');
+
+                        const img = document.createElement('img');
+                        img.src = product.thumbnail;
+                        img.alt = product.title;
+                        
+                        const middle = document.createElement('div');
+                        middle.classList.add('middle');
+                        const text = document.createElement('div');
+                        text.classList.add('text');
+                        
+                        text.content = product.description;
+                        
+                        
+
+                      
+
+                        const caption = document.createElement('figcaption');
+                        caption.textContent = product.title;
+
+                        
+
+                        figure.appendChild(img);
+                         figure.appendChild(middle);
+                         middle.appendChild(text);
+                        figure.appendChild(caption);
+                        card.appendChild(figure);
+                        cardsContainer.appendChild(card);
+                    });
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        };
+    </script> 
+
+        <!-- 
+
+    Q1:
+    create a card layout look like page for displaying products. No bootstrap. Just HTML,CSS,Flex
+
+    ---
+
+    Q2:
+    Create a webpage thet will display the products from the products from the url 'https://dummyjson.com/products' 
+    in a card layout(Bootstrap, your own css, tailwind)
+    Each product should have put for <price> button,
+    when clicked will add the product to the cart https://dummyjson.com/carts/add'
+
+      -->
+
+
+
+  fetch(`https://dummyjson.com/products/${product.id}`)
+        .then(res => res.json())
+        .then(product => {
+            fetch('https://dummyjson.com/carts/add', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: 1, // replace this with the actual user ID
+                    products: [
+                        { id: product.id, quantity: 1 } // Only ID and quantity are required
+                    ]
+                })
+            })
+            .then(res => res.json())
+            .then(data => console.log('Product added to cart:', data)) // Log the response
+            .catch(error => console.error('Error adding product to cart:', error));
+        })
+        .catch(error => console.error('Error fetching product details:', error));
+
+        
+fetch('https://dummyjson.com/products/add', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    title: 'BMW Pencil',
+    /* other product data */
+  })
+})
+.then(res => res.json())
+.then(console.log);
+
+fetch('https://dummyjson.com/carts/add', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    userId: 1,
+    products: [
+      {
+        id: 144,
+        quantity: 4,
+      },
+      {
+        id: 98,
+        quantity: 1,
+      },
+    ]
+  })
+})
+.then(res => res.json())
+.then(console.log);
+
+
+
+const BuyProduct = (productId) => {
+    const cardsContainer = document.querySelector('.cards');
+    fetch('https://dummyjson.com/carts/add', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            userId: 1, 
+            products: [
+                { id: productId, quantity: 1 } 
+            ]
+        })
+    })
+    .then((res) => res.json()) 
+    .then(json => {
+        console.log(productToBeAdd); 
+        productToBeAdd = json; 
+        console.log(productToBeAdd); 
+        cardsContainer.innerHTML = ''; 
+        GetResponse(); 
+    })
+    .catch(error => console.error('Error adding product to cart:', error));
+};
+
+const GetResponse = (productToBeAdd) => {
+    console.log(productToBeAdd); 
+};
+
+

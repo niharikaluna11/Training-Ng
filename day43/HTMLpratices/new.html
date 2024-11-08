@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+    <head></head>
+    <body>
+        <header>
+            <h1>Logo</h1>
+            <base href="https://codeshare.io" target="blank"/>
+            <script>
+                const clickEvent = ()=>{
+                   fetch('https://dummyjson.com/products')
+                   .then((data)=>data.json())
+                   .then(json=>{
+                    let products = json.products
+                    products.forEach(element => {
+                        let text = document.createElement("div")
+                        text.innerHTML = element.title;
+                        let pic = document.createElement("img")
+                        pic.src = element.thumbnail
+                        pic.height=100;
+                        pic.width=100;
+                        text.appendChild(pic)
+                        document.getElementById("data").appendChild(text)
+                    });
+                
+                
+                
+                })
+                }
+                // setTimeout(()=>alert("hello"),1000)
+            </script>
+        </header>
+        <nav>
+            <a  href="/CelsiorG31">try download</a>
+        </nav>
+        <section id="data">
+            <button onclick="clickEvent()">Click here</button>
+            <summary>
+                This is the agreemnet
+                <details>
+                    Blah blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah  blah 
+                </details>
+            </summary>
+        </section>
+        <article>
+            <figure>
+                <figcaption>Image for example</figcaption>
+                <img height="100" width="100" src="./media/rose.webp"/>
+            </figure>
+
+            <aside>
+                <h2>Ad</h2>
+                    <video controls height="200" poster="./media/rose.webp">
+                        <source src="./media/rsamle.mp4"/>
+                    </video>
+            </aside>
+        </article>
+        <section>
+
+        </section>
+        <footer>
+
+        </footer>
+    </body>
+</html>

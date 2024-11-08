@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Card Layout Page</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f3f3f3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Header Style */
+        header {
+            background-color:  #3b3434;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            width: 100%;
+        }
+
+        header h1 {
+            font-size: 2em;
+        }
+
+        /* Navigation */
+        nav {
+            width: 100%;
+            padding: 10px;
+            text-align: center;
+            background-color: #333;
+            color: #f1f1f1;
+        }
+
+        /* Summary Section */
+        section {
+            background-color: #e6e6e6;
+            width: 90%;
+            padding: 15px;
+            margin-top: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        summary {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        a {
+            color: #bb7cbb;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        details {
+            margin-top: 10px;
+            color: #555;
+            font-size: 0.9em;
+        }
+
+        /* Article Section */
+        article {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            width: 90%;
+            padding: 15px;
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        figure {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        figure figcaption {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #bb7cbb;
+        }
+
+        img {
+            border-radius: 8px;
+        }
+
+        /* Video Section (Aside) */
+        aside {
+            text-align: center;
+            width: 100%;
+        }
+
+        aside h2 {
+            font-size: 1.2em;
+            color: #bb7cbb;
+            margin-bottom: 10px;
+        }
+
+        /* Footer Style */
+        footer {
+            padding: 10px;
+            background-color:   #3b3434;
+            color: white;
+            text-align: center;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Logo</h1>
+    </header>
+
+    <nav>
+        <!-- Navigation content, if any -->
+    </nav>
+
+    <section>
+        <summary>
+            Click ME !!
+            <a href="ProductCard.html"> Card Layout</a>
+            <br>
+            This is the agreement:
+            <details>
+                Blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah blah.
+            </details>
+        </summary>
+    </section>
+
+    <article>
+        <figure>
+            <figcaption>Image for example</figcaption>
+            <img height="100" width="100" src="Doodle.gif" alt="Example Image">
+        </figure>
+
+        <aside>
+            <h2>Ad</h2>
+            <video controls height="200">
+                <source src="Cartoon.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </aside>
+    </article>
+
+    <footer>
+        @Niharika-Garg  &copy; All rights reserved. :)
+    </footer>
+</body>
+</html>
