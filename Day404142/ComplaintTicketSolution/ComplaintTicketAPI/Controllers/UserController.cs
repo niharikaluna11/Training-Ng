@@ -1,6 +1,7 @@
 ﻿using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -23,34 +24,7 @@ namespace ComplaintTicketAPI.Controllers
         }
         // ILogger<Student> logger
 
-        [HttpGet("AvailableRoles")]
-        public IActionResult GetAvailableRoles()
-        {
-            var roles = Enum.GetValues(typeof(Role));
-            List<String> roleInString = new List<String>();
-            int count = 0;
-            foreach (var item in roles)
-            {
-                string itemS = item.ToString() + " " + count;
-                roleInString.Add(itemS);
-                count++;
-            }
-            return Ok(roleInString);
-        }
-        [HttpGet("AvailableTypesOFOrganization")]
-        public IActionResult GetAvailableTypes()
-        {
-            var types = Enum.GetValues(typeof(Type));
-            List<String> typeInString = new List<String>();
-            int count = 0;
-            foreach (var item in types)
-            {
-                string itemS = item.ToString() + " " + count;
-                typeInString.Add(itemS);
-                count++;
-            }
-            return Ok(typeInString);
-        }
+ 
 
 
         [HttpPost("RegistrationOFUser")]

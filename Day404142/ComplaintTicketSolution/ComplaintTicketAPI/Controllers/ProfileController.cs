@@ -1,5 +1,4 @@
 ﻿using ComplaintTicketAPI.Interfaces;
-using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -27,40 +26,57 @@ namespace ComplaintTicketAPI.Controllers
             _logger = logger;
         }
 
-        // GET: api/profile/user/{userId}
-        [HttpGet("GetUserProfile")]
-        [Authorize(Roles="User")]
-        public async Task<IActionResult> GetUserProfile(int userId)
+        // GET: api/profile/{userId}
+        [HttpGet("Get-profile/{userId}")]
+        [Authorize]
+        public async Task<IActionResult> GetProfile(int userId)
         {
             try
             {
-                var profile = await _userProfileService.GetProfile(userId);
-                if (profile == null)
+                var userProfile = await _userProfileService.GetProfile(userId);
+                if (userProfile != null)
                 {
-                    return NotFound($"User profile with user ID {userId} not found.");
+                    return Ok(userProfile);
                 }
-                return Ok(profile);
+
+                var organizationProfile = await _organizationProfileService.GetOrganizationProfile(userId);
+                if (organizationProfile != null)
+                {
+                    return Ok(organizationProfile);
+                }
+
+                return NotFound($"Profile with user ID {userId} not found in either User or Organization profiles.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error retrieving user profile.");
+                _logger.LogError(ex, "Error retrieving profile.");
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
 
-        // PUT: api/profile/user/{userId}
-        [HttpPut("UpdateUserProfile")]
+        // PUT: api/profile/update-profile/{userId}
+        [HttpPut("update-User-profile/{userId}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> UpdateUserProfile(int userId, ProfileUpdateDTO updateDto)
+        public async Task<IActionResult> UpdateUserProfile(int userId, [FromBody] ProfileUpdateDTO profileUpdateDTO)
         {
             try
             {
-                var updatedProfile = await _userProfileService.UpdateProfile(userId, updateDto);
-                if (updatedProfile == null)
+                // Get the user profile first to check if it exists
+                var userProfile = await _userProfileService.GetProfile(userId);
+                if (userProfile == null)
                 {
-                    return NotFound($"User profile with user ID {userId} not found.");
+                    return NotFound($"Profile with user ID {userId} not found.");
                 }
-                return Ok(updatedProfile);
+
+                // Now update the user profile
+                var updatedUserProfile = await _userProfileService.UpdateProfile(userId, profileUpdateDTO);
+                if (updatedUserProfile != null)
+                {
+                    return Ok(updatedUserProfile);
+                }
+
+                // If the update fails for some reason, return a bad request
+                return BadRequest("Failed to update the user profile.");
             }
             catch (Exception ex)
             {
@@ -69,42 +85,29 @@ namespace ComplaintTicketAPI.Controllers
             }
         }
 
-        // GET: api/profile/organization/{userId}
-        [HttpGet("GetOrganizationProfile")]
-        [Authorize(Roles = "Organization")]
-        public async Task<IActionResult> GetOrganizationProfile(int userId)
+        // PUT: api/profile/update-profile/{userId}
+        [HttpPut("update-Organization-profile/{userId}")]
+        [Authorize(Roles = "Admin,Organization")]
+        public async Task<IActionResult> UpdateOrgProfile(int userId, [FromBody] OrganizationProfileDTO organizationProfileDTO)
         {
             try
             {
-                var organization = await _organizationProfileService.GetOrganizationProfile(userId);
-                if (organization == null)
+                // Get the organization profile first to check if it exists
+                var organizationProfile = await _organizationProfileService.GetOrganizationProfile(userId);
+                if (organizationProfile == null)
                 {
-                    return NotFound($"Organization profile with user ID {userId} not found.");
+                    return NotFound($"Profile with user ID {userId} not found in Organization.");
                 }
-                return Ok(organization);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error retrieving organization profile.");
-                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
-            }
-        }
 
-        // PUT: api/profile/organization/{userId}
-        [HttpPut("UpdateOrganizationProfile")]
-        [Authorize(Roles = "Organization")]
-
-
-        public async Task<IActionResult> UpdateOrganizationProfile(int userId, OrganizationProfileDTO updateDto)
-        {
-            try
-            {
-                var updatedOrganization = await _organizationProfileService.UpdateOrganizationProfile(userId, updateDto);
-                if (updatedOrganization == null)
+                // Now update the organization profile
+                var updatedOrganizationProfile = await _organizationProfileService.UpdateOrganizationProfile(userId, organizationProfileDTO);
+                if (updatedOrganizationProfile != null)
                 {
-                    return NotFound($"Organization profile with user ID {userId} not found.");
+                    return Ok(updatedOrganizationProfile);
                 }
-                return Ok(updatedOrganization);
+
+                // If the update fails for some reason, return a bad request
+                return BadRequest("Failed to update the organization profile.");
             }
             catch (Exception ex)
             {
@@ -112,5 +115,7 @@ namespace ComplaintTicketAPI.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
             }
         }
+
+
     }
 }
