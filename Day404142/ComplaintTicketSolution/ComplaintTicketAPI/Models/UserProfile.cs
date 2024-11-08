@@ -1,6 +1,6 @@
 ﻿namespace ComplaintTicketAPI.Models
 {
-    public class Profile
+    public class UserProfile
     {
         //User Profile
 

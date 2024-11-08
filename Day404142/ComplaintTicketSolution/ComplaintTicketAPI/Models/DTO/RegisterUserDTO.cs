@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ComplaintTicketAPI.Validations;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
 
 namespace ComplaintTicketAPI.Models.DTO
@@ -18,9 +19,12 @@ namespace ComplaintTicketAPI.Models.DTO
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
+
+        [EmailValidator]
         public string Email { get; set; }
         public DateTime DateOfBirth { get; set; }
 
+        [Required(ErrorMessage = "Role is required")]
         public Role Role { get; set; }
 
         public Type Types { get; set; }

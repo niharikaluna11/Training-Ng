@@ -15,7 +15,7 @@
         public byte[] HashKey { get; set; }
 
         //stored hash password
-        public Profile? Profile { get; set; }
+        public UserProfile? Profile { get; set; }
         public Role Roles { get; set; }
         public ICollection<Complaint> Complaints { get; set; }
             //= new List<Complaint>();

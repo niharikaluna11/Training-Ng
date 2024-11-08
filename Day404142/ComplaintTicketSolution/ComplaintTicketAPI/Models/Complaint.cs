@@ -18,37 +18,30 @@
 
     public enum Category
     {
+       Others = 0,
        Technical =1,
        CustomerService =2,
        Facilities =3,
-       Others =0
+       
     }
     public class Complaint
     {
         public int Id { get; set; }
-        public int UserId { get; set; }
-        //foreign key 
+        public int UserId { get; set; } // Foreign key to User
         public User User { get; set; } // Navigation property to User
 
-        // Foreign key to User
-        public int OrganizationId { get; set; } 
-        // Foreign key to Organization
-        public Category Category { get; set; }
-        //string or enum type
+        public int OrganizationId { get; set; } // Foreign key to Organization
         public string Description { get; set; }
-        public string AttachmentUrl { get; set; } 
-        // URL for uploaded images/docs
-        public Status Status { get; set; } 
-        // Enum or string: Received, In Progress, Resolved
-        public Priority Priority { get; set; } 
-        // Enum or string: Low, Medium, High, Urgent
+     
+        public int CategoryId { get; set; } // Foreign key to ComplaintCategory
+        public ComplaintCategory Category { get; set; } // Navigation property to ComplaintCategory
 
-        public string CommentByUser { get; set; } = string.Empty;
-        //String type Comment stored by user for organization
+        public ICollection<ComplaintFile> ComplaintFiles { get; set; } // 1:M relation to ComplaintFile
 
-        public string CommentByOrg { get; set; } = string.Empty;
-        //String type Comment stored by organization for user  
+        public ICollection<ComplaintStatusDate> ComplaintStatusDates { get; set; } // M:M relation to ComplaintStatus through ComplaintStatusDate
 
-        public DateTime CreatedAt { get; set; }
+
+       
+
     }
 }
