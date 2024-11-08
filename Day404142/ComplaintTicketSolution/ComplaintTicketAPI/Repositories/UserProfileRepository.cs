@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ComplaintTicketAPI.Repositories
 {
-    public class UserProfileRepository : IRepository<int, Profile>
+    public class UserProfileRepository : IRepository<int, UserProfile>
     {
         private readonly ComplaintTicketContext _context;
 
@@ -16,7 +16,7 @@ namespace ComplaintTicketAPI.Repositories
             _context = context;
         }
 
-        public async Task<Profile> Add(Profile entity)
+        public async Task<UserProfile> Add(UserProfile entity)
         {
             try
             {
@@ -31,22 +31,22 @@ namespace ComplaintTicketAPI.Repositories
             
         }
 
-        public Task<Profile> Delete(int key)
+        public Task<UserProfile> Delete(int key)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<Profile> Get(int userId)
+        public async Task<UserProfile> Get(int userId)
         {
             return await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
         }
 
-        public async Task<IEnumerable<Profile>> GetAll()
+        public async Task<IEnumerable<UserProfile>> GetAll()
         {
             return await _context.Profiles.ToListAsync();
         }
 
-        public async Task<Profile> Update(Profile entity, int userId)
+        public async Task<UserProfile> Update(UserProfile entity, int userId)
         {
             // Check if the profile exists
             var existingProfile = await Get(userId);
@@ -54,7 +54,7 @@ namespace ComplaintTicketAPI.Repositories
             if (existingProfile == null)
             {
                 // If no profile exists, create a new one
-                var newProfile = new Profile
+                var newProfile = new UserProfile
                 {
                     UserId = userId, // Set the userId for the new profile
                     FirstName = entity.FirstName,

@@ -30,24 +30,8 @@ namespace ComplaintTicketAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("AttachmentUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CommentByOrg")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CommentByUser")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -55,6 +39,75 @@ namespace ComplaintTicketAPI.Migrations
 
                     b.Property<int>("OrganizationId")
                         .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("OrganizationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Complaints");
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ComplaintCategories");
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintFile", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ComplaintId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("FilePath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ComplaintId");
+
+                    b.ToTable("ComplaintFiles");
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CommentByUser")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Priority")
                         .IsRequired()
@@ -64,17 +117,30 @@ namespace ComplaintTicketAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("OrganizationId")
-                        .IsUnique();
+                    b.ToTable("ComplaintStatuses");
+                });
 
-                    b.HasIndex("UserId");
+            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintStatusDate", b =>
+                {
+                    b.Property<int>("ComplaintId")
+                        .HasColumnType("int");
 
-                    b.ToTable("Complaints");
+                    b.Property<int>("ComplaintStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("StatusDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("ComplaintId", "ComplaintStatusId");
+
+                    b.HasIndex("ComplaintStatusId");
+
+                    b.ToTable("ComplaintStatusDates");
                 });
 
             modelBuilder.Entity("ComplaintTicketAPI.Models.Organization", b =>
@@ -116,7 +182,36 @@ namespace ComplaintTicketAPI.Migrations
                     b.ToTable("Organizations");
                 });
 
-            modelBuilder.Entity("ComplaintTicketAPI.Models.Profile", b =>
+            modelBuilder.Entity("ComplaintTicketAPI.Models.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<byte[]>("HashKey")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("Password")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Roles")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.UserProfile", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -162,40 +257,17 @@ namespace ComplaintTicketAPI.Migrations
                     b.ToTable("Profiles");
                 });
 
-            modelBuilder.Entity("ComplaintTicketAPI.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<byte[]>("HashKey")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<byte[]>("Password")
-                        .IsRequired()
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("Roles")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
-                });
-
             modelBuilder.Entity("ComplaintTicketAPI.Models.Complaint", b =>
                 {
+                    b.HasOne("ComplaintTicketAPI.Models.ComplaintCategory", "Category")
+                        .WithMany("Complaints")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("ComplaintTicketAPI.Models.Organization", null)
-                        .WithOne()
-                        .HasForeignKey("ComplaintTicketAPI.Models.Complaint", "OrganizationId")
+                        .WithMany()
+                        .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -205,7 +277,39 @@ namespace ComplaintTicketAPI.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Category");
+
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintFile", b =>
+                {
+                    b.HasOne("ComplaintTicketAPI.Models.Complaint", "Complaint")
+                        .WithMany("ComplaintFiles")
+                        .HasForeignKey("ComplaintId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Complaint");
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintStatusDate", b =>
+                {
+                    b.HasOne("ComplaintTicketAPI.Models.Complaint", "Complaint")
+                        .WithMany("ComplaintStatusDates")
+                        .HasForeignKey("ComplaintId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ComplaintTicketAPI.Models.ComplaintStatus", "ComplaintStatus")
+                        .WithMany("ComplaintStatusDates")
+                        .HasForeignKey("ComplaintStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Complaint");
+
+                    b.Navigation("ComplaintStatus");
                 });
 
             modelBuilder.Entity("ComplaintTicketAPI.Models.Organization", b =>
@@ -217,13 +321,30 @@ namespace ComplaintTicketAPI.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ComplaintTicketAPI.Models.Profile", b =>
+            modelBuilder.Entity("ComplaintTicketAPI.Models.UserProfile", b =>
                 {
                     b.HasOne("ComplaintTicketAPI.Models.User", null)
                         .WithOne("Profile")
-                        .HasForeignKey("ComplaintTicketAPI.Models.Profile", "UserId")
+                        .HasForeignKey("ComplaintTicketAPI.Models.UserProfile", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.Complaint", b =>
+                {
+                    b.Navigation("ComplaintFiles");
+
+                    b.Navigation("ComplaintStatusDates");
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintCategory", b =>
+                {
+                    b.Navigation("Complaints");
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintStatus", b =>
+                {
+                    b.Navigation("ComplaintStatusDates");
                 });
 
             modelBuilder.Entity("ComplaintTicketAPI.Models.User", b =>

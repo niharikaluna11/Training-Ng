@@ -3,7 +3,7 @@
 namespace ComplaintTicketAPI.Exceptions
 {
     [Serializable]
-    internal class CouldNotUpdateException : Exception
+    public class CouldNotUpdateException : Exception
     {
         public CouldNotUpdateException()
         {

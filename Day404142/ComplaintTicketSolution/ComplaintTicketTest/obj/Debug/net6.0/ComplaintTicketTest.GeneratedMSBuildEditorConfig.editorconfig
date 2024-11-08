@@ -8,6 +8,6 @@ build_property.PlatformNeutralAssembly =
 build_property.EnforceExtendedAnalyzerRules = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = ComplaintTicketTest
-build_property.ProjectDir = D:\Niharikaluna-github\Training-Ng\Day4041\ComplaintTicketSolution\ComplaintTicketTest\
+build_property.ProjectDir = D:\Niharikaluna-github\Training-Ng\Day404142\ComplaintTicketSolution\ComplaintTicketTest\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

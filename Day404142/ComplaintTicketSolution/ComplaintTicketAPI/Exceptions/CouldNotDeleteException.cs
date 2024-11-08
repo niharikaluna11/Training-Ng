@@ -3,7 +3,7 @@
 namespace ComplaintTicketAPI.Exceptions
 {
     [Serializable]
-    internal class CouldNotDeleteException : Exception
+    public class CouldNotDeleteException : Exception
     {
         public CouldNotDeleteException()
         {

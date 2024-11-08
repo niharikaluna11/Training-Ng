@@ -5,10 +5,10 @@ using ComplaintTicketAPI.Repositories;
 using ComplaintTicketAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
+using Microsoft.OpenApi.Models;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace ComplaintTicketAPI
 {
@@ -35,22 +35,37 @@ namespace ComplaintTicketAPI
                 });
             #endregion
 
-
+            #region AutoMapper
+            builder.Services.AddAutoMapper(typeof(Program));
+            #endregion
 
             #region Repositories
-            builder.Services.AddScoped<IRepository<int, Profile>, UserProfileRepository>();
+            builder.Services.AddScoped<IRepository<int, Complaint>, ComplaintRepository>();
+            builder.Services.AddScoped<IRepository<int, ComplaintFile>, ComplaintFileRepository>();
+            builder.Services.AddScoped<IRepository<int, ComplaintCategory>, ComplaintCategoryRepository>();
+            builder.Services.AddScoped<IRepository<int, ComplaintStatus>, ComplaintStatusRepository>();
+            builder.Services.AddScoped<IRepository<int, ComplaintStatusDate>, ComplaintStatusDateRepository>();
+
+            builder.Services.AddScoped<IRepository<int, UserProfile>, UserProfileRepository>();
             builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
-            //    builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
             builder.Services.AddScoped<IRepository<int, Organization>, OrganizationRepository>();
             #endregion
 
             #region Services    
-
+            builder.Services.AddScoped<IOrganizationService, OrganizationService>();
             builder.Services.AddScoped<IUserService, UserService>();
+            builder.Services.AddScoped<IComplaintCategoryService, ComplaintCategoryService>();
+            builder.Services.AddScoped<IComplaintService, ComplaintService>();
+
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
             builder.Services.AddScoped<IOrganizationProfileService, OrganizationProfileService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-            #endregion;
+
+            // Register UpdateComplaintService
+            builder.Services.AddScoped<IUpdateComplaintService, UpdateComplaintService>();
+            #endregion
+
+
 
 
             #region Contexts
@@ -60,19 +75,57 @@ namespace ComplaintTicketAPI
             });
             #endregion
 
+            #region Logger
             ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
             {
                 builder.AddConsole();
                 builder.AddDebug();
             });
-           // loggerFactory.LogInformation("Starting up the application...");
+            // loggerFactory.LogInformation("Starting up the application...");
+            #endregion
 
-            #region Others
-            builder.Services.AddControllers();
+
+            #region Swagger
+            // Configure services
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    // Set ReferenceHandler.Preserve to handle circular references
+                    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+                    options.JsonSerializerOptions.MaxDepth = 64; // Optional: increase if needed
+                });
+
             // Learn more about configuring Swagger/OpenAPI
             // at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(opt =>
+            {
+                opt.SwaggerDoc("v1", new OpenApiInfo { Title = "MyAPI", Version = "v1" });
+                opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Please enter token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "bearer"
+                });
+
+                opt.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
+            });
 
             var app = builder.Build();
 
@@ -84,17 +137,14 @@ namespace ComplaintTicketAPI
             }
 
             app.UseAuthorization();
-           
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseRouting();
-         
+
             app.UseAuthentication();
             app.UseAuthorization();
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+
 
             app.MapControllers();
 

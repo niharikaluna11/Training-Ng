@@ -3,7 +3,7 @@
 namespace ComplaintTicketAPI.Exceptions
 {
     [Serializable]
-    internal class CouldNotAddException : Exception
+    public class CouldNotAddException : Exception
     {
         public CouldNotAddException()
         {

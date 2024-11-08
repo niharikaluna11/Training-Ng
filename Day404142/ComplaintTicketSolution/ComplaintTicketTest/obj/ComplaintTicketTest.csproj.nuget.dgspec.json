@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketTest\\ComplaintTicketTest.csproj": {}
+    "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketTest\\ComplaintTicketTest.csproj": {}
   },
   "projects": {
-    "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj": {
+    "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj",
+        "projectUniqueName": "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj",
         "projectName": "ComplaintTicketAPI",
-        "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj",
+        "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj",
         "packagesPath": "C:\\Users\\niharika.garg.PYRAMIDINDIA\\.nuget\\packages\\",
-        "outputPath": "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketAPI\\obj\\",
+        "outputPath": "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketAPI\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\niharika.garg.PYRAMIDINDIA\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[6.0.35, )"
             },
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.5.0, )"
@@ -92,14 +96,14 @@
         }
       }
     },
-    "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketTest\\ComplaintTicketTest.csproj": {
+    "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketTest\\ComplaintTicketTest.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketTest\\ComplaintTicketTest.csproj",
+        "projectUniqueName": "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketTest\\ComplaintTicketTest.csproj",
         "projectName": "ComplaintTicketTest",
-        "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketTest\\ComplaintTicketTest.csproj",
+        "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketTest\\ComplaintTicketTest.csproj",
         "packagesPath": "C:\\Users\\niharika.garg.PYRAMIDINDIA\\.nuget\\packages\\",
-        "outputPath": "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketTest\\obj\\",
+        "outputPath": "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketTest\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\niharika.garg.PYRAMIDINDIA\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -117,8 +121,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj": {
-                "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\Day4041\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj"
+              "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj": {
+                "projectPath": "D:\\Niharikaluna-github\\Training-Ng\\Day404142\\ComplaintTicketSolution\\ComplaintTicketAPI\\ComplaintTicketAPI.csproj"
               }
             }
           }
