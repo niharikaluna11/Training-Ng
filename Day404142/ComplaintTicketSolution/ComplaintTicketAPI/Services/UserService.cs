@@ -5,28 +5,36 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using ComplaintTicketAPI.Context;
 
 namespace ComplaintTicketAPI.Services
 {
     public class UserService : IUserService
     {
         private readonly IRepository<string, User> _userRepo;
-        private readonly IRepository<int, Profile> _profileRepo;
+        private readonly IRepository<int, UserProfile> _profileRepo;
         private readonly IRepository<int, Organization> _organizationRepo;
-     
+        private readonly IMapper _mapper;
         private readonly ILogger<UserService> _logger;
         private readonly ITokenService _tokenService;
-
+        private readonly ComplaintTicketContext _context;
         public UserService(
             IRepository<string, User> userRepository,
-            IRepository<int, Profile> profileRepo,
+            IRepository<int, UserProfile> profileRepo,
             IRepository<int, Organization> organizationRepo,
             ILogger<UserService> logger,
-            ITokenService tokenService)
+            ITokenService tokenService,
+            ComplaintTicketContext context
+            , IMapper mapper
+            )
         {
+            _context = context;
             _userRepo = userRepository;
             _profileRepo = profileRepo;
             _organizationRepo = organizationRepo;
+            _mapper = mapper;
             _logger = logger;
             _tokenService = tokenService;
         }
@@ -115,7 +123,7 @@ namespace ComplaintTicketAPI.Services
         {
             try
             {
-                var profile = new Profile
+                var profile = new UserProfile
                 {
                     UserId = userId,
                     FirstName = registerUser.Name,
@@ -155,6 +163,21 @@ namespace ComplaintTicketAPI.Services
                 _logger.LogError(ex, "Error creating organization profile for organization: {UserId}", userId);
                 throw new Exception("Failed to create organization profile");
             }
+        }
+
+        public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
+        {
+            try
+            {
+
+                var users = await _context.Users.ToListAsync();
+                return _mapper.Map<IEnumerable<UserDTO>>(users);
+            }
+            catch(Exception ex)
+            {
+                throw new Exception("Failed to Get Users");
+            }
+            
         }
     }
 }

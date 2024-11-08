@@ -15,7 +15,7 @@ namespace ComplaintTicketAPI.Services
             _context = context;
         }
 
-        public async Task<Profile> GetProfile(int userId)
+        public async Task<UserProfile> GetProfile(int userId)
         {
             // Retrieve the profile from the database by userId
             var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
@@ -23,7 +23,7 @@ namespace ComplaintTicketAPI.Services
         }
 
 
-        public async Task<Profile> UpdateProfile(int userId, ProfileUpdateDTO updateDto)
+        public async Task<UserProfile> UpdateProfile(int userId, ProfileUpdateDTO updateDto)
         {
             var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
             if (profile != null)
