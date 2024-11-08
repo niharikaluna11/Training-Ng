@@ -1,0 +1,2 @@
+Create a webpage thet will display the products from the products from the url 'https://dummyjson.com/products&#39; in a card layout(Bootstrap, your own css, tailwind)
+Each product should have but for <price> button, when clicked will add the product to the cart https://dummyjson.com/carts/add&#39;
