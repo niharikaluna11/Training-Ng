@@ -1,0 +1,168 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Full-height layout */
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    align-items: center;
+    margin: 0;
+}
+
+header {
+    background-color: #3b3434;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+/* Main content area with Flexbox */
+.centered {
+    max-width: 1200px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    flex: 1;
+}
+
+/* Card layout */
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.card {
+    background-color: white;
+    flex: 1 1 22%;
+    max-width: 220px;
+    min-width: 220px;
+    height: 320px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    position: relative; /* Needed for overlay positioning */
+    transition: transform 0.3s ease;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card img {
+    width: 220px;
+    height: 250px;
+    object-fit: fill;
+}
+
+.card:hover img {
+    opacity: 0.4;
+}
+
+/* Overlay styling */
+.middle {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-decoration-color: #ad809c;
+    text-align: justify;
+}
+
+.card:hover .middle {
+    opacity: 4;
+}
+
+.text1 {
+    color: #000000;
+    margin-top: 50%;
+    font-size: 10px;
+    padding: 12px 8px;
+}
+
+.text2 {
+    color: whitesmoke;
+    background-color: #3b3434;
+    font-size: 15px;
+    padding: 4px 4px;
+}
+
+figcaption {
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Footer Style */
+footer {
+    padding: 10px;
+    background-color: #3b3434;
+    color: white;
+    text-align: center;
+    width: 100%;
+}
+
+/* Button Styling */
+.button-14 {
+    background-image: linear-gradient(#f7f8fa, #e7e9ec);
+    border-color: #adb1b8 #a2a6ac #8d9096;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 3px;
+    box-shadow: rgba(255, 255, 255, .6) 0 1px 0 inset;
+    box-sizing: border-box;
+    color: #0f1111;
+    cursor: pointer;
+    display: inline-block;
+    font-family: "Amazon Ember", Arial, sans-serif;
+    font-size: 14px;
+    height: 29px;
+    outline: 0;
+    margin-top: 20px;
+    overflow: hidden;
+    padding: 0 11px;
+    text-align: center;
+    text-decoration: none;
+    user-select: none;
+    white-space: nowrap;
+}
+
+
+
+
+.button-14:active {
+  border-bottom-color: #a2a6ac;
+}
+
+.button-14:active:hover {
+  border-bottom-color: #a2a6ac;
+}
+
+.button-14:hover {
+  border-color: #a2a6ac #979aa1 #82858a;
+}
+
+.button-14:focus {
+  border-color: #b86f91;
+  box-shadow: rgba(169, 104, 182, 0.5) 0 0 3px 2px;
+  outline: 0;
+}
