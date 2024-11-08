@@ -5,8 +5,8 @@ namespace ComplaintTicketAPI.Interfaces
 {
     public interface IUserProfileService
     {
-        Task<Profile> UpdateProfile(int userId, ProfileUpdateDTO updateDto);
+        Task<UserProfile> UpdateProfile(int userId, ProfileUpdateDTO updateDto);
 
-        Task<Profile> GetProfile(int userId);
+        Task<UserProfile> GetProfile(int userId);
     }
 }
