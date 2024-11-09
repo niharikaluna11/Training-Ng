@@ -8,6 +8,8 @@ using Microsoft.Extensions.Logging;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using ComplaintTicketAPI.Context;
+using ComplaintTicketAPI.EmailInterface;
+using ComplaintTicketAPI.EmailModel;
 
 namespace ComplaintTicketAPI.Services
 {
@@ -19,6 +21,8 @@ namespace ComplaintTicketAPI.Services
         private readonly IMapper _mapper;
         private readonly ILogger<UserService> _logger;
         private readonly ITokenService _tokenService;
+        private readonly IEmailSender _emailSender;
+
         private readonly ComplaintTicketContext _context;
         public UserService(
             IRepository<string, User> userRepository,
@@ -27,7 +31,8 @@ namespace ComplaintTicketAPI.Services
             ILogger<UserService> logger,
             ITokenService tokenService,
             ComplaintTicketContext context
-            , IMapper mapper
+            , IMapper mapper,
+            IEmailSender emailSender
             )
         {
             _context = context;
@@ -37,6 +42,18 @@ namespace ComplaintTicketAPI.Services
             _mapper = mapper;
             _logger = logger;
             _tokenService = tokenService;
+            _emailSender = emailSender;
+        }
+
+
+        private void SendMail(string title,string email, string body)
+        {
+            var rng = new Random();
+            var message = new Message(new string[] {
+                        email },
+                    title,
+                    body);
+            _emailSender.SendEmail(message);
         }
 
         public async Task<LoginResponseDTO> Authenticate(LoginRequestDTO loginUser)
@@ -87,6 +104,27 @@ namespace ComplaintTicketAPI.Services
                 var addedUser = await _userRepo.Add(user);
                 if (addedUser != null)
                 {
+
+                    try
+                    {
+                        string body = $"Dear {addedUser.Roles.ToString()} {registerUser.Name},\n\n" +
+                                         "We are pleased to inform you that your account has been successfully created.\n\n" +
+                                         "Below are your login credentials for accessing our service:\n\n" +
+                                         $"*Username:* {registerUser.Username}\n" +
+                                         $"*Password:* {registerUser.Password}\n\n" +
+                                         "Should you have any questions or require assistance, please feel free to contact our support team.\n\n" +
+                                         "Best regards,\n" +
+                                         "ComplaintTicketApp\n" +
+                                         "Support Team" +
+                                         "(Niharika Garg)";
+
+                        string email = registerUser.Email;
+                        SendMail("Your Account Has Been Created", email, body);
+
+                    }
+                    catch { throw new Exception("Mail Cannot be send Becuase of Invalid Mail"); }
+               
+
                     await CreateProfileOrOrganizationAsync(addedUser, registerUser);
                     return new LoginResponseDTO { Username = user.Username };
                 }
@@ -135,6 +173,11 @@ namespace ComplaintTicketAPI.Services
                     Preferences = string.Empty,
                 };
                 await _profileRepo.Add(profile);
+
+
+
+
+
             }
             catch (Exception ex)
             {

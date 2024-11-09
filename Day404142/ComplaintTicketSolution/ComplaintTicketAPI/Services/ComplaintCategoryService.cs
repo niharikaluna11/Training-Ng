@@ -4,29 +4,53 @@ using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 public class ComplaintCategoryService : IComplaintCategoryService
 {
     private readonly ComplaintTicketContext _context;
     private readonly IMapper _mapper;
-//asdkjf
-    public ComplaintCategoryService(ComplaintTicketContext context, IMapper mapper)
+    private readonly ILogger<ComplaintCategoryService> _logger;
+
+    public ComplaintCategoryService(ComplaintTicketContext context, IMapper mapper, ILogger<ComplaintCategoryService> logger)
     {
         _context = context;
         _mapper = mapper;
+        _logger = logger;
     }
 
     public async Task<IEnumerable<ComplaintCategoryResponseDTO>> GetAllComplaintCategories()
     {
-        var categories = await _context.ComplaintCategories.ToListAsync();
-        return _mapper.Map<IEnumerable<ComplaintCategoryResponseDTO>>(categories);
+        try
+        {
+            var categories = await _context.ComplaintCategories.ToListAsync();
+            return _mapper.Map<IEnumerable<ComplaintCategoryResponseDTO>>(categories);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error occurred while fetching complaint categories.");
+            throw new Exception("An error occurred while fetching complaint categories.", ex);
+        }
     }
 
     public async Task<ComplaintCategoryResponseDTO> AddComplaintCategory(ComplaintCategoryDTO categoryDto)
     {
-        var category = _mapper.Map<ComplaintCategory>(categoryDto);
-        _context.ComplaintCategories.Add(category);
-        await _context.SaveChangesAsync();
-        return _mapper.Map<ComplaintCategoryResponseDTO>(category);
+        try
+        {
+            var category = _mapper.Map<ComplaintCategory>(categoryDto);
+            _context.ComplaintCategories.Add(category);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<ComplaintCategoryResponseDTO>(category);
+        }
+        catch (DbUpdateException dbEx)
+        {
+            _logger.LogError(dbEx, "Error occurred while adding a new complaint category.");
+            throw new Exception("An error occurred while adding a new complaint category.", dbEx);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An unexpected error occurred while adding a new complaint category.");
+            throw new Exception("An unexpected error occurred while adding a new complaint category.", ex);
+        }
     }
 }

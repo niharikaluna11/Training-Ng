@@ -1,30 +1,30 @@
-﻿using ComplaintTicketAPI.Context;
+﻿using AutoMapper;
+using ComplaintTicketAPI.Context;
 using ComplaintTicketAPI.Interfaces;
-using ComplaintTicketAPI.Models.DTO;
 using ComplaintTicketAPI.Models;
-using ComplaintTicketAPI.Repositories;
+using ComplaintTicketAPI.Models.DTO;
 using Microsoft.EntityFrameworkCore;
-using AutoMapper;
 
 namespace ComplaintTicketAPI.Services
 {
     public class ComplaintService : IComplaintService
     {
-
         private readonly ComplaintTicketContext _context;
-        private readonly IRepository<int, Complaint> _complaintRepository;
+        private readonly IComplaintRepository _complaintRepository;
         private readonly IMapper _mapper;
         private readonly IRepository<int, ComplaintStatus> _complaintStatusRepository;
         private readonly IRepository<int, ComplaintFile> _complaintFileRepository;
         private readonly IRepository<int, ComplaintStatusDate> _complaintStatusDateRepository;
-
+        private readonly ILogger<ComplaintService> _logger;
+        
         public ComplaintService(
             ComplaintTicketContext context,
-            IRepository<int, Complaint> complaintRepository,
+            IComplaintRepository complaintRepository,
             IRepository<int, ComplaintStatus> complaintStatusRepository,
             IRepository<int, ComplaintFile> complaintFileRepository,
             IRepository<int, ComplaintStatusDate> complaintStatusDateRepository,
-            IMapper mapper)
+            IMapper mapper,
+            ILogger<ComplaintService> logger)
         {
             _context = context;
             _complaintRepository = complaintRepository;
@@ -32,99 +32,137 @@ namespace ComplaintTicketAPI.Services
             _complaintFileRepository = complaintFileRepository;
             _complaintStatusDateRepository = complaintStatusDateRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         public async Task<Complaint> CreateComplaint(CreateComplaintRequestDTO complaintDto)
         {
-            
-
-            // Map CreateComplaintRequestDTO to Complaint entity
-            var complaint = _mapper.Map<Complaint>(complaintDto);
-
-            // Step 1: Add the complaint
-            var createdComplaint = await _complaintRepository.Add(complaint);
-
-            // Optional: Map ComplaintStatus (if needed)
-            var complaintStatus = _mapper.Map<ComplaintStatus>(complaintDto);
-            complaintStatus.Status = Status.Recieved; // Set default status to "Recieved"
-            complaintStatus.Priority = Priority.Medium; // Set default priority if not provided
-            await _complaintStatusRepository.Add(complaintStatus); // Save the ComplaintStatus
-
-            // Optional: Map ComplaintFile (if needed)
-            var complaintFile = _mapper.Map<ComplaintFile>(complaintDto);
-            complaintFile.ComplaintId = createdComplaint.Id; // Ensure it links to the created complaint
-            await _complaintFileRepository.Add(complaintFile); // Save the ComplaintFile
-
-            // Optional: Map ComplaintStatusDate (if needed)
-            var complaintStatusDate = new ComplaintStatusDate
+            try
             {
-                ComplaintId = createdComplaint.Id,
-                ComplaintStatusId = complaintStatus.Id, // Link to the complaint status
-                StatusDate = DateTime.Now // Set the current date as the status date
-            };
-            await _complaintStatusDateRepository.Add(complaintStatusDate); // Save the ComplaintStatusDate
+                // Step 1: Create and save the complaint
+                var complaint = _mapper.Map<Complaint>(complaintDto);
+                var createdComplaint = await _complaintRepository.Add(complaint);
 
-            // Save all changes to the database
-            await _context.SaveChangesAsync();
+                // Step 2: Create and save the initial complaint status
+                var complaintStatus = _mapper.Map<ComplaintStatus>(complaintDto);
+                complaintStatus.Status = Status.Recieved;
+                complaintStatus.Priority = Priority.Medium;
+                await _complaintStatusRepository.Add(complaintStatus);
 
-            return createdComplaint;
+                // Step 3: Create and save the complaint file
+                var complaintFile = _mapper.Map<ComplaintFile>(complaintDto);
+                complaintFile.ComplaintId = createdComplaint.Id;
+                await _complaintFileRepository.Add(complaintFile);
+
+                
+                var complaintStatusDate = new ComplaintStatusDate
+                {
+                    ComplaintId = createdComplaint.Id,
+                    ComplaintStatusId = complaintStatus.Id,
+                    StatusDate = DateTime.Now
+                };
+                await _complaintStatusDateRepository.Add(complaintStatusDate);
+
+                
+           
+
+                // Step 7: Save all changes to the database
+                await _context.SaveChangesAsync();
+
+                return createdComplaint;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Log database update errors
+                _logger.LogError(dbEx, "Error occurred while creating the complaint.");
+                throw new Exception("An error occurred while creating the complaint.", dbEx);
+            }
+            catch (Exception ex)
+            {
+                // Log general errors
+                _logger.LogError(ex, "An unexpected error occurred while creating the complaint.");
+                throw new Exception("An unexpected error occurred while creating the complaint.", ex);
+            }
         }
 
 
         public async Task<Complaint> GetComplaint(int id)
         {
-            var complaint = await _context.Complaints
-                                          .Include(c => c.ComplaintStatusDates)  // Include related entities if needed
-                                          .FirstOrDefaultAsync(c => c.Id == id);
-
-            if (complaint == null)
+            try
             {
-                throw new KeyNotFoundException("Complaint not found.");
-            }
+                var complaint = await _context.Complaints
+                                             // .Include(c => c.ComplaintStatusDates)  // Include related entities if needed
+                                              .FirstOrDefaultAsync(c => c.Id == id);
 
-            return complaint;
+                if (complaint == null)
+                {
+                    throw new KeyNotFoundException("Complaint not found.");
+                }
+
+                return complaint;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving the complaint with ID: {ComplaintId}", id);
+                throw new Exception("An error occurred while retrieving the complaint.", ex);
+            }
         }
 
         public async Task<List<Complaint>> GetAllComplaint()
         {
-            var complaints = await _context.Complaints.ToListAsync();
-
-            if (complaints == null || complaints.Count == 0)
+            try
             {
-                throw new KeyNotFoundException("No Complaints Found.");
-            }
+                var complaints = await _context.Complaints.ToListAsync();
 
-            return complaints;
+                if (complaints == null || complaints.Count == 0)
+                {
+                    throw new KeyNotFoundException("No Complaints Found.");
+                }
+
+                return complaints;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving all complaints.");
+                throw new Exception("An error occurred while retrieving all complaints.", ex);
+            }
         }
 
         public async Task<ComplaintStatusDTO> TrackComplaintStatus(int complaintId)
         {
-            var complaint = await _context.Complaints
-                                          .Include(c => c.ComplaintStatusDates)  // Include status dates
-                                          .FirstOrDefaultAsync(c => c.Id == complaintId);
-
-            if (complaint == null)
+            try
             {
-                throw new KeyNotFoundException("Complaint not found.");
+                var complaint = await _context.Complaints
+                                              .Include(c => c.ComplaintStatusDates)  // Include status dates
+                                              .FirstOrDefaultAsync(c => c.Id == complaintId);
+
+                if (complaint == null)
+                {
+                    throw new KeyNotFoundException("Complaint not found.");
+                }
+
+                // Get the most recent complaint status
+                var latestStatus = complaint.ComplaintStatusDates.OrderByDescending(cs => cs.StatusDate).FirstOrDefault();
+
+                if (latestStatus == null)
+                {
+                    throw new Exception("No status found for this complaint.");
+                }
+
+                // Map to a DTO to return relevant status information
+                var complaintStatusDTO = _mapper.Map<ComplaintStatusDTO>(latestStatus.ComplaintStatus);
+
+                // Add other relevant information like date of status change
+                complaintStatusDTO.StatusDate = latestStatus.StatusDate;
+                complaintStatusDTO.Priority = latestStatus.ComplaintStatus.Priority;
+
+                return complaintStatusDTO;
             }
-
-            // Get the most recent complaint status
-            var latestStatus = complaint.ComplaintStatusDates.OrderByDescending(cs => cs.StatusDate).FirstOrDefault();
-
-            if (latestStatus == null)
+            catch (Exception ex)
             {
-                throw new Exception("No status found for this complaint.");
+                _logger.LogError(ex, "Error occurred while tracking status for complaint with ID: {ComplaintId}", complaintId);
+                throw new Exception("An error occurred while tracking the complaint status.", ex);
             }
-
-            // Map to a DTO to return relevant status information
-            var complaintStatusDTO = _mapper.Map<ComplaintStatusDTO>(latestStatus.ComplaintStatus);
-
-            // Add other relevant information like date of status change
-            complaintStatusDTO.StatusDate = latestStatus.StatusDate;
-            complaintStatusDTO.Priority = latestStatus.ComplaintStatus.Priority;
-
-            return complaintStatusDTO;
         }
-
     }
 }
