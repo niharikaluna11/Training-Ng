@@ -19,7 +19,9 @@
         public string Phone { get; set; }
         public string Email { get; set; }
 
-       
+        // Navigation property for related reports
+        
+
 
     }
 }

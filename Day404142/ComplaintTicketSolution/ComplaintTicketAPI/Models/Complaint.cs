@@ -16,14 +16,7 @@
     }
 
 
-    public enum Category
-    {
-       Others = 0,
-       Technical =1,
-       CustomerService =2,
-       Facilities =3,
-       
-    }
+   
     public class Complaint
     {
         public int Id { get; set; }
