@@ -28,6 +28,7 @@ namespace ComplaintTicketAPI.Controllers
 
 
         [HttpPost("RegistrationOFUser")]
+       
         public async Task<IActionResult> UserRegistration(RegisterUserDto entity)
         {
             try
@@ -43,6 +44,7 @@ namespace ComplaintTicketAPI.Controllers
         }
 
         [HttpPost("LoginOFUser")]
+        
         public async Task<IActionResult> LoginUser(LoginRequestDTO entity)
         {
             try

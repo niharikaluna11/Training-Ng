@@ -56,7 +56,7 @@ namespace ComplaintTicketAPI.Controllers
 
         // PUT: api/profile/update-profile/{userId}
         [HttpPut("update-User-profile/{userId}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> UpdateUserProfile(int userId, [FromBody] ProfileUpdateDTO profileUpdateDTO)
         {
             try

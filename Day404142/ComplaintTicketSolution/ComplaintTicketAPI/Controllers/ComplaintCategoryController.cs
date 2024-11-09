@@ -15,6 +15,7 @@ public class ComplaintCategoryController : ControllerBase
     }
 
     [HttpGet("GetAllCategories")]
+    [Authorize]
     public async Task<ActionResult<IEnumerable<ComplaintCategoryResponseDTO>>> GetCategories()
     {
         var categories = await _service.GetAllComplaintCategories();

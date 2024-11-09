@@ -23,7 +23,27 @@ public class ComplaintController : ControllerBase
         _mapper = mapper;
     }
 
-    // POST: api/complaint
+    [HttpGet("GetComplaintBy/{id}")] // Updated route parameter to match CreateComplaint usage
+    [Authorize(Roles = "Admin,User")]
+    public async Task<ActionResult<Complaint>> GetComplaint(int id)
+    {
+        try
+        {
+            var complaint = await _complaintService.GetComplaint(id);
+
+            if (complaint == null)
+            {
+                return NotFound("Complaint not found.");
+            }
+
+            return Ok(complaint);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
     [HttpPost("FileComplaint")]
     [Authorize(Roles = "Admin,User")]
     public async Task<ActionResult<Complaint>> CreateComplaint(CreateComplaintRequestDTO complaintDto)
@@ -35,93 +55,127 @@ public class ComplaintController : ControllerBase
 
         try
         {
-            // Call the service to create a complaint and set default status
             var createdComplaint = await _complaintService.CreateComplaint(complaintDto);
 
-            // Return the created complaint
+            // Use the route parameter name 'id' as it matches the one in GetComplaint
             return CreatedAtAction(nameof(GetComplaint), new { id = createdComplaint.Id }, createdComplaint);
         }
         catch (InvalidOperationException ex)
         {
-            // If complaint already exists for this OrganizationId, handle it here
-            return Conflict(ex.Message); // Return a 409 Conflict status code with the error message
+            return Conflict(ex.Message);
         }
         catch (Exception ex)
         {
-            // Handle other errors
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
 
-    // GET: api/complaint/{id}
-    [HttpGet("GetComplaintBy/{userid}")]
-    [Authorize(Roles = "Admin,User")]
-    public async Task<ActionResult<Complaint>> GetComplaint(int id)
-    {
-        try
-        {
-            // Call the service to get a specific complaint by id
-            var complaint = await _complaintService.GetComplaint(id);
-
-            return Ok(complaint);
-        }
-        catch (KeyNotFoundException ex)
-        {
-            // Handle when the complaint is not found
-            return NotFound(ex.Message); // Return a 404 Not Found status code with the error message
-        }
-        catch (Exception ex)
-        {
-            // Handle other errors
-            return StatusCode(500, $"Internal server error: {ex.Message}");
-        }
-    }
+    // [HttpGet("TrackComplaintStatus/{complaintId}")]
+    //  [Authorize(Roles = "Admin,User")]
 
     [HttpGet("TrackComplaintStatus/{complaintId}")]
     [Authorize(Roles = "Admin,User")]
-    public async Task<ActionResult<ComplaintStatusDTO>> TrackComplaintStatus(int complaintId)
+    public async Task<ActionResult> TrackComplaintStatus(int complaintId)
     {
         try
         {
             // Fetch the complaint including its status dates
             var complaint = await _context.Complaints
-                                          .Include(c => c.ComplaintStatusDates)  // Include status dates
-                                          .FirstOrDefaultAsync(c => c.Id == complaintId); // Ensure 'Id' matches your database column name
+                                          .Include(c => c.ComplaintStatusDates)
+                                          .ThenInclude(cs => cs.ComplaintStatus)
+                                          .FirstOrDefaultAsync(c => c.Id == complaintId);
 
             if (complaint == null)
             {
                 return NotFound("Complaint not found.");
             }
 
-            // Ensure you are ordering by the correct column for the latest status
-            var latestStatus = complaint.ComplaintStatusDates
-                                        .OrderByDescending(cs => cs.StatusDate)  // Assuming StatusDate exists and is correct
-                                        .FirstOrDefault();
+            // Select only the relevant fields from each status in the complaint
+            var result = complaint.ComplaintStatusDates
+                                  .OrderByDescending(cs => cs.StatusDate)
+                                  .Select(cs => new
+                                  {
+                                      Status = cs.ComplaintStatus.Status,
+                                      CommentByUser = cs.ComplaintStatus.CommentByUser,
+                                      StatusDate = cs.StatusDate
+                                  })
+                                  .ToList(); // Convert the results to a list
 
-            if (latestStatus == null)
-            {
-                return NotFound("No status found for this complaint.");
-            }
-
-            // Map to a DTO to return relevant status information
-            var complaintStatusDTO = _mapper.Map<ComplaintStatusDTO>(latestStatus.ComplaintStatus);
-
-            if (complaintStatusDTO == null)
-            {
-                return StatusCode(500, "Failed to map complaint status to DTO.");
-            }
-
-            // Add other relevant information like date of status change
-            complaintStatusDTO.StatusDate = latestStatus.StatusDate;
-            complaintStatusDTO.Priority = latestStatus.ComplaintStatus.Priority;
-
-            return Ok(complaintStatusDTO);
+            // Return the list in the response
+            return Ok(result);
         }
         catch (Exception ex)
         {
-            // Handle other errors
             return StatusCode(500, $"Internal server error: {ex.Message}");
         }
     }
+
+    [HttpGet("GenerateComplaintReport/{OrgId}")]
+    [Authorize(Roles = "Admin,Organization")]
+    public async Task<ActionResult> GenerateComplainReport(int OrgId)
+    {
+        try
+        {
+            // Fetch the complaints and their status details, including the status dates
+            var complaints = await _context.Complaints
+                .Include(c => c.ComplaintStatusDates)
+                .ThenInclude(cs => cs.ComplaintStatus)
+                .Where(c => c.OrganizationId == OrgId)
+                .ToListAsync();
+
+            if (complaints == null || !complaints.Any())
+            {
+                return NotFound("Complaints not found for the specified organization.");
+            }
+
+            // Get the latest status for each complaint
+            var latestStatusComplaints = complaints
+                .Select(c => new
+                {
+                    ComplaintId = c.Id,
+                    LatestStatus = c.ComplaintStatusDates
+                        .OrderByDescending(cs => cs.StatusDate)  // Order by the latest status date
+                        .FirstOrDefault()?.ComplaintStatus.Status  // Get the status of the most recent entry
+                })
+                .Where(x => x.LatestStatus != null)  // Exclude complaints without a status
+                .ToList();
+
+            // If there are no valid status updates, return an appropriate message
+            if (!latestStatusComplaints.Any())
+            {
+                return NotFound("No valid status updates found for the complaints.");
+            }
+
+            // Count how many complaints have the latest status
+            var statusCount = latestStatusComplaints
+             .GroupBy(x => x.LatestStatus)  // Group by latest status
+             .Select(g => new
+             {
+                 Status = g.Key.ToString(),  // Get the status name as a string (if it's an enum)
+                 Count = g.Count()
+             })
+             .ToList();
+
+
+
+
+            // Combine the total complaint count and the status count
+            var result = new
+            {
+                TotalComplaints = complaints.Count,  // Total complaints
+                LatestStatusCounts = statusCount  // Count of complaints by latest status
+            };
+
+            // Return the result in the response
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Internal server error: {ex.Message}");
+        }
+    }
+
+
+
 
 }
