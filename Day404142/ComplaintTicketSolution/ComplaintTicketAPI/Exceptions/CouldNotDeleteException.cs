@@ -5,20 +5,14 @@ namespace ComplaintTicketAPI.Exceptions
     [Serializable]
     public class CouldNotDeleteException : Exception
     {
-        public CouldNotDeleteException()
+        string msg;
+
+        public CouldNotDeleteException(string msg)
         {
+            this.msg = msg;
         }
 
-        public CouldNotDeleteException(string? message) : base(message)
-        {
-        }
-
-        public CouldNotDeleteException(string? message, Exception? innerException) : base(message, innerException)
-        {
-        }
-
-        protected CouldNotDeleteException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        public override string Message => msg;
     }
+    
 }
