@@ -5,20 +5,13 @@ namespace ComplaintTicketAPI.Exceptions
     [Serializable]
     public class EmptyCollectionException : Exception
     {
-        public EmptyCollectionException()
+        string msg;
+
+        public EmptyCollectionException(string msg)
         {
+            this.msg = msg;
         }
 
-        public EmptyCollectionException(string? message) : base(message)
-        {
-        }
-
-        public EmptyCollectionException(string? message, Exception? innerException) : base(message, innerException)
-        {
-        }
-
-        protected EmptyCollectionException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        public override string Message => msg;
     }
 }
