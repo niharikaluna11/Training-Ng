@@ -3,8 +3,8 @@ using ComplaintTicketAPI.Exceptions;
 using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+
+// all done 
 
 namespace ComplaintTicketAPI.Repositories
 {
@@ -28,15 +28,15 @@ namespace ComplaintTicketAPI.Repositories
             {
                 var addedUser = await _context.Users.AddAsync(entity);
                 await _context.SaveChangesAsync();
-                return addedUser.Entity; 
+                return addedUser.Entity;
             }
             catch (DbUpdateException)
             {
-                throw new CouldNotAddException("Failed to add user due to database constraints.");
+                throw new Exception("Failed to add user due to database constraints.");
             }
             catch (Exception ex)
             {
-                throw new CouldNotAddException("An unexpected error occurred while adding the user.", ex);
+                throw new Exception("An unexpected error occurred while adding the user.", ex);
             }
         }
 
@@ -56,20 +56,38 @@ namespace ComplaintTicketAPI.Repositories
             }
             catch (Exception ex)
             {
-                throw new CouldNotDeleteException("An error occurred while deleting the user.", ex);
+                throw new Exception("An error occurred while deleting the user.", ex);
             }
         }
 
         public async Task<User> Get(string key)
         {
-            return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == key);
+            try
+            {
+                return await _context.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Username == key);
+            }
+            catch (Exception ex)
+            {
+                throw new CouldNotUpdateException("User not found.");
+            }
+
         }
 
         public async Task<IEnumerable<User>> GetAll()
         {
-            return await _context.Users
+
+            try
+            {
+                return await _context.Users
                                  .AsNoTracking()
                                  .ToListAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw new CouldNotUpdateException("User not found.");
+            }
+
         }
 
         public async Task<User> Update(User entity, string key)
@@ -97,13 +115,21 @@ namespace ComplaintTicketAPI.Repositories
             }
             catch (Exception ex)
             {
-                throw new CouldNotUpdateException("An unexpected error occurred while updating the user.", ex);
+                throw new Exception("An unexpected error occurred while updating the user.", ex);
             }
         }
 
         private async Task<bool> UserExists(string username)
         {
-            return await _context.Users.AnyAsync(u => u.Username == username);
+            try
+            {
+                return await _context.Users.AnyAsync(u => u.Username == username);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
     }
 }
