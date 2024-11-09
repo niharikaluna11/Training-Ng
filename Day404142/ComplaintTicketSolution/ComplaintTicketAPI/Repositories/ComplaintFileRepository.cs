@@ -2,9 +2,11 @@
 using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ComplaintTicketAPI.Repositories
 {
+    //alll done
     public class ComplaintFileRepository : IRepository<int, ComplaintFile>
     {
         private readonly ComplaintTicketContext _context;
@@ -16,37 +18,72 @@ namespace ComplaintTicketAPI.Repositories
 
         public async Task<ComplaintFile> Add(ComplaintFile entity)
         {
-            _context.ComplaintFiles.Add(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+
+                _context.ComplaintFiles.Add(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch { throw new Exception("not able to add entity complaint file"); }
+
         }
 
         public async Task<ComplaintFile> Update(ComplaintFile entity, int key)
         {
-            var existing = await _context.ComplaintFiles.FindAsync(key);
-            if (existing == null) return null;
-            _context.Entry(existing).CurrentValues.SetValues(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+            try
+            {
+
+                var existing = await _context.ComplaintFiles.FindAsync(key);
+                if (existing == null) return null;
+                _context.Entry(existing).CurrentValues.SetValues(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch { throw new Exception("not able to update entity complaint file"); }
+           
         }
 
         public async Task<ComplaintFile> Delete(int key)
         {
-            var entity = await _context.ComplaintFiles.FindAsync(key);
-            if (entity == null) return null;
-            _context.ComplaintFiles.Remove(entity);
-            await _context.SaveChangesAsync();
-            return entity;
+
+            try
+            {
+
+                var entity = await _context.ComplaintFiles.FindAsync(key);
+                if (entity == null) return null;
+                _context.ComplaintFiles.Remove(entity);
+                await _context.SaveChangesAsync();
+                return entity;
+            }
+            catch { throw new Exception("not able to delete entity complaint file"); }
+
+          
         }
 
         public async Task<ComplaintFile> Get(int key)
         {
-            return await _context.ComplaintFiles.FindAsync(key);
+            try
+            {
+
+
+                return await _context.ComplaintFiles.FindAsync(key);
+            }
+            catch { throw new Exception("not able to get entity complaint file"); }
+
+
         }
 
         public async Task<IEnumerable<ComplaintFile>> GetAll()
         {
-            return await _context.ComplaintFiles.ToListAsync();
+            try
+            {
+                return await _context.ComplaintFiles.ToListAsync();
+            }
+            catch { throw new Exception("not able to get entity complaint file"); }
+
+
+           
         }
     }
 
