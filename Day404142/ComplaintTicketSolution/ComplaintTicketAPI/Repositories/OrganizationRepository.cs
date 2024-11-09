@@ -3,8 +3,8 @@ using ComplaintTicketAPI.Exceptions;
 using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+
+// all done 
 
 namespace ComplaintTicketAPI.Repositories
 {
@@ -30,15 +30,34 @@ namespace ComplaintTicketAPI.Repositories
                 throw new CouldNotAddException("Failed to add Organization");
             }
         }
-      
+
         public async Task<Organization> Get(int key)
         {
-            return await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == key);
+            try
+            {
+                return await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == key);
+            }
+            catch
+            {
+                throw new InvalidOperationException("NO organization found");
+            }
+
         }
 
         public async Task<IEnumerable<Organization>> GetAll()
         {
-            return await _context.Organizations.ToListAsync();
+
+
+            try
+            {
+
+                return await _context.Organizations.ToListAsync();
+            }
+            catch
+            {
+                throw new InvalidOperationException("NO organization found");
+            }
+
         }
 
         public async Task<Organization> Update(Organization entity, int key)
@@ -46,29 +65,44 @@ namespace ComplaintTicketAPI.Repositories
             var organization = await Get(key);
             if (organization != null)
             {
-                organization.Name = entity.Name;
-                organization.Email = entity.Email;
-                organization.Phone = entity.Phone;
-                organization.Address = entity.Address;
-                organization.Types = entity.Types;
+                try
+                {
+                    organization.Name = entity.Name;
+                    organization.Email = entity.Email;
+                    organization.Phone = entity.Phone;
+                    organization.Address = entity.Address;
+                    organization.Types = entity.Types;
 
-                await _context.SaveChangesAsync();
-                return organization;
+                    await _context.SaveChangesAsync();
+                    return organization;
+                }
+                catch
+                {
+                    throw new InvalidOperationException("NOt able to update");
+                }
+
             }
-
-
-        
             throw new CouldNotUpdateException("Organization not found");
         }
 
         public async Task<Organization> Delete(int key)
         {
+
             var organization = await Get(key);
             if (organization != null)
             {
-                _context.Organizations.Remove(organization);
-                await _context.SaveChangesAsync();
-                return organization;
+                try
+                {
+                    _context.Organizations.Remove(organization);
+                    await _context.SaveChangesAsync();
+                    return organization;
+                }
+                catch
+                {
+                    throw new InvalidOperationException("NOt able to delete");
+                }
+
+
             }
             throw new CouldNotDeleteException("Organization not found");
         }
