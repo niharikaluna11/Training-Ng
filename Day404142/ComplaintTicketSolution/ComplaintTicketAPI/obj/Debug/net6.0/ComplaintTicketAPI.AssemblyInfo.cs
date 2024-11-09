@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ComplaintTicketAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d92f5a082460cea8c1637321d1176076e178a0a3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ecd977b2b8c0b310b45cbf9c268cae14a5dc8f33")]
 [assembly: System.Reflection.AssemblyProductAttribute("ComplaintTicketAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ComplaintTicketAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

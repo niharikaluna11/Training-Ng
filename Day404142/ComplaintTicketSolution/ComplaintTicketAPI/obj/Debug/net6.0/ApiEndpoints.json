@@ -27,8 +27,24 @@
   },
   {
     "ContainingType": "ComplaintController",
+    "Method": "GenerateComplainReport",
+    "RelativePath": "api/Complaint/GenerateComplaintReport/{OrgId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "OrgId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintController",
     "Method": "GetComplaint",
-    "RelativePath": "api/Complaint/GetComplaintBy/{userid}",
+    "RelativePath": "api/Complaint/GetComplaintBy/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -36,11 +52,6 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "userid",
-        "Type": "",
         "IsRequired": true
       }
     ],
@@ -70,17 +81,7 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "ComplaintTicketAPI.Models.DTO.ComplaintStatusDTO",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "ComplaintCategoryController",
@@ -129,9 +130,9 @@
     ]
   },
   {
-    "ContainingType": "ComplaintTicketAPI.Controllers.GeneralController",
-    "Method": "GetAllUser",
-    "RelativePath": "api/General/Admin/GetAllAvailableUsers",
+    "ContainingType": "ComplaintTicketAPI.Controllers.OrganizationController",
+    "Method": "GetAvailablePriorityLevels",
+    "RelativePath": "api/Organization/Complaints/AvailablePriorities",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -139,49 +140,39 @@
     "ReturnTypes": []
   },
   {
-    "ContainingType": "ComplaintTicketAPI.Controllers.GeneralController",
-    "Method": "GetAvailableCategories",
-    "RelativePath": "api/General/Complaint/GetAvailableCategories",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ComplaintTicketAPI.Controllers.GeneralController",
-    "Method": "GetAvailablePriority",
-    "RelativePath": "api/General/Complaint/GetAvailablePriorityType",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ComplaintTicketAPI.Controllers.GeneralController",
-    "Method": "GetAvailableTypes",
-    "RelativePath": "api/General/Organization/AvailableTypesOFOrganization",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ComplaintTicketAPI.Controllers.GeneralController",
-    "Method": "GetAvailableRoles",
-    "RelativePath": "api/General/User/AvailableRoles",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ComplaintTicketAPI.Controllers.GeneralController",
+    "ContainingType": "ComplaintTicketAPI.Controllers.OrganizationController",
     "Method": "GetAllOrganizations",
-    "RelativePath": "api/General/User/GetAllAvailableOrganizations",
+    "RelativePath": "api/Organization/Organizations/All",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.OrganizationController",
+    "Method": "GetAvailableOrganizationTypes",
+    "RelativePath": "api/Organization/Organizations/AvailableTypes",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.OrganizationController",
+    "Method": "GetAvailableRoles",
+    "RelativePath": "api/Organization/Roles/Available",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.OrganizationController",
+    "Method": "GetAllUsers",
+    "RelativePath": "api/Organization/Users/All",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
