@@ -15,6 +15,7 @@ namespace ComplaintTicketAPI.Context
         public DbSet<ComplaintStatus> ComplaintStatuses { get; set; }
         public DbSet<ComplaintStatusDate> ComplaintStatusDates { get; set; }
         public DbSet<Organization> Organizations { get; set; }
+      
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -71,13 +72,14 @@ namespace ComplaintTicketAPI.Context
                 .HasForeignKey(c => c.CategoryId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // **Updated: Remove unique constraint on OrganizationId**
+            // Configure Complaint - Organization one-to-many relationship
             modelBuilder.Entity<Complaint>()
                 .HasOne<Organization>()
-                .WithMany()  // Change this from WithOne() to WithMany(), allowing multiple complaints per organization
+                .WithMany()
                 .HasForeignKey(c => c.OrganizationId)
-                .OnDelete(DeleteBehavior.Restrict); // Maintain the Restrict on delete
+                .OnDelete(DeleteBehavior.Restrict);
 
+            
             // Enum configurations
             modelBuilder.Entity<User>()
                 .Property(u => u.Roles)
@@ -99,7 +101,5 @@ namespace ComplaintTicketAPI.Context
                 .Property(o => o.Types)
                 .HasConversion<string>();
         }
-
-      
     }
 }
