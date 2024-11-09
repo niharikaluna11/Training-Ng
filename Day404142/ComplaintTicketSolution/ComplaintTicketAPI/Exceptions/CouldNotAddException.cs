@@ -5,20 +5,17 @@ namespace ComplaintTicketAPI.Exceptions
     [Serializable]
     public class CouldNotAddException : Exception
     {
-        public CouldNotAddException()
-        {
-        }
+        string msg;
 
         public CouldNotAddException(string? message) : base(message)
         {
         }
 
-        public CouldNotAddException(string? message, Exception? innerException) : base(message, innerException)
+        public CouldNotAddException(string msg, Exception ex)
         {
+            this.msg = msg;
         }
 
-        protected CouldNotAddException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        public override string Message => msg;
     }
 }
