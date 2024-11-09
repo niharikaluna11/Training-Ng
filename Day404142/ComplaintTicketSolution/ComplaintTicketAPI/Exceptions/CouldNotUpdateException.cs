@@ -5,20 +5,13 @@ namespace ComplaintTicketAPI.Exceptions
     [Serializable]
     public class CouldNotUpdateException : Exception
     {
-        public CouldNotUpdateException()
+        string msg;
+
+        public CouldNotUpdateException(string msg)
         {
+            this.msg = msg;
         }
 
-        public CouldNotUpdateException(string? message) : base(message)
-        {
-        }
-
-        public CouldNotUpdateException(string? message, Exception? innerException) : base(message, innerException)
-        {
-        }
-
-        protected CouldNotUpdateException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+        public override string Message => msg;
     }
 }
