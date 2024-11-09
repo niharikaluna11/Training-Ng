@@ -1,4 +1,7 @@
 using ComplaintTicketAPI.Context;
+using ComplaintTicketAPI.EmailInterface;
+using ComplaintTicketAPI.EmailModel;
+using ComplaintTicketAPI.EmailService;
 using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Repositories;
@@ -39,31 +42,43 @@ namespace ComplaintTicketAPI
             builder.Services.AddAutoMapper(typeof(Program));
             #endregion
 
+
             #region Repositories
-            builder.Services.AddScoped<IRepository<int, Complaint>, ComplaintRepository>();
+
+           
+            builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintFile>, ComplaintFileRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintCategory>, ComplaintCategoryRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintStatus>, ComplaintStatusRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintStatusDate>, ComplaintStatusDateRepository>();
+            // builder.Services.AddScoped<IEmailSender, EmailConfiguration>();
 
             builder.Services.AddScoped<IRepository<int, UserProfile>, UserProfileRepository>();
             builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
             builder.Services.AddScoped<IRepository<int, Organization>, OrganizationRepository>();
             #endregion
 
-            #region Services    
+            #region Services  
+            
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IComplaintCategoryService, ComplaintCategoryService>();
             builder.Services.AddScoped<IComplaintService, ComplaintService>();
 
+            builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
             builder.Services.AddScoped<IOrganizationProfileService, OrganizationProfileService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
 
+
             // Register UpdateComplaintService
             builder.Services.AddScoped<IUpdateComplaintService, UpdateComplaintService>();
             #endregion
+            var emailConfig = builder.Configuration
+              .GetSection("EmailConfiguration")
+              .Get<EmailConfiguration>();
+            builder.Services.AddSingleton(emailConfig);
+
 
 
 
@@ -112,8 +127,8 @@ namespace ComplaintTicketAPI
                 });
 
                 opt.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
+                {
+                    {
             new OpenApiSecurityScheme
             {
                 Reference = new OpenApiReference
@@ -123,8 +138,8 @@ namespace ComplaintTicketAPI
                 }
             },
             new string[]{}
-        }
-    });
+                    }
+            });
             });
 
             var app = builder.Build();
