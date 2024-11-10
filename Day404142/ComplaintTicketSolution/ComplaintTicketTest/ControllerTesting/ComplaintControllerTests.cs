@@ -59,10 +59,10 @@ namespace ComplaintTicketApiTests.Controllers
             var result = await _complaintController.GetComplaint(complaintId);
 
             // Assert
-            var actionResult = result as ActionResult<Complaint>;
-            Assert.IsNotNull(actionResult);
+            // var actionResult = result as ActionResult<Complaint>;
+            // Assert.IsNotNull(actionResult);
 
-            var okResult = actionResult.Result as OkObjectResult;
+            var okResult = result as OkObjectResult;
             Assert.IsNotNull(okResult);
             Assert.AreEqual(200, okResult.StatusCode);
 
@@ -82,10 +82,10 @@ namespace ComplaintTicketApiTests.Controllers
             // Act
             var result = await _complaintController.GetComplaint(complaintId);
 
-            var actionResult = result as ActionResult<Complaint>;
-            Assert.IsNotNull(actionResult);
+            // var actionResult = result as ActionResult;
+            // Assert.IsNotNull(actionResult);
             // Assert
-            var notFoundResult = actionResult.Result as NotFoundObjectResult;
+            var notFoundResult = result as NotFoundObjectResult;
             Assert.IsNotNull(notFoundResult);
             Assert.AreEqual(404, notFoundResult.StatusCode);
             Assert.AreEqual("Complaint not found.", notFoundResult.Value);
@@ -105,9 +105,9 @@ namespace ComplaintTicketApiTests.Controllers
 
             // Assert
 
-            var actionResult = result as ActionResult<Complaint>;
-            Assert.IsNotNull(actionResult);
-            var createdResult = actionResult.Result as CreatedAtActionResult;
+            // var actionResult = result as ActionResult<Complaint>;
+            // Assert.IsNotNull(actionResult);
+            var createdResult = result as CreatedAtActionResult;
             Assert.IsNotNull(createdResult);
             Assert.AreEqual(201, createdResult.StatusCode);
             var returnedComplaint = createdResult.Value as Complaint;
@@ -127,10 +127,10 @@ namespace ComplaintTicketApiTests.Controllers
             var result = await _complaintController.CreateComplaint(complaintDto);
 
             // Assert
-            var actionResult = result as ActionResult<Complaint>;
-            Assert.IsNotNull(actionResult);
+            // var actionResult = result as ActionResult<Complaint>;
+            // Assert.IsNotNull(actionResult);
             //var createdResult = actionResult.Result as CreatedAtActionResult;
-            var badRequestResult = actionResult.Result as BadRequestObjectResult;
+            var badRequestResult = result as BadRequestObjectResult;
             Assert.IsNotNull(badRequestResult);
             Assert.AreEqual(400, badRequestResult.StatusCode);
             Assert.AreEqual("Invalid complaint data.", badRequestResult.Value);
