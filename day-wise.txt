@@ -22,5 +22,32 @@ DAY19: Learning of given topics :  Destructor, Indexer, Operator Overloading,pri
 DAY20: Learning of given topics :  Need for Abstract class,Methods in interface (Why), Design Pattern Learning
 DAY21: RDBMS Basics: Normalization, ER diagram, and other topics
 DAY22: Assignment Given
+DAY23
+DAY24
+DAY25
+DAY26
+DAY27
+DAY28
+DAY29
+DAY30
+DAY31
+DAY32
+DAY33
+DAY34
+DAY35
+DAY36
+DAY37
+DAY38
+DAY39
+DAY40
+DAY41
+DAY42
+DAY43
+DAY44: 
+DAY45: 11-11-24 Vue.js basics Declarartive Rendering, SPA
+DAY46: 12-11-24 Vue.js API call, Handling Events And Routing
+
+
+
 
 
