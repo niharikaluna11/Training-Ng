@@ -39,11 +39,8 @@ export default {
 <template>
     <section>
         <h1>Products</h1>
-        
-        <!-- Styled Button -->
-        <button @click="btnClick()" class="btn btn-success custom-button">Click me</button>
-        
-        <!-- Styled Dropdown for categories -->
+       
+ 
         <select v-model="selectedCategory" @change="onCategorySelect" class="form-select custom-select">
             <option disabled value="">Select a category</option>
             <option v-for="c in category" :key="c" :value="c">
@@ -51,18 +48,21 @@ export default {
             </option>
         </select>
         
-        <!-- Product List Display -->
         <div v-if="products.length">
-            <h2>Products in {{ selectedCategory }} category:</h2>
+            <div v-if="selectedCategory">
+                <h2 >Products in {{ selectedCategory.slug }} category:</h2>
             <ul>
                 <li v-for="product in products" :key="product.id">
                     {{ product.title }} - ${{ product.price }}
                 </li>
             </ul>
+            </div>
         </div>
         <div v-else-if="selectedCategory">
-            <p>No products found for this category.</p>
+            <p>No products found for this category.</p>   
         </div>
+    
+       
     </section>
 </template>
 
