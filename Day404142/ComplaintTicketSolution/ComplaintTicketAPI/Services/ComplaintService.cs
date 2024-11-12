@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using ComplaintTicketAPI.Context;
+using ComplaintTicketAPI.EmailInterface;
+using ComplaintTicketAPI.EmailModel;
+using ComplaintTicketAPI.EmailService;
 using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
@@ -16,7 +19,8 @@ namespace ComplaintTicketAPI.Services
         private readonly IRepository<int, ComplaintFile> _complaintFileRepository;
         private readonly IRepository<int, ComplaintStatusDate> _complaintStatusDateRepository;
         private readonly ILogger<ComplaintService> _logger;
-        
+        private readonly IEmailSender _emailSender;
+
         public ComplaintService(
             ComplaintTicketContext context,
             IComplaintRepository complaintRepository,
@@ -24,7 +28,8 @@ namespace ComplaintTicketAPI.Services
             IRepository<int, ComplaintFile> complaintFileRepository,
             IRepository<int, ComplaintStatusDate> complaintStatusDateRepository,
             IMapper mapper,
-            ILogger<ComplaintService> logger)
+            ILogger<ComplaintService> logger,
+               IEmailSender emailSender)
         {
             _context = context;
             _complaintRepository = complaintRepository;
@@ -33,6 +38,17 @@ namespace ComplaintTicketAPI.Services
             _complaintStatusDateRepository = complaintStatusDateRepository;
             _mapper = mapper;
             _logger = logger;
+            _emailSender = emailSender;
+        }
+
+        private void SendMail(string title, string email, string body)
+        {
+            var rng = new Random();
+            var message = new Message(new string[] {
+                        email },
+                    title,
+                    body);
+            _emailSender.SendEmail(message);
         }
 
         public async Task<Complaint> CreateComplaint(CreateComplaintRequestDTO complaintDto)
@@ -63,8 +79,28 @@ namespace ComplaintTicketAPI.Services
                 };
                 await _complaintStatusDateRepository.Add(complaintStatusDate);
 
-                
-           
+
+                //try
+                //{
+                //    string body = $"Dear {addedUser.Roles.ToString()} {registerUser.Name},\n\n" +
+                //                     "We are pleased to inform you that your account has been successfully created.\n\n" +
+                //                     "Below are your login credentials for accessing our service:\n\n" +
+                //                     $"*Username:* {registerUser.Username}\n" +
+                //                     $"*Password:* {registerUser.Password}\n\n" +
+                //                     "Should you have any questions or require assistance, please feel free to contact our support team.\n\n" +
+                //                     "Best regards,\n" +
+                //                     "ComplaintTicketApp\n" +
+                //                     "Support Team" +
+                //                     "(Niharika Garg)";
+
+                //    string email = registerUser.Email;
+                //    SendMail("Your Account Has Been Created", email, body);
+
+                //}
+                //catch { throw new Exception("Mail Cannot be send Becuase of Invalid Mail"); }
+
+
+
 
                 // Step 7: Save all changes to the database
                 await _context.SaveChangesAsync();

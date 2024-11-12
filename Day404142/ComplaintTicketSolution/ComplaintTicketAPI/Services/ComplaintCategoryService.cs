@@ -19,12 +19,26 @@ public class ComplaintCategoryService : IComplaintCategoryService
         _logger = logger;
     }
 
-    public async Task<IEnumerable<ComplaintCategoryResponseDTO>> GetAllComplaintCategories()
+    public async Task<IEnumerable<ComplaintCategoryResponseDTO>> GetAllComplaintCategories(int pagenum,int pagesize)
     {
         try
         {
             var categories = await _context.ComplaintCategories.ToListAsync();
-            return _mapper.Map<IEnumerable<ComplaintCategoryResponseDTO>>(categories);
+            pagenum = Math.Max(pagenum, 1);
+            pagesize = Math.Max(pagesize, 5);
+
+            int total = categories.Count();
+            int pageTotal=(int)Math.Ceiling((double)total / pagesize);
+
+            var returncategories = categories
+                                    .Skip((pagenum - 1) * pagesize)
+                                    .Take(pagesize)
+                                    .ToList();
+            
+
+
+            return _mapper.Map<IEnumerable<ComplaintCategoryResponseDTO>>(returncategories);
+
         }
         catch (Exception ex)
         {
