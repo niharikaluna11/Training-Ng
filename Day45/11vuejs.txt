@@ -1,0 +1,83 @@
+npm install -g @vue/cli
+vue --version
+open the cmd prompt from the folder you want to create the app in
+vue create <appname>
+cd <appname>
+npm run serve
+----------------------
+<template>
+    <h1>This is my first component</h1>
+</template>
+<script>
+    export default{
+        name:'FirstComponent'
+    }
+</script>
+<style>
+    h1{
+        background-color: aquamarine;
+    }
+</style>
+---------------------------
+<template>
+  <img alt="Vue logo" src="./assets/logo.png">
+  <HelloWorld />
+  <FirstComponent/>
+</template>
+
+<script>
+import HelloWorld from './components/HelloWorld.vue'
+import FirstComponent from './components/FirstComponent.vue'
+
+export default {
+  name: 'App',
+  components: {
+    HelloWorld,
+    FirstComponent
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
+------------------------------
+<template>
+    <h1>This is my first component - {{ custName }}</h1>
+    <div v-html="divContent"></div>
+    <hr/>
+    <div>{{ divContent }}</div>
+    <!-- <div v-bind:id="divId">THis is the id i will give dynamically for styling</div> -->
+    <div :id="divId">THis is the id i will give dynamically for styling</div>
+
+</template>
+<script>
+    export default{
+        name:'FirstComponent',
+        data(){
+            return{
+                custName:"Ramu",
+                divContent:'<p style="color:red">Hi</p>',
+                divId:"div2"
+            }
+        }
+    }
+</script>
+<style>
+    h1{
+        background-color: aquamarine;
+    }
+    #div1{
+        background-color: blue;
+    }
+    #div2{
+        background-color: pink;
+    }
+</style>
