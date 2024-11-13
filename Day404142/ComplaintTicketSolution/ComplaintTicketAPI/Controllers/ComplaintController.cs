@@ -6,8 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using ComplaintTicketAPI.Context;
 using AutoMapper;
+using Microsoft.AspNetCore.Cors;
 
 [Route("api/[controller]")]
+[EnableCors("AllowAll")]
 [ApiController]
 public class ComplaintController : ControllerBase
 {
@@ -45,7 +47,7 @@ public class ComplaintController : ControllerBase
     }
 
     [HttpPost("FileComplaint")]
-    [Authorize(Roles = "Admin,User")]
+   [Authorize(Roles = "Admin,User")]
     public async Task<ActionResult> CreateComplaint(CreateComplaintRequestDTO complaintDto)
     {
         if (complaintDto == null || !ModelState.IsValid)
@@ -72,8 +74,6 @@ public class ComplaintController : ControllerBase
         }
     }
 
-    // [HttpGet("TrackComplaintStatus/{complaintId}")]
-    //  [Authorize(Roles = "Admin,User")]
 
     [HttpGet("TrackComplaintStatus/{complaintId}")]
     [Authorize(Roles = "Admin,User")]

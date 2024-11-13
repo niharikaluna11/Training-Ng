@@ -113,10 +113,8 @@ namespace ComplaintTicketAPI.Services
                                          $"*Username:* {registerUser.Username}\n" +
                                          $"*Password:* {registerUser.Password}\n\n" +
                                          "Should you have any questions or require assistance, please feel free to contact our support team.\n\n" +
-                                         "Best regards,\n" +
-                                         "ComplaintTicketApp\n" +
-                                         "Support Team" +
-                                         "(Niharika Garg)";
+                                        "Best regards,\n" +
+                                     "ComplaintTicketApp Team";
 
                         string email = registerUser.Email;
                         SendMail("Your Account Has Been Created", email, body);

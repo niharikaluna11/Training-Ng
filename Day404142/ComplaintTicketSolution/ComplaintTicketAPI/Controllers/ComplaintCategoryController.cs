@@ -1,9 +1,11 @@
 ﻿using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
 [Route("api/[controller]")]
+[EnableCors("AllowAll")]
 [ApiController]
 public class ComplaintCategoryController : ControllerBase
 {
@@ -15,7 +17,7 @@ public class ComplaintCategoryController : ControllerBase
     }
 
     [HttpGet("GetAllCategories")]
-    [Authorize]
+    //[Authorize]
     public async Task<ActionResult<IEnumerable<ComplaintCategoryResponseDTO>>> GetCategories(int pagenum,int pagesize)
     {
         var categories = await _service.GetAllComplaintCategories(pagenum,pagesize);

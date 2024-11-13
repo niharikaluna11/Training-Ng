@@ -60,16 +60,24 @@ namespace ComplaintTicketAPI.Repositories
 
             try
             {
-
                 var existing = await _context.Complaints.FindAsync(key);
                 if (existing == null) return null;
-                _context.Entry(existing).CurrentValues.SetValues(entity);
-                await _context.SaveChangesAsync();
-                return entity;
-            }
-            catch { throw new Exception("not able to update complaint"); }
 
-           
+                // Apply values from 'entity' to 'existing' (tracked instance)
+                _context.Entry(existing).CurrentValues.SetValues(entity);
+
+                await _context.SaveChangesAsync();
+
+                // Return the tracked and updated entity
+                return existing;
+            }
+            catch
+            {
+                throw new Exception("Not able to update complaint");
+            }
+
+
+
         }
         public async Task<IEnumerable<Complaint>> GetComplaintsByOrganizationId(int organizationId)
         {

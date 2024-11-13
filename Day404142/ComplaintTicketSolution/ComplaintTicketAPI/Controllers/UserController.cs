@@ -2,6 +2,7 @@
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Xml.Linq;
@@ -10,7 +11,9 @@ using Type = ComplaintTicketAPI.Models.Type;
 namespace ComplaintTicketAPI.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AllowAll")]
     [ApiController]
+    
     public class UserController : ControllerBase
     {
 

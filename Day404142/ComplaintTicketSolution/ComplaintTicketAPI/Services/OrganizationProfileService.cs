@@ -72,9 +72,7 @@ namespace ComplaintTicketAPI.Services
                           "We are pleased to inform you that your account profile has been successfully updated.\n\n" +
                           "If you have any questions or need further assistance, please do not hesitate to contact us.\n\n" +
                           "Best regards,\n" +
-                          "ComplaintTicketApp\n" +
-                          "Support Team" +
-                          "Niharika Garg";
+                            "ComplaintTicketApp Team";
 
                     string email = organization.Email;
                     SendMail("Your Account Has Been Created", email, body);

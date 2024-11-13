@@ -7,6 +7,9 @@ using AutoMapper;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using ComplaintTicketAPI.EmailInterface;
+using ComplaintTicketAPI.EmailModel;
+using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTicketAPI.Services
 {
@@ -15,13 +18,38 @@ namespace ComplaintTicketAPI.Services
         private readonly IComplaintRepository _complaintRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateComplaintService> _logger;
+        private readonly IEmailSender _emailSender;
+        private readonly IUserProfileService _userProfileService;
+        private readonly IOrganizationProfileService _organizationProfileService;
 
-        public UpdateComplaintService(IComplaintRepository complaintRepository, IMapper mapper, ILogger<UpdateComplaintService> logger)
+        public UpdateComplaintService(IComplaintRepository complaintRepository,
+            IMapper mapper,
+            ILogger<UpdateComplaintService> logger,
+            IEmailSender emailSender,
+            IUserProfileService userProfileService,
+            IOrganizationProfileService organizationProfileService)
         {
             _complaintRepository = complaintRepository;
             _mapper = mapper;
             _logger = logger;
+            _emailSender = emailSender;
+            _userProfileService = userProfileService;
+            _organizationProfileService = organizationProfileService;
         }
+
+
+
+        private void SendMail(string title, string email, string body)
+        {
+            var rng = new Random();
+            var message = new Message(new string[] {
+                        email },
+                    title,
+                    body);
+            _emailSender.SendEmail(message);
+        }
+
+       
 
         public async Task<IEnumerable<Complaint>> GetComplaintByOrganizationIdAsync(int orgId)
         {
@@ -48,6 +76,7 @@ namespace ComplaintTicketAPI.Services
             }
         }
 
+
         public async Task<bool> UpdateComplaintStatusAsync(UpdateComplaintRequestDTO updateRequest)
         {
             try
@@ -56,19 +85,21 @@ namespace ComplaintTicketAPI.Services
                 var complaint = await _complaintRepository.Get(updateRequest.ComplaintId);
                 if (complaint == null || complaint.OrganizationId != updateRequest.OrganizationId)
                 {
+                    _logger.LogError("Complaint not found for organization.");
                     throw new KeyNotFoundException("Complaint not found for this organization.");
                 }
 
                 // Initialize ComplaintStatusDates if it's null
                 if (complaint.ComplaintStatusDates == null)
                 {
-                    complaint.ComplaintStatusDates = new List<ComplaintStatusDate>(); // Initialize the collection
+                    complaint.ComplaintStatusDates = new List<ComplaintStatusDate>();
                 }
 
-                // Map the updated fields from DTO
+                // Map the updated fields from DTO and log the mapping
                 var complaintStatus = _mapper.Map<ComplaintStatus>(updateRequest);
+                _logger.LogInformation("Mapped complaint status: {Status}", complaintStatus.Status);
 
-                // Add the new status update to the ComplaintStatusDates
+                // Add the new status update
                 complaint.ComplaintStatusDates.Add(new ComplaintStatusDate
                 {
                     ComplaintId = complaint.Id,
@@ -76,11 +107,68 @@ namespace ComplaintTicketAPI.Services
                     StatusDate = updateRequest.StatusDate
                 });
 
-                // Update the complaint
+                // Attempt to update the complaint
                 var updatedComplaint = await _complaintRepository.Update(complaint, complaint.Id);
+                if (updatedComplaint == null)
+                {
+                    _logger.LogError("Complaint update failed, repository returned null.");
+                    return false;
+                }
 
-                // Return true if update was successful
-                return updatedComplaint != null;
+                // Fetch user and organization profiles for email notification
+                var userProfile = await _userProfileService.GetProfile(complaint.UserId);
+                var orgProfile = await _organizationProfileService.GetOrganizationProfile(complaint.OrganizationId);
+
+                if (userProfile != null && orgProfile != null)
+                {
+                    try
+                    {
+                        // Email content for user
+                        string userBody =  $"Dear {userProfile.FirstName}" + " " + "{userProfile.LastName},\n\n" +
+                                          "The status of your complaint has been updated.\n\n" +
+                                          "Complaint Details:\n" +
+                                          $"• Complaint ID: {complaint.Id}\n" +
+                                          $"• New Status: {complaintStatus.Status}\n" +
+                                          $"• Comment By org: {complaintStatus.CommentByUser}\n" +
+                                          $"• Status Updated On: {updateRequest.StatusDate}\n\n" +
+                                          "Thank you for your patience.\n\n" +
+                                          "Best regards,\n" +
+                                          "ComplaintTicketApp Team";
+
+                        // Send email to user
+                        SendMail("Complaint Status Updated", userProfile.Email.ToString(), userBody);
+                        _logger.LogInformation("Email sent to user {UserEmail}", userProfile.Email);
+                    }
+                    catch (Exception emailEx)
+                    {
+                        _logger.LogError(emailEx, "Error while sending email to user {UserEmail}", userProfile.Email);
+                    }
+
+                    try
+                    {
+                        // Email content for organization
+                        string orgBody = $"Dear {orgProfile.Name},\n\n" +
+                                         "A complaint status has been updated.\n\n" +
+                                         "Complaint Details:\n" +
+                                         $"• Complaint ID: {complaint.Id}\n" +
+                                         $"• New Status: {complaintStatus.Status}\n" +
+                                         $"• Comment: {complaintStatus.CommentByUser}\n" +
+                                         $"• Status Date: {updateRequest.StatusDate}\n\n" +
+                                         "Thank you for your attention.\n\n" +
+                                         "Best regards,\n" +
+                                         "ComplaintTicketApp Team";
+
+                        // Send email to organization
+                      SendMail("Complaint Status Update Notification", orgProfile.Email.ToString(), orgBody);
+                        _logger.LogInformation("Email sent to organization {OrgEmail}", orgProfile.Email);
+                    }
+                    catch (Exception emailEx)
+                    {
+                        _logger.LogError(emailEx, "Error while sending email to organization {OrgEmail}", orgProfile.Email);
+                    }
+                }
+
+                return true;
             }
             catch (KeyNotFoundException knfEx)
             {
@@ -93,5 +181,8 @@ namespace ComplaintTicketAPI.Services
                 throw new Exception("An error occurred while updating the complaint.", ex);
             }
         }
+
+
+
     }
 }

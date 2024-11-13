@@ -6,10 +6,12 @@ using ComplaintTicketAPI.Models.DTO;
 using ComplaintTicketAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using ComplaintTicketAPI.Services;
+using Microsoft.AspNetCore.Cors;
 
 namespace ComplaintTicketAPI.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AllowAll")]
     [ApiController]
 
     // Controller for managing organizations, users, and complaints

@@ -79,7 +79,17 @@ namespace ComplaintTicketAPI
               .Get<EmailConfiguration>();
             builder.Services.AddSingleton(emailConfig);
 
-
+            #region CORS
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
+            #endregion
 
 
 
@@ -157,6 +167,7 @@ namespace ComplaintTicketAPI
             app.UseStaticFiles();
             app.UseRouting();
 
+            app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseAuthorization();
 

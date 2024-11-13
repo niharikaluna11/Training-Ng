@@ -1,6 +1,7 @@
 ﻿using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 namespace ComplaintTicketAPI.Controllers
 {
     [Route("api/[controller]")]
+    [EnableCors("AllowAll")]
     [ApiController]
     public class ProfileController : ControllerBase
     {
@@ -54,9 +56,9 @@ namespace ComplaintTicketAPI.Controllers
             }
         }
 
-        // PUT: api/profile/update-profile/{userId}
+
         [HttpPut("update-User-profile/{userId}")]
-        [Authorize(Roles = "User,Admin")]
+       [Authorize(Roles = "User,Admin")]
         public async Task<IActionResult> UpdateUserProfile(int userId, [FromBody] ProfileUpdateDTO profileUpdateDTO)
         {
             try
@@ -85,7 +87,7 @@ namespace ComplaintTicketAPI.Controllers
             }
         }
 
-        // PUT: api/profile/update-profile/{userId}
+        
         [HttpPut("update-Organization-profile/{userId}")]
         [Authorize(Roles = "Admin,Organization")]
         public async Task<IActionResult> UpdateOrgProfile(int userId, [FromBody] OrganizationProfileDTO organizationProfileDTO)

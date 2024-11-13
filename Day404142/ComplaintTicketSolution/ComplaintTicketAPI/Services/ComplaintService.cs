@@ -2,7 +2,6 @@
 using ComplaintTicketAPI.Context;
 using ComplaintTicketAPI.EmailInterface;
 using ComplaintTicketAPI.EmailModel;
-using ComplaintTicketAPI.EmailService;
 using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
@@ -20,6 +19,8 @@ namespace ComplaintTicketAPI.Services
         private readonly IRepository<int, ComplaintStatusDate> _complaintStatusDateRepository;
         private readonly ILogger<ComplaintService> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IUserProfileService _userProfileService;
+        private readonly IOrganizationProfileService _organizationProfileService;
 
         public ComplaintService(
             ComplaintTicketContext context,
@@ -29,7 +30,9 @@ namespace ComplaintTicketAPI.Services
             IRepository<int, ComplaintStatusDate> complaintStatusDateRepository,
             IMapper mapper,
             ILogger<ComplaintService> logger,
-               IEmailSender emailSender)
+            IEmailSender emailSender,
+            IUserProfileService userProfileService,
+            IOrganizationProfileService organizationProfileService)
         {
             _context = context;
             _complaintRepository = complaintRepository;
@@ -39,8 +42,11 @@ namespace ComplaintTicketAPI.Services
             _mapper = mapper;
             _logger = logger;
             _emailSender = emailSender;
+            _userProfileService = userProfileService;
+            _organizationProfileService = organizationProfileService;
         }
 
+     
         private void SendMail(string title, string email, string body)
         {
             var rng = new Random();
@@ -50,7 +56,12 @@ namespace ComplaintTicketAPI.Services
                     body);
             _emailSender.SendEmail(message);
         }
-
+        public async Task<UserProfile> GetProfile(int userId)
+        {
+            // Retrieve the profile from the database by userId
+            var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
+            return profile; // Return the found profile
+        }
         public async Task<Complaint> CreateComplaint(CreateComplaintRequestDTO complaintDto)
         {
             try
@@ -70,7 +81,7 @@ namespace ComplaintTicketAPI.Services
                 complaintFile.ComplaintId = createdComplaint.Id;
                 await _complaintFileRepository.Add(complaintFile);
 
-                
+
                 var complaintStatusDate = new ComplaintStatusDate
                 {
                     ComplaintId = createdComplaint.Id,
@@ -79,32 +90,55 @@ namespace ComplaintTicketAPI.Services
                 };
                 await _complaintStatusDateRepository.Add(complaintStatusDate);
 
+                var userProfile = await GetProfile(complaint.UserId);
+                var orgprofile = await _organizationProfileService.GetOrganizationProfile(complaint.OrganizationId);
 
-                //try
-                //{
-                //    string body = $"Dear {addedUser.Roles.ToString()} {registerUser.Name},\n\n" +
-                //                     "We are pleased to inform you that your account has been successfully created.\n\n" +
-                //                     "Below are your login credentials for accessing our service:\n\n" +
-                //                     $"*Username:* {registerUser.Username}\n" +
-                //                     $"*Password:* {registerUser.Password}\n\n" +
-                //                     "Should you have any questions or require assistance, please feel free to contact our support team.\n\n" +
-                //                     "Best regards,\n" +
-                //                     "ComplaintTicketApp\n" +
-                //                     "Support Team" +
-                //                     "(Niharika Garg)";
+                if (userProfile != null)
 
-                //    string email = registerUser.Email;
-                //    SendMail("Your Account Has Been Created", email, body);
+                { 
 
-                //}
-                //catch { throw new Exception("Mail Cannot be send Becuase of Invalid Mail"); }
+                    try
+                    {
+
+                        string body = $"Dear {userProfile.FirstName}"+" "+"{userProfile.LastName},\n\n" +
+                             "We are pleased to inform you that you have successfully filed a complaint.\n\n" +
+                             "Below are the details of your complaint:\n\n" +
+                             $"• Complaint ID: {complaint.Id}\n" +
+                             $"• Priority: {complaintStatus.Priority.ToString()}\n" +
+                             $"• Organization ID: {complaint.OrganizationId}\n" +
+                             $"• Comment By you: {complaintStatus.CommentByUser}\n" +
+                             $"• Status: {complaintStatus.Status}\n\n" +
+                             "Should you have any questions or require assistance, please feel free to contact our support team.\n\n" +
+                             "Best regards,\n" +
+                             "ComplaintTicketApp\n" +
+                             "Support Team\n" +
+                             "(Niharika Garg)";
+
+                        string orgBody = $"Dear {orgprofile.Name},\n\n" +
+                                         "A complaint has been recieved for you.\n\n" +
+                                         "Complaint Details:\n" +
+                                         $"• Complaint ID: {complaint.Id}\n" +
+                                         $"• User: {userProfile.FirstName}\n" +  // Include username
+                                         $"• Priority: {complaintStatus.Priority.ToString()}\n" + // Add more details if needed
+                                         $"• Comment By User: {complaintStatus.CommentByUser}\n" +
+                                         $"• Status: {complaintStatus.Status}\n\n" +
+                                         "Thank you for your attention.\n\n" +
+                                         "Best regards,\n" +
+                                         "ComplaintTicketApp Team";
+
+                        string uemail = userProfile.Email.ToString();
+                        string oemail = orgprofile.Email;
+                        SendMail("Complaint Successfully Filed", userProfile.Email.ToString(), body);
+                        SendMail("Complaint Received Notification", oemail, orgBody);
 
 
+                    }
 
+                    catch { throw new Exception("Mail Cannot be send Becuase of Invalid Mail"); }
+            }
 
-                // Step 7: Save all changes to the database
                 await _context.SaveChangesAsync();
-
+               // return new createdComplaint { Username = user.Username }
                 return createdComplaint;
             }
             catch (DbUpdateException dbEx)
@@ -127,7 +161,7 @@ namespace ComplaintTicketAPI.Services
             try
             {
                 var complaint = await _context.Complaints
-                                             // .Include(c => c.ComplaintStatusDates)  // Include related entities if needed
+                                              // .Include(c => c.ComplaintStatusDates)  // Include related entities if needed
                                               .FirstOrDefaultAsync(c => c.Id == id);
 
                 if (complaint == null)

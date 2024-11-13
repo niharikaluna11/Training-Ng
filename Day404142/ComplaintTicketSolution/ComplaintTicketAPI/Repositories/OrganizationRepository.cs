@@ -35,7 +35,7 @@ namespace ComplaintTicketAPI.Repositories
         {
             try
             {
-                return await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == key);
+                return await _context.Organizations.FirstOrDefaultAsync(o => o.Id == key);
             }
             catch
             {
