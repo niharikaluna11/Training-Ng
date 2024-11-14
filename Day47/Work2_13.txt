@@ -1,0 +1,169 @@
+import axios from "axios";
+https://bbbootstrap.com/snippets/login-form-footer-and-social-media-icons-55203607
+
+export function AddProduct(name,  description, quantity,price, image) {
+  console.log(name,  description, quantity,price, image);
+  return axios.post('http://localhost:5230/api/Product',{
+
+        "name": name,
+        "description": description,
+        "quantity": quantity,
+        "pricePerUnit": price,
+        "basicImage": image
+  },
+  {
+    headers: {
+      'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+    }
+  });
+}
+--------------------------------------
+<script>
+import { AddProduct } from '@/scripts/ProductService';
+
+export default {
+  name: 'AddProductComponent',
+  data() {
+    return {
+        product:{
+            "name": "",
+            "description": "",
+            "quantity": 0,
+            "pricePerUnit": 0,
+            "basicImage": ""
+            },
+      addProduct:()=>{
+        event.preventDefault();
+        const addProd = async()=>{
+            var data = await AddProduct(this.product.name, this.product.description, this.product.quantity, this.product.pricePerUnit, this.product.basicImage)
+            alert(data.message);
+        }
+        addProd();
+        }
+        
+      }
+    }
+  }
+</script>
+<template>
+    <div>
+        <form>
+            <div>
+                <label class="form-control" for="name">Name</label>
+                <input class="form-control" type="text" id="name" v-model="product.name">
+            </div>
+            <div>
+                <label class="form-control" for="description">Description</label>
+                <input class="form-control" type="text" id="description" v-model="product.description">
+            </div>
+            <div>
+                <label class="form-control" for="quantity">Quantity</label>
+                <input class="form-control" type="number" id="quantity" v-model="product.quantity">
+            </div>
+            <div>
+                <label class="form-control" for="pricePerUnit">Price Per Unit</label>
+                <input class="form-control" type="number" id="pricePerUnit" v-model="product.pricePerUnit">
+            </div>
+            <div>
+                <label class="form-control" for="basicImage">Basic Image</label>
+                <input class="form-control" type="text" id="basicImage" v-model="product.basicImage">
+            </div>
+            <button class="btn btn-success" @click="addProduct()" type="submit">Add Product</button>
+        </form>
+    </div>
+</template>
+----------------------------------------------------------------------
+--------------------------------------------------
+npm i bootstrap
+npm i axios
+
+------------------------------------------------------
+import axios from 'axios';
+
+
+
+export function login(username, password) {
+  return axios.post('http://localhost:5230/api/User/Login', {
+    "username": username,
+    "password": password
+  });
+}
+-----------------------------------------------------------------
+<script>
+import { login } from '@/scripts/LoginService';
+
+export default {
+  name: 'LoginComponent',
+  data() {
+    return {
+      email: '',
+      password: '',
+      login:()=>{
+        event.preventDefault();
+        login(this.email, this.password)
+        .then((response)=>{
+          alert(response.data.username + ' is logged in');
+        },err=>{
+          alert(err.response.data.errorMessage);
+        })
+       
+      }
+    }
+  }
+}   
+</script>
+<template>
+  <div>
+    <h1>Login</h1>
+    <div class="formdiv">
+      <form>
+      <div>
+        <label class="form-control" for="email">Email</label>
+        <input class="form-control" type="email" id="email" v-model="email">
+      </div>
+      <div>
+        <label class="form-control" for="password">Password</label>
+        <input class="form-control" type="password" id="password" v-model="password">
+      </div>
+      <button class="btn btn-success" @click="login()" type="submit">Login</button>
+    </form>
+    </div>
+  </div>
+</template>
+<style scoped>
+  .formdiv{
+    width: 30%;
+    position: absolute;
+    left: 35%;
+  }
+  </style>
+  ------------------------------------------------------------
+  <template>
+  <img alt="Vue logo" src="./assets/logo.png">
+  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <LoginComponent/>
+</template>
+
+<script>
+import HelloWorld from './components/HelloWorld.vue'
+import LoginComponent from './components/Login/LoginComponent.vue';
+
+export default {
+  name: 'App',
+  components: {
+    HelloWorld,
+    LoginComponent
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
