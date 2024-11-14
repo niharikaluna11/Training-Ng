@@ -1,0 +1,168 @@
+npm install vue-router
+---------------------------------------------------
+
+import axios from "axios";
+
+
+function requestInterceptor(config) {
+    const token = sessionStorage.getItem('token');
+    if (token) {
+        config.headers['Authorization'] = 'Bearer ' + token;
+    }
+    return config;
+}
+
+// function responseInterceptor(response) {
+//     return response;
+// }
+
+axios.interceptors.request.use(requestInterceptor);
+
+export default axios;
+--------------------------------------------------------------
+import HelloWorld from "@/components/HelloWorld.vue";
+import LoginComponent from "@/components/Login/LoginComponent.vue";
+import ProductsComponent from "@/components/ProductsComponent.vue";
+import { createRouter,createWebHistory } from "vue-router";
+
+
+const routes=[
+    {path: '/', component: HelloWorld},
+    {path: '/login', component: LoginComponent},
+    {path: '/products', component: ProductsComponent}
+];
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+});
+
+export default router;
+----------------------------------------------------------------------
+import axios from './myAxiosInterceptor';
+
+export function AddProduct(name,  description, quantity,price, image) {
+
+  console.log(name,  description, quantity,price, image);
+  return axios.post('http://localhost:5230/api/Product',{
+
+        "name": name,
+        "description": description,
+        "quantity": quantity,
+        "pricePerUnit": price,
+        "basicImage": image
+  });
+
+}
+
+export function GetProducts() {
+  return axios.get('http://localhost:5230/api/Product');
+}
+----------------------------------------------------------------------------
+<script>
+import { GetProducts } from '@/scripts/ProductService';
+import ProductComponent from './ProductComponent.vue';
+
+export default {
+  name: 'ProductsCompoent',
+  data() {
+    return {
+      products: []
+    }
+  },
+  components: {
+    ProductComponent
+  },
+  created() {
+    GetProducts().then(response => {
+      this.products = response.data;
+      console.log(this.products);
+    });
+  }
+}
+</script>
+<template>
+  <div>
+    <h1>Product</h1>
+    <div v-for="product in products" :key="product.id">
+      <ProductComponent :product="product" />
+    </div>
+  </div>
+  </template>
+  <style>
+
+</style>
+----------------------------------------------------------
+<script>
+
+
+export default {
+  name: 'ProductCompoent',
+  props: {
+
+      product: {
+        name: '',
+        unitPrice: 0,
+        quantity: 0,
+        description: '',
+        basicImage: ''
+
+      }
+    }
+}
+</script>
+<template>
+  <div>
+    <h1>Product</h1>
+    <div>{{ product.name }}</div>
+  </div>
+  </template>
+  <style>
+
+</style>
+---------------------------------------------------------
+<template>
+  <img alt="Vue logo" src="./assets/logo.png">
+  <!-- <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <ProductsComponent/>
+  <LoginComponent/> 
+  <hr/>
+  <AddPRoductComponent/> -->
+  <nav>
+    <router-link to="/">Home</router-link> |
+    <router-link to="/login">Login</router-link> |
+    <router-link to="/products">Products</router-link> |
+  </nav>
+  <router-view/>
+</template>
+
+<script>
+
+
+// import AddPRoductComponent from './components/AddProduct/AddPRoductComponent.vue';
+// import HelloWorld from './components/HelloWorld.vue'
+// import LoginComponent from './components/Login/LoginComponent.vue';
+// import ProductsComponent from './components/ProductsComponent.vue';
+
+
+export default {
+  name: 'App',
+  components: {
+    // HelloWorld,
+    // ProductsComponent,
+    // // LoginComponent,
+    // AddPRoductComponent
+  }
+}
+</script>
+
+<style>
+#app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 60px;
+}
+</style>
