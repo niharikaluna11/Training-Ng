@@ -18,7 +18,7 @@
   {
     "ContainingType": "ComplaintController",
     "Method": "GenerateComplainReport",
-    "RelativePath": "api/Complaint/GenerateComplaintReport/{OrgId}",
+    "RelativePath": "api/Complaint/GenerateComplaintReport",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -26,7 +26,7 @@
       {
         "Name": "OrgId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -34,7 +34,7 @@
   {
     "ContainingType": "ComplaintController",
     "Method": "GetComplaint",
-    "RelativePath": "api/Complaint/GetComplaintBy/{id}",
+    "RelativePath": "api/Complaint/GetComplaintById",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -42,7 +42,7 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -50,7 +50,7 @@
   {
     "ContainingType": "ComplaintController",
     "Method": "TrackComplaintStatus",
-    "RelativePath": "api/Complaint/TrackComplaintStatus/{complaintId}",
+    "RelativePath": "api/Complaint/TrackComplaintStatus",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -58,7 +58,7 @@
       {
         "Name": "complaintId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -173,7 +173,7 @@
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
     "Method": "GetProfile",
-    "RelativePath": "api/Profile/Get-profile/{userId}",
+    "RelativePath": "api/Profile/Get-profile",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -181,7 +181,7 @@
       {
         "Name": "userId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -189,7 +189,7 @@
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
     "Method": "UpdateOrgProfile",
-    "RelativePath": "api/Profile/update-Organization-profile/{userId}",
+    "RelativePath": "api/Profile/update-Organization-profile",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -197,7 +197,7 @@
       {
         "Name": "userId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       },
       {
         "Name": "organizationProfileDTO",
@@ -210,7 +210,7 @@
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
     "Method": "UpdateUserProfile",
-    "RelativePath": "api/Profile/update-User-profile/{userId}",
+    "RelativePath": "api/Profile/update-User-profile",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -218,7 +218,7 @@
       {
         "Name": "userId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       },
       {
         "Name": "profileUpdateDTO",
@@ -230,8 +230,8 @@
   },
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.UpdateComplaintController",
-    "Method": "GetComplaint",
-    "RelativePath": "api/UpdateComplaint/{orgId}/GetComplaints",
+    "Method": "GetComplaints",
+    "RelativePath": "api/UpdateComplaint/GetComplaints",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -239,12 +239,12 @@
       {
         "Name": "orgId",
         "Type": "System.Int32",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
       {
-        "Type": "ComplaintTicketAPI.Models.Complaint",
+        "Type": "System.Collections.Generic.List\u00601[[ComplaintTicketAPI.Models.DTO.ComplaintDataDTO, ComplaintTicketAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
