@@ -20,14 +20,41 @@ namespace ComplaintTicketAPI.Controllers
             _updateComplaintService = updateComplaintService;
         }
 
-        [HttpGet("{orgId}/GetComplaints")]
+
+       
+        public static ComplaintDataDTO ToComplaintDataDTO(Complaint complaint)
+        {
+            // Validate that ComplaintStatusDates is not null or empty
+            var latestStatusDate = complaint.ComplaintStatusDates?
+                                         .OrderByDescending(c => c.StatusDate)
+                                         .FirstOrDefault();
+
+            return new ComplaintDataDTO
+            {
+                Id = complaint.Id,
+                Description = complaint.Description,
+                Status = latestStatusDate?.ComplaintStatus.Status ?? Status.Recieved,
+                Priority = latestStatusDate?.ComplaintStatus.Priority ?? Priority.Low,
+                CategoryName = complaint.Category?.Name,
+                LastUpdated = latestStatusDate?.StatusDate ?? DateTime.Now
+            };
+        }
+
+
+        [HttpGet("GetComplaints")]
         [Authorize(Roles = "Admin,Organization")]
-        public async Task<ActionResult<Complaint>> GetComplaint(int orgId)
+        public async Task<ActionResult<List<ComplaintDataDTO>>> GetComplaints(int orgId)
         {
             try
             {
-                var complaint = await _updateComplaintService.GetComplaintByOrganizationIdAsync(orgId);
-                return Ok(complaint);
+                var complaints = await _updateComplaintService.GetComplaintByOrganizationIdAsync(orgId);
+                if (complaints == null || !complaints.Any())
+                {
+                    return NotFound();
+                }
+
+                var complaintDTOs = complaints.Select(ToComplaintDataDTO).ToList();
+                return Ok(complaintDTOs);
             }
             catch (KeyNotFoundException ex)
             {
@@ -35,26 +62,45 @@ namespace ComplaintTicketAPI.Controllers
             }
         }
 
+
+
+       
         [HttpPut("UpdateComplaintStatus")]
         [Authorize(Roles = "Admin,Organization")]
         public async Task<IActionResult> UpdateComplaintStatus([FromBody] UpdateComplaintRequestDTO updateRequest)
         {
             try
             {
-                var isUpdated = await _updateComplaintService.UpdateComplaintStatusAsync(updateRequest);
-                if (isUpdated==true)
-                    return Ok("Updated Complaint. Thankyou"); // Successfully updated, return 204 No Content
+                var updatedComplaint = await _updateComplaintService.UpdateComplaintStatusAsync(updateRequest);
 
-                return BadRequest("Unable to update complaint status."); // If update fails
+                if (updatedComplaint != null)
+                {
+                    // Assuming the service returns the updated complaint details
+                    return Ok(new UpdateComplaintResponseDTO
+                    {
+                        ComplaintId = updateRequest.ComplaintId,
+                        Status = updateRequest.Status,
+                        UpdatedAt = DateTime.UtcNow, // Example additional field
+                        Message = "Complaint updated successfully"
+                    });
+                }
+
+                return BadRequest(new UpdateComplaintResponseDTO
+                {
+                    ComplaintId = updateRequest.ComplaintId,
+                    Status = updateRequest.Status,
+                    Message = "Unable to update complaint status"
+                });
             }
             catch (KeyNotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new { Error = ex.Message });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, new { Error = $"Internal server error: {ex.Message}" });
             }
         }
+
     }
 }

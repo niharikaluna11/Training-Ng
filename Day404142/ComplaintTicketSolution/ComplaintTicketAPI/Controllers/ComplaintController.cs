@@ -25,7 +25,7 @@ public class ComplaintController : ControllerBase
         _mapper = mapper;
     }
 
-    [HttpGet("GetComplaintBy/{id}")] // Updated route parameter to match CreateComplaint usage
+    [HttpGet("GetComplaintById")] // Updated route parameter to match CreateComplaint usage
     [Authorize(Roles = "Admin,User")]
     public async Task<ActionResult> GetComplaint(int id)
     {
@@ -61,8 +61,8 @@ public class ComplaintController : ControllerBase
 
             // Use the route parameter name 'id' as it matches the one in GetComplaint
             /// return CreatedAtAction(nameof(GetComplaint), new { id = createdComplaint.Id }, createdComplaint);
-            var id = createdComplaint.Id;
-            return Ok("the complaint id is"+id);
+           // var id = createdComplaint.Id;
+            return Ok(createdComplaint);
         }
         catch (InvalidOperationException ex)
         {
@@ -75,7 +75,7 @@ public class ComplaintController : ControllerBase
     }
 
 
-    [HttpGet("TrackComplaintStatus/{complaintId}")]
+    [HttpGet("TrackComplaintStatus")]
     [Authorize(Roles = "Admin,User")]
     public async Task<ActionResult> TrackComplaintStatus(int complaintId)
     {
@@ -112,7 +112,7 @@ public class ComplaintController : ControllerBase
         }
     }
 
-    [HttpGet("GenerateComplaintReport/{OrgId}")]
+    [HttpGet("GenerateComplaintReport")]
     [Authorize(Roles = "Admin,Organization")]
     public async Task<ActionResult> GenerateComplainReport(int OrgId)
     {
