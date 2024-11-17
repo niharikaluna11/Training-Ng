@@ -8,6 +8,9 @@
       <nav>
         <router-link to="register">Register</router-link> 
       </nav>
+      <nav>
+        <router-link to="complaint">complaint-app</router-link> 
+      </nav>
     </div>
   </template>
   
@@ -28,6 +31,7 @@ export default {
       event.preventDefault();
       login(this.username, this.password)
         .then((response) => {
+          sessionStorage.setItem("token", response.data.token);
           alert(response.data.username + ' is logged in');
         })
         .catch((err) => {
