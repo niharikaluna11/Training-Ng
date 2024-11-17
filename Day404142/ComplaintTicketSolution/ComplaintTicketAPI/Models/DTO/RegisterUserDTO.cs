@@ -8,10 +8,13 @@ namespace ComplaintTicketAPI.Models.DTO
     {
 
         [Required(ErrorMessage = "First Name is required")]
-        public string Name { get;  set; }
+        public string FName { get;  set; }
+
+        [Required(ErrorMessage = "Last Name is required")]
+        public string LName { get; set; }
 
         [Required(ErrorMessage = "Username is required")]
-        [MinLength(5, ErrorMessage = "Username should be at least 5 characters long")]
+        [MinLength(2, ErrorMessage = "Username should be at least 2 characters long")]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
