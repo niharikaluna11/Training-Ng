@@ -68,11 +68,55 @@ namespace ComplaintTicketAPI.Services
 
                 try
                 {
-                    string body = $"Dear {organization.Name},\n\n" +
-                          "We are pleased to inform you that your account profile has been successfully updated.\n\n" +
-                          "If you have any questions or need further assistance, please do not hesitate to contact us.\n\n" +
-                          "Best regards,\n" +
-                            "ComplaintTicketApp Team";
+                    string body = $@"
+<html>
+<head>
+    <style>
+        body {{
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+        }}
+        .header {{
+            background-color: #0073e6;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 24px;
+        }}
+        .greeting {{
+            font-size: 18px;
+            color: #333;
+        }}
+        .content {{
+            margin-top: 20px;
+            color: #333;
+        }}
+        .footer {{
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+        }}
+        .signature {{
+            color: #0073e6;
+        }}
+    </style>
+</head>
+<body>
+    <div class='header'>
+        <h1>Welcome to TicketSolve!</h1>
+    </div>
+
+    <p class='greeting'>Dear <strong>{organization.Name}</strong>,</p>
+    
+    <p class='content'>We are pleased to inform you that your account profile has been successfully updated.</p>
+    
+    <p class='content footer'>If you have any questions or need further assistance, please do not hesitate to contact us.</p>
+    
+    <p class='footer'>Best regards,<br/><span class='signature'>TicketSolve Team</span></p>
+</body>
+</html>";
+
 
                     string email = organization.Email;
                     SendMail("Your Account Has Been Created", email, body);

@@ -107,14 +107,63 @@ namespace ComplaintTicketAPI.Services
 
                     try
                     {
-                        string body = $"Dear {addedUser.Roles.ToString()} {registerUser.Name},\n\n" +
-                                         "We are pleased to inform you that your account has been successfully created.\n\n" +
-                                         "Below are your login credentials for accessing our service:\n\n" +
-                                         $"*Username:* {registerUser.Username}\n" +
-                                         $"*Password:* {registerUser.Password}\n\n" +
-                                         "Should you have any questions or require assistance, please feel free to contact our support team.\n\n" +
-                                        "Best regards,\n" +
-                                     "ComplaintTicketApp Team";
+                        string body = $@"
+                                <html>
+                                <head>
+                                    <style>
+                                        body {{
+                                            font-family: Arial, sans-serif;
+                                            background-color: #f0f8ff;
+                                            color: #333;
+                                        }}
+                                        .header {{
+                                            background-color: #0073e6;
+                                            color: white;
+                                            padding: 10px;
+                                            text-align: center;
+                                            font-size: 24px;
+                                        }}
+                                        .greeting {{
+                                            font-size: 18px;
+                                            color: #333;
+                                        }}
+                                        .content {{
+                                            margin-top: 20px;
+                                            color: #333;
+                                        }}
+                                        .credentials {{
+                                            margin-top: 10px;
+                                            font-weight: bold;
+                                        }}
+                                        .footer {{
+                                            margin-top: 20px;
+                                            font-size: 14px;
+                                            color: #555;
+                                        }}
+                                        .signature {{
+                                            color: #0073e6;
+                                        }}
+                                    </style>
+                                </head>
+                                <body>
+                                    <div class='header'>
+                                        <h1>Welcome to TicketSolve!</h1>
+                                    </div>
+
+                                    <p class='greeting'>Dear <strong>{addedUser.Roles.ToString()} {registerUser.FName} {registerUser.LName}</strong>,</p>
+    
+                                    <p class='content'>We are pleased to inform you that your account has been successfully created.</p>
+                                    <p class='content'>Below are your login credentials for accessing our service:</p>
+    
+                                    <div class='credentials'>
+                                        <p><strong>Username:</strong> {registerUser.Username}</p>
+                                        <p><strong>Password:</strong> {registerUser.Password}</p>
+                                    </div>
+
+                                    <p class='content footer'>Should you have any questions or require assistance, please feel free to contact our support team.</p>
+                                    <p class='footer'>Best regards,<br/><span class='signature'>TicketSolve Team</span></p>
+                                </body>
+                                </html>";
 
                         string email = registerUser.Email;
                         SendMail("Your Account Has Been Created", email, body);
@@ -124,9 +173,19 @@ namespace ComplaintTicketAPI.Services
                
 
                     await CreateProfileOrOrganizationAsync(addedUser, registerUser);
-                    return new LoginResponseDTO { Username = user.Username };
+                    return new LoginResponseDTO { Username = user.Username,
+                        Id = user.Id,
+                        Token = await _tokenService.GenerateToken(new UserTokenDTO
+                        {
+                            Username = user.Username,
+                            Role = user.Roles.ToString()
+                        })
+                    };
                 }
+
                 throw new Exception("User could not be added");
+
+
             }
             catch (Exception ex)
             {
@@ -162,8 +221,8 @@ namespace ComplaintTicketAPI.Services
                 var profile = new UserProfile
                 {
                     UserId = userId,
-                    FirstName = registerUser.Name,
-                    LastName = string.Empty,
+                    FirstName = registerUser.FName,
+                    LastName = registerUser.LName,
                     Address = string.Empty,
                     DateOfBirth = registerUser.DateOfBirth,
                     Email = registerUser.Email,
@@ -191,7 +250,7 @@ namespace ComplaintTicketAPI.Services
                 var organization = new Organization
                 {
                     UserId = userId,
-                    Name = registerUser.Name,
+                    Name = registerUser.FName,
                     Email = registerUser.Email,
                     Phone = string.Empty,
                     Address = string.Empty,

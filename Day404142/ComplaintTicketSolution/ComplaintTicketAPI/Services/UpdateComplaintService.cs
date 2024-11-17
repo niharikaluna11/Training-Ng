@@ -124,16 +124,67 @@ namespace ComplaintTicketAPI.Services
                     try
                     {
                         // Email content for user
-                        string userBody =  $"Dear {userProfile.FirstName}" + " " + "{userProfile.LastName},\n\n" +
-                                          "The status of your complaint has been updated.\n\n" +
-                                          "Complaint Details:\n" +
-                                          $"• Complaint ID: {complaint.Id}\n" +
-                                          $"• New Status: {complaintStatus.Status}\n" +
-                                          $"• Comment By org: {complaintStatus.CommentByUser}\n" +
-                                          $"• Status Updated On: {updateRequest.StatusDate}\n\n" +
-                                          "Thank you for your patience.\n\n" +
-                                          "Best regards,\n" +
-                                          "ComplaintTicketApp Team";
+                        string userBody = $@"
+                        <html>
+                        <head>
+                            <style>
+                                body {{
+                                    font-family: Arial, sans-serif;
+                                    background-color: #f0f8ff;
+                                    color: #333;
+                                }}
+                                .header {{
+                                    background-color: #0073e6;
+                                    color: white;
+                                    padding: 10px;
+                                    text-align: center;
+                                    font-size: 24px;
+                                }}
+                                .greeting {{
+                                    font-size: 18px;
+                                    color: #333;
+                                }}
+                                .content {{
+                                    margin-top: 20px;
+                                    color: #333;
+                                }}
+                                .details {{
+                                    margin-top: 10px;
+                                    font-weight: bold;
+                                }}
+                                .footer {{
+                                    margin-top: 20px;
+                                    font-size: 14px;
+                                    color: #555;
+                                }}
+                                .signature {{
+                                    color: #0073e6;
+                                }}
+                            </style>
+                        </head>
+                        <body>
+                            <div class='header'>
+                                <h1>Welcome to TicketSolve!</h1>
+                            </div>
+
+                            <p class='greeting'>Dear <strong>{userProfile.FirstName} {userProfile.LastName}</strong>,</p>
+    
+                            <p class='content'>The status of your complaint has been updated.</p>
+    
+                            <p class='content'>Complaint Details:</p>
+                            <div class='details'>
+                                <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                                <p><strong>New Status:</strong> {complaintStatus.Status}</p>
+                                <p><strong>Comment By Organization:</strong> {complaintStatus.CommentByUser}</p>
+                                <p><strong>Status Updated On:</strong> {updateRequest.StatusDate}</p>
+                            </div>
+
+                            <p class='content footer'>Thank you for your patience.</p>
+    
+                            <p class='footer'>Best regards,<br/><span class='signature'>TicketSolve Team</span></p>
+                        </body>
+                        </html>";
+
 
                         // Send email to user
                         SendMail("Complaint Status Updated", userProfile.Email.ToString(), userBody);
@@ -147,19 +198,70 @@ namespace ComplaintTicketAPI.Services
                     try
                     {
                         // Email content for organization
-                        string orgBody = $"Dear {orgProfile.Name},\n\n" +
-                                         "A complaint status has been updated.\n\n" +
-                                         "Complaint Details:\n" +
-                                         $"• Complaint ID: {complaint.Id}\n" +
-                                         $"• New Status: {complaintStatus.Status}\n" +
-                                         $"• Comment: {complaintStatus.CommentByUser}\n" +
-                                         $"• Status Date: {updateRequest.StatusDate}\n\n" +
-                                         "Thank you for your attention.\n\n" +
-                                         "Best regards,\n" +
-                                         "ComplaintTicketApp Team";
+                       string orgBody = $@"
+                            <html>
+                            <head>
+                                <style>
+                                    body {{
+                                        font-family: Arial, sans-serif;
+                                        background-color: #f0f8ff;
+                                        color: #333;
+                                    }}
+                                    .header {{
+                                        background-color: #0073e6;
+                                        color: white;
+                                        padding: 10px;
+                                        text-align: center;
+                                        font-size: 24px;
+                                    }}
+                                    .greeting {{
+                                        font-size: 18px;
+                                        color: #333;
+                                    }}
+                                    .content {{
+                                        margin-top: 20px;
+                                        color: #333;
+                                    }}
+                                    .details {{
+                                        margin-top: 10px;
+                                        font-weight: bold;
+                                    }}
+                                    .footer {{
+                                        margin-top: 20px;
+                                        font-size: 14px;
+                                        color: #555;
+                                    }}
+                                    .signature {{
+                                        color: #0073e6;
+                                    }}
+                                </style>
+                            </head>
+                            <body>
+                                <div class='header'>
+                                    <h1>Welcome to TicketSolve!</h1>
+                                </div>
+
+                                <p class='greeting'>Dear <strong>{orgProfile.Name}</strong>,</p>
+    
+                                <p class='content'>A complaint status has been updated.</p>
+    
+                                <p class='content'>Complaint Details:</p>
+                                <div class='details'>
+                                    <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                                    <p><strong>New Status:</strong> {complaintStatus.Status}</p>
+                                    <p><strong>Comment:</strong> {complaintStatus.CommentByUser}</p>
+                                    <p><strong>Status Date:</strong> {updateRequest.StatusDate}</p>
+                                </div>
+
+                                <p class='content footer'>Thank you for your attention.</p>
+    
+                                <p class='footer'>Best regards,<br/><span class='signature'>TicketSolve Team</span></p>
+                            </body>
+                            </html>";
+
 
                         // Send email to organization
-                      SendMail("Complaint Status Update Notification", orgProfile.Email.ToString(), orgBody);
+                        SendMail("Complaint Status Update Notification", orgProfile.Email.ToString(), orgBody);
                         _logger.LogInformation("Email sent to organization {OrgEmail}", orgProfile.Email);
                     }
                     catch (Exception emailEx)

@@ -100,35 +100,134 @@ namespace ComplaintTicketAPI.Services
                     try
                     {
 
-                        string body = $"Dear {userProfile.FirstName}"+" "+"{userProfile.LastName},\n\n" +
-                             "We are pleased to inform you that you have successfully filed a complaint.\n\n" +
-                             "Below are the details of your complaint:\n\n" +
-                             $"• Complaint ID: {complaint.Id}\n" +
-                             $"• Priority: {complaintStatus.Priority.ToString()}\n" +
-                             $"• Organization ID: {complaint.OrganizationId}\n" +
-                             $"• Comment By you: {complaintStatus.CommentByUser}\n" +
-                             $"• Status: {complaintStatus.Status}\n\n" +
-                             "Should you have any questions or require assistance, please feel free to contact our support team.\n\n" +
-                             "Best regards,\n" +
-                             "ComplaintTicketApp\n" +
-                             "Support Team\n" +
-                             "(Niharika Garg)";
+                        string orgBody = $@"
+                                <html>
+                                <head>
+                                    <style>
+                                        body {{
+                                            font-family: Arial, sans-serif;
+                                            background-color: #f0f8ff;
+                                            color: #333;
+                                        }}
+                                        .header {{
+                                            background-color: #0073e6;
+                                            color: white;
+                                            padding: 10px;
+                                            text-align: center;
+                                            font-size: 24px;
+                                        }}
+                                        .greeting {{
+                                            font-size: 18px;
+                                            color: #333;
+                                        }}
+                                        .content {{
+                                            margin-top: 20px;
+                                            color: #333;
+                                        }}
+                                        .details {{
+                                            margin-top: 10px;
+                                            font-weight: bold;
+                                        }}
+                                        .footer {{
+                                            margin-top: 20px;
+                                            font-size: 14px;
+                                            color: #555;
+                                        }}
+                                        .signature {{
+                                            color: #0073e6;
+                                        }}
+                                    </style>
+                                </head>
+                                <body>
+                                    <div class='header'>
+                                        <h1>ComplaintTicketApp</h1>
+                                    </div>
 
-                        string orgBody = $"Dear {orgprofile.Name},\n\n" +
-                                         "A complaint has been recieved for you.\n\n" +
-                                         "Complaint Details:\n" +
-                                         $"• Complaint ID: {complaint.Id}\n" +
-                                         $"• User: {userProfile.FirstName}\n" +  // Include username
-                                         $"• Priority: {complaintStatus.Priority.ToString()}\n" + // Add more details if needed
-                                         $"• Comment By User: {complaintStatus.CommentByUser}\n" +
-                                         $"• Status: {complaintStatus.Status}\n\n" +
-                                         "Thank you for your attention.\n\n" +
-                                         "Best regards,\n" +
-                                         "ComplaintTicketApp Team";
+                                    <p class='greeting'>Dear <strong>{orgprofile.Name}</strong>,</p>
+
+                                    <p class='content'>A complaint has been received for you.</p>
+
+                                    <p class='content'>Complaint Details:</p>
+                                    <div class='details'>
+                                        <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                                        <p><strong>User:</strong> {userProfile.FirstName}</p>
+                                        <p><strong>Priority:</strong> {complaintStatus.Priority.ToString()}</p>
+                                        <p><strong>Comment By User:</strong> {complaintStatus.CommentByUser}</p>
+                                        <p><strong>Status:</strong> {complaintStatus.Status}</p>
+                                    </div>
+
+                                    <p class='content footer'>Thank you for your attention.</p>
+
+                                    <p class='footer'>Best regards,<br/><span class='signature'>ComplaintTicketApp Team</span></p>
+                                </body>
+                                </html>";
+                     
+                     string userBody = $@"
+                                <html>
+                                <head>
+                                    <style>
+                                        body {{
+                                            font-family: Arial, sans-serif;
+                                            background-color: #f0f8ff;
+                                            color: #333;
+                                        }}
+                                        .header {{
+                                            background-color: #0073e6;
+                                            color: white;
+                                            padding: 10px;
+                                            text-align: center;
+                                            font-size: 24px;
+                                        }}
+                                        .greeting {{
+                                            font-size: 18px;
+                                            color: #333;
+                                        }}
+                                        .content {{
+                                            margin-top: 20px;
+                                            color: #333;
+                                        }}
+                                        .details {{
+                                            margin-top: 10px;
+                                            font-weight: bold;
+                                        }}
+                                        .footer {{
+                                            margin-top: 20px;
+                                            font-size: 14px;
+                                            color: #555;
+                                        }}
+                                        .signature {{
+                                            color: #0073e6;
+                                        }}
+                                    </style>
+                                </head>
+                                <body>
+                                    <div class='header'>
+                                        <h1>ComplaintTicketApp</h1>
+                                    </div>
+
+                                    <p class='greeting'>Dear <strong>{userProfile.FirstName} {userProfile.LastName}</strong>,</p>
+
+                                    <p class='content'>We are pleased to inform you that you have successfully filed a complaint.</p>
+
+                                    <p class='content'>Below are the details of your complaint:</p>
+                                    <div class='details'>
+                                        <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                                        <p><strong>Priority:</strong> {complaintStatus.Priority.ToString()}</p>
+                                        <p><strong>Organization ID:</strong> {complaint.OrganizationId}</p>
+                                        <p><strong>Comment By You:</strong> {complaintStatus.CommentByUser}</p>
+                                        <p><strong>Status:</strong> {complaintStatus.Status}</p>
+                                    </div>
+
+                                    <p class='content footer'>Should you have any questions or require assistance, please feel free to contact our support team.</p>
+
+                                    <p class='footer'>Best regards,<br/><span class='signature'>ComplaintTicketApp Support Team</span><br/> (Niharika Garg)</p>
+                                </body>
+                                </html>";
+
 
                         string uemail = userProfile.Email.ToString();
                         string oemail = orgprofile.Email;
-                        SendMail("Complaint Successfully Filed", userProfile.Email.ToString(), body);
+                        SendMail("Complaint Successfully Filed", userProfile.Email.ToString(), userBody);
                         SendMail("Complaint Received Notification", oemail, orgBody);
 
 
