@@ -15,18 +15,19 @@ namespace ComplaintTicketAPI.Services
         private readonly IComplaintRepository _complaintRepository;
         private readonly IMapper _mapper;
         private readonly IRepository<int, ComplaintStatus> _complaintStatusRepository;
-        private readonly IRepository<int, ComplaintFile> _complaintFileRepository;
+        private readonly IComplaintFileRepository _complaintFileRepository;
         private readonly IRepository<int, ComplaintStatusDate> _complaintStatusDateRepository;
         private readonly ILogger<ComplaintService> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IUserProfileService _userProfileService;
         private readonly IOrganizationProfileService _organizationProfileService;
+        private readonly string _uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "ComplaintFiles");
 
         public ComplaintService(
             ComplaintTicketContext context,
             IComplaintRepository complaintRepository,
             IRepository<int, ComplaintStatus> complaintStatusRepository,
-            IRepository<int, ComplaintFile> complaintFileRepository,
+            IComplaintFileRepository complaintFileRepository,
             IRepository<int, ComplaintStatusDate> complaintStatusDateRepository,
             IMapper mapper,
             ILogger<ComplaintService> logger,
@@ -56,12 +57,42 @@ namespace ComplaintTicketAPI.Services
                     body);
             _emailSender.SendEmail(message);
         }
+
+        public async Task<string> SaveFileAsync(IFormFile file)
+
+        {
+
+            if (file == null || file.Length == 0)
+
+            {
+
+                return null;
+
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            var filePath = Path.Combine(_uploadFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+
+            {
+
+                await file.CopyToAsync(stream);
+
+            }
+
+            return uniqueFileName;
+
+        }
+
         public async Task<UserProfile> GetProfile(int userId)
         {
             // Retrieve the profile from the database by userId
             var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
             return profile; // Return the found profile
         }
+
         public async Task<Complaint> CreateComplaint(CreateComplaintRequestDTO complaintDto)
         {
             try
@@ -76,183 +107,135 @@ namespace ComplaintTicketAPI.Services
                 complaintStatus.Priority = Priority.Medium;
                 await _complaintStatusRepository.Add(complaintStatus);
 
-                // Step 3: Create and save the complaint file
-                var complaintFile = _mapper.Map<ComplaintFile>(complaintDto);
-                complaintFile.ComplaintId = createdComplaint.Id;
-                await _complaintFileRepository.Add(complaintFile);
-
-
-                var complaintStatusDate = new ComplaintStatusDate
+                // Step 3: Create and save the complaint files
+                var complaintFiles = await SaveComplaintFiles(complaintDto.AttachmentUrl, createdComplaint.Id);
+                if (complaintFiles.Any())
                 {
-                    ComplaintId = createdComplaint.Id,
-                    ComplaintStatusId = complaintStatus.Id,
-                    StatusDate = DateTime.Now
-                };
-                await _complaintStatusDateRepository.Add(complaintStatusDate);
+                    await _complaintFileRepository.AddFiles(complaintFiles);  // Save the complaint files
+                }
 
+                // Step 4: Save the complaint status date
+                await SaveComplaintStatusDate(createdComplaint.Id, complaintStatus.Id);
+
+                // Step 5: Get user and organization profile
                 var userProfile = await GetProfile(complaint.UserId);
-                var orgprofile = await _organizationProfileService.GetOrganizationProfile(complaint.OrganizationId);
+                var orgProfile = await _organizationProfileService.GetOrganizationProfile(complaint.OrganizationId);
 
-                if (userProfile != null)
-
-                { 
-
-                    try
-                    {
-
-                        string orgBody = $@"
-                                <html>
-                                <head>
-                                    <style>
-                                        body {{
-                                            font-family: Arial, sans-serif;
-                                            background-color: #f0f8ff;
-                                            color: #333;
-                                        }}
-                                        .header {{
-                                            background-color: #0073e6;
-                                            color: white;
-                                            padding: 10px;
-                                            text-align: center;
-                                            font-size: 24px;
-                                        }}
-                                        .greeting {{
-                                            font-size: 18px;
-                                            color: #333;
-                                        }}
-                                        .content {{
-                                            margin-top: 20px;
-                                            color: #333;
-                                        }}
-                                        .details {{
-                                            margin-top: 10px;
-                                            font-weight: bold;
-                                        }}
-                                        .footer {{
-                                            margin-top: 20px;
-                                            font-size: 14px;
-                                            color: #555;
-                                        }}
-                                        .signature {{
-                                            color: #0073e6;
-                                        }}
-                                    </style>
-                                </head>
-                                <body>
-                                    <div class='header'>
-                                        <h1>ComplaintTicketApp</h1>
-                                    </div>
-
-                                    <p class='greeting'>Dear <strong>{orgprofile.Name}</strong>,</p>
-
-                                    <p class='content'>A complaint has been received for you.</p>
-
-                                    <p class='content'>Complaint Details:</p>
-                                    <div class='details'>
-                                        <p><strong>Complaint ID:</strong> {complaint.Id}</p>
-                                        <p><strong>User:</strong> {userProfile.FirstName}</p>
-                                        <p><strong>Priority:</strong> {complaintStatus.Priority.ToString()}</p>
-                                        <p><strong>Comment By User:</strong> {complaintStatus.CommentByUser}</p>
-                                        <p><strong>Status:</strong> {complaintStatus.Status}</p>
-                                    </div>
-
-                                    <p class='content footer'>Thank you for your attention.</p>
-
-                                    <p class='footer'>Best regards,<br/><span class='signature'>ComplaintTicketApp Team</span></p>
-                                </body>
-                                </html>";
-                     
-                     string userBody = $@"
-                                <html>
-                                <head>
-                                    <style>
-                                        body {{
-                                            font-family: Arial, sans-serif;
-                                            background-color: #f0f8ff;
-                                            color: #333;
-                                        }}
-                                        .header {{
-                                            background-color: #0073e6;
-                                            color: white;
-                                            padding: 10px;
-                                            text-align: center;
-                                            font-size: 24px;
-                                        }}
-                                        .greeting {{
-                                            font-size: 18px;
-                                            color: #333;
-                                        }}
-                                        .content {{
-                                            margin-top: 20px;
-                                            color: #333;
-                                        }}
-                                        .details {{
-                                            margin-top: 10px;
-                                            font-weight: bold;
-                                        }}
-                                        .footer {{
-                                            margin-top: 20px;
-                                            font-size: 14px;
-                                            color: #555;
-                                        }}
-                                        .signature {{
-                                            color: #0073e6;
-                                        }}
-                                    </style>
-                                </head>
-                                <body>
-                                    <div class='header'>
-                                        <h1>ComplaintTicketApp</h1>
-                                    </div>
-
-                                    <p class='greeting'>Dear <strong>{userProfile.FirstName} {userProfile.LastName}</strong>,</p>
-
-                                    <p class='content'>We are pleased to inform you that you have successfully filed a complaint.</p>
-
-                                    <p class='content'>Below are the details of your complaint:</p>
-                                    <div class='details'>
-                                        <p><strong>Complaint ID:</strong> {complaint.Id}</p>
-                                        <p><strong>Priority:</strong> {complaintStatus.Priority.ToString()}</p>
-                                        <p><strong>Organization ID:</strong> {complaint.OrganizationId}</p>
-                                        <p><strong>Comment By You:</strong> {complaintStatus.CommentByUser}</p>
-                                        <p><strong>Status:</strong> {complaintStatus.Status}</p>
-                                    </div>
-
-                                    <p class='content footer'>Should you have any questions or require assistance, please feel free to contact our support team.</p>
-
-                                    <p class='footer'>Best regards,<br/><span class='signature'>ComplaintTicketApp Support Team</span><br/> (Niharika Garg)</p>
-                                </body>
-                                </html>";
-
-
-                        string uemail = userProfile.Email.ToString();
-                        string oemail = orgprofile.Email;
-                        SendMail("Complaint Successfully Filed", userProfile.Email.ToString(), userBody);
-                        SendMail("Complaint Received Notification", oemail, orgBody);
-
-
-                    }
-
-                    catch { throw new Exception("Mail Cannot be send Becuase of Invalid Mail"); }
-            }
+                // Step 6: Send emails
+                if (userProfile != null && orgProfile != null)
+                {
+                    await SendComplaintNotificationEmails(userProfile, orgProfile, complaint, complaintStatus);
+                }
 
                 await _context.SaveChangesAsync();
-               // return new createdComplaint { Username = user.Username }
                 return createdComplaint;
             }
             catch (DbUpdateException dbEx)
             {
-                // Log database update errors
                 _logger.LogError(dbEx, "Error occurred while creating the complaint.");
                 throw new Exception("An error occurred while creating the complaint.", dbEx);
             }
             catch (Exception ex)
             {
-                // Log general errors
                 _logger.LogError(ex, "An unexpected error occurred while creating the complaint.");
                 throw new Exception("An unexpected error occurred while creating the complaint.", ex);
             }
         }
+
+        // Helper function to save complaint files
+        private async Task<List<ComplaintFile>> SaveComplaintFiles(IEnumerable<IFormFile> attachmentUrls, int complaintId)
+        {
+            var complaintFiles = new List<ComplaintFile>();  // List to store multiple complaint files
+            if (attachmentUrls != null && attachmentUrls.Any())
+            {
+                foreach (var file in attachmentUrls)
+                {
+                    var filePath = await SaveFileAsync(file);  // Save file and get the file path
+
+                    if (!string.IsNullOrEmpty(filePath))
+                    {
+                        // Map the complaint file entity and set properties
+                        var complaintFile = new ComplaintFile
+                        {
+                            ComplaintId = complaintId,
+                            FilePath = filePath
+                        };
+                        complaintFiles.Add(complaintFile);  // Add to the list of complaint files
+                    }
+                }
+            }
+            return complaintFiles;
+        }
+
+        // Helper function to save complaint status date
+        private async Task SaveComplaintStatusDate(int complaintId, int complaintStatusId)
+        {
+            var complaintStatusDate = new ComplaintStatusDate
+            {
+                ComplaintId = complaintId,
+                ComplaintStatusId = complaintStatusId,
+                StatusDate = DateTime.Now
+            };
+            await _complaintStatusDateRepository.Add(complaintStatusDate);
+        }
+
+        // Helper function to send complaint notification emails
+        private async Task SendComplaintNotificationEmails(UserProfile userProfile, Organization orgProfile, Complaint complaint, ComplaintStatus complaintStatus)
+        {
+            try
+            {
+                // Organization email body
+                string orgBody = $@"
+            <html>
+                <head><style>/* CSS Styling */</style></head>
+                <body>
+                    <div class='header'><h1>ComplaintTicketApp</h1></div>
+                    <p>Dear <strong>{orgProfile.Name}</strong>,</p>
+                    <p>A complaint has been received for you.</p>
+                    <div class='details'>
+                        <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                        <p><strong>User:</strong> {userProfile.FirstName}</p>
+                        <p><strong>Priority:</strong> {complaintStatus.Priority.ToString()}</p>
+                        <p><strong>Comment By User:</strong> {complaintStatus.CommentByUser}</p>
+                        <p><strong>Status:</strong> {complaintStatus.Status}</p>
+                    </div>
+                    <p class='footer'>Thank you for your attention.</p>
+                    <p class='footer'>Best regards,<br/><span class='signature'>ComplaintTicketApp Team</span></p>
+                </body>
+            </html>";
+
+                // User email body
+                string userBody = $@"
+            <html>
+                <head><style>/* CSS Styling */</style></head>
+                <body>
+                    <div class='header'><h1>ComplaintTicketApp</h1></div>
+                    <p>Dear <strong>{userProfile.FirstName} {userProfile.LastName}</strong>,</p>
+                    <p>We are pleased to inform you that you have successfully filed a complaint.</p>
+                    <div class='details'>
+                        <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                        <p><strong>Priority:</strong> {complaintStatus.Priority.ToString()}</p>
+                        <p><strong>Organization ID:</strong> {complaint.OrganizationId}</p>
+                        <p><strong>Comment By You:</strong> {complaintStatus.CommentByUser}</p>
+                        <p><strong>Status:</strong> {complaintStatus.Status}</p>
+                    </div>
+                    <p class='footer'>Should you have any questions or require assistance, please feel free to contact our support team.</p>
+                    <p class='footer'>Best regards,<br/><span class='signature'>ComplaintTicketApp Support Team</span><br/> (Niharika Garg)</p>
+                </body>
+            </html>";
+
+                // Send emails to both user and organization
+                 SendMail("Complaint Successfully Filed", userProfile.Email, userBody);
+                 SendMail("Complaint Received Notification", orgProfile.Email, orgBody);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while sending notification emails.");
+                throw new Exception("Mail cannot be sent because of invalid mail", ex);
+            }
+        }
+
+      
 
 
         public async Task<Complaint> GetComplaint(int id)

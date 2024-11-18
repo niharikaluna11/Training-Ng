@@ -8,6 +8,8 @@ using AutoMapper;
 using ComplaintTicketAPI.EmailModel;
 using ComplaintTicketAPI.EmailInterface;
 using MimeKit.Encodings;
+using ComplaintTicketAPI.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTicketAPI.Services
 {
@@ -16,21 +18,68 @@ namespace ComplaintTicketAPI.Services
         private readonly IRepository<int, Organization> _organizationRepo;
         private readonly ILogger<OrganizationProfileService> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly string _uploadFolder = Path.Combine(Directory.GetCurrentDirectory(), "ProfilePicture/Organization");
+        private readonly ComplaintTicketContext _context;
         public OrganizationProfileService(IRepository<int, Organization> organizationRepo,
             ILogger<OrganizationProfileService> logger,
+            ComplaintTicketContext context,
               IEmailSender emailSender)
         {
             _organizationRepo = organizationRepo;
             _logger = logger;
             _emailSender = emailSender;
+            _context = context;
         }
 
-     
+
+        public async Task<string> SaveFileAsync(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+            {
+                throw new ArgumentException("No file uploaded.");
+            }
+
+            // Generate a unique file name using Guid to avoid overwriting existing files
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            var filePath = Path.Combine(_uploadFolder, uniqueFileName);
+
+            // Save the file to the server
+            try
+            {
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await file.CopyToAsync(stream);
+                }
+
+                // Check if the file was successfully saved
+                if (File.Exists(filePath))
+                {
+                    return uniqueFileName;
+                }
+                else
+                {
+                    _logger.LogError("File not saved.");
+                    throw new Exception("Error saving file.");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving the file.");
+                throw new Exception("Error saving the file.");
+            }
+        }
+
+
+
         public async Task<Organization> GetOrganizationProfile(int userId)
         {
             try
             {
-                return await _organizationRepo.Get(userId);
+                var orgProfile = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == userId);
+
+
+                return orgProfile;
             }
             catch (Exception ex)
             {
@@ -53,19 +102,24 @@ namespace ComplaintTicketAPI.Services
         {
             try
             {
-                var organization = await _organizationRepo.Get(userId);
+                var organization = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == userId);
+
                 if (organization == null)
                 {
-                    return null;
+                    throw new KeyNotFoundException($"Organization with UserId {userId} not found.");
                 }
 
-                // Update organization fields with new data from DTO
+                // Update fields
                 organization.Name = updateDto.Name;
                 organization.Email = updateDto.Email;
                 organization.Phone = updateDto.Phone;
                 organization.Address = updateDto.Address;
-                organization.Types = updateDto.Types; // assuming Types is included in ProfileUpdateDTO
+                organization.Types = updateDto.Types;
 
+                // Handle profile picture saving
+                organization.ProfilePicture = await SaveFileAsync(updateDto.ProfilePicture);
+
+                // Send email notification
                 try
                 {
                     string body = $@"
@@ -117,21 +171,28 @@ namespace ComplaintTicketAPI.Services
 </body>
 </html>";
 
-
                     string email = organization.Email;
                     SendMail("Your Account Has Been Created", email, body);
                 }
-                catch
+                catch (Exception ex)
                 {
-                    throw new Exception("Not able to send becuase of invalid mail");
+                    _logger.LogError(ex, "Failed to send email notification.");
+                    throw new Exception("Not able to send email because of invalid mail.");
                 }
-                return await _organizationRepo.Update( organization, userId);
+
+                // Update organization in the database
+                _context.Organizations.Update(organization);
+                await _context.SaveChangesAsync();
+
+                return organization;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, $"Error updating organization profile for user ID {userId}");
+                _logger.LogError(ex, $"Error updating organization profile for user ID {userId}: {ex.Message}");
                 throw new Exception("An error occurred while updating the organization profile.");
             }
         }
+
+
     }
 }

@@ -55,30 +55,6 @@ namespace ComplaintTicketAPI.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ComplaintReports",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    OpenCount = table.Column<int>(type: "int", nullable: false),
-                    InProgressCount = table.Column<int>(type: "int", nullable: false),
-                    ClosedCount = table.Column<int>(type: "int", nullable: false),
-                    PercentageOfTotal = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ComplaintReports", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ComplaintReports_ComplaintCategories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "ComplaintCategories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Organizations",
                 columns: table => new
                 {
@@ -86,6 +62,7 @@ namespace ComplaintTicketAPI.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Types = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -113,6 +90,7 @@ namespace ComplaintTicketAPI.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ProfilePicture = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Preferences = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -214,11 +192,6 @@ namespace ComplaintTicketAPI.Migrations
                 column: "ComplaintId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ComplaintReports_CategoryId",
-                table: "ComplaintReports",
-                column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Complaints_CategoryId",
                 table: "Complaints",
                 column: "CategoryId");
@@ -255,9 +228,6 @@ namespace ComplaintTicketAPI.Migrations
         {
             migrationBuilder.DropTable(
                 name: "ComplaintFiles");
-
-            migrationBuilder.DropTable(
-                name: "ComplaintReports");
 
             migrationBuilder.DropTable(
                 name: "ComplaintStatusDates");

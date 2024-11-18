@@ -7,6 +7,7 @@ using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
 using ComplaintTicketAPI.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace ComplaintTicketAPI.Services
 {
@@ -15,9 +16,8 @@ namespace ComplaintTicketAPI.Services
         private readonly ComplaintTicketContext _context;
         private readonly ILogger<UserProfileService> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly string _uploadFolder= Path.Combine(Directory.GetCurrentDirectory(), "ProfilePicture/User"); 
 
-
-      
         public UserProfileService(ComplaintTicketContext context,
              IEmailSender emailSender,
               ILogger<UserProfileService> logger)
@@ -28,12 +28,59 @@ namespace ComplaintTicketAPI.Services
             _emailSender = emailSender;
         }
 
+        public async Task<string> SaveFileAsync(IFormFile file)
+
+        {
+
+            if (file == null || file.Length == 0)
+
+            {
+
+                return null;
+
+            }
+
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+            var filePath = Path.Combine(_uploadFolder, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+
+            {
+
+                await file.CopyToAsync(stream);
+
+            }
+
+            return uniqueFileName;
+
+        }
+
+
+       
+
         public async Task<UserProfile> GetProfile(int userId)
         {
-            // Retrieve the profile from the database by userId
+            // Retrieve the user profile and organization profile from the database
             var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
-            return profile; // Return the found profile
+            var orgprofile = await _context.Organizations.FirstOrDefaultAsync(p => p.UserId == userId);
+
+            // If both profiles exist, return a combined profile
+            if (profile != null && orgprofile != null)
+            {
+                return new UserProfile
+                {
+                    UserId = profile.UserId,
+                    FirstName = profile.FirstName ?? orgprofile.Name, // If FirstName is null, use orgprofile.Name
+                    
+                    Address = profile.Address ?? orgprofile.Address // Add other fields from orgprofile as needed
+                };
+            }
+
+            // If only profile is found, return it
+            return profile;
         }
+
 
         private void SendMail(string title, string email, string body)
         {
@@ -62,6 +109,9 @@ namespace ComplaintTicketAPI.Services
                     profile.Email = updateDto.Email;
                     profile.Phone = updateDto.Phone;
                     profile.Preferences = updateDto.Preferences;
+
+                    profile.ProfilePicture = await SaveFileAsync(updateDto.ProfilePicture);
+
 
                     try
                     {

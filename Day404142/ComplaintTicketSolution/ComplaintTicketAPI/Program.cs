@@ -8,6 +8,7 @@ using ComplaintTicketAPI.Repositories;
 using ComplaintTicketAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
@@ -44,10 +45,11 @@ namespace ComplaintTicketAPI
 
 
             #region Repositories
-
+            
            
+
             builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
-            builder.Services.AddScoped<IRepository<int, ComplaintFile>, ComplaintFileRepository>();
+            builder.Services.AddScoped<IComplaintFileRepository, ComplaintFileRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintCategory>, ComplaintCategoryRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintStatus>, ComplaintStatusRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintStatusDate>, ComplaintStatusDateRepository>();
@@ -64,7 +66,7 @@ namespace ComplaintTicketAPI
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IComplaintCategoryService, ComplaintCategoryService>();
             builder.Services.AddScoped<IComplaintService, ComplaintService>();
-
+            
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
             builder.Services.AddScoped<IOrganizationProfileService, OrganizationProfileService>();

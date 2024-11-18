@@ -8,9 +8,49 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "complaintDto",
-        "Type": "ComplaintTicketAPI.Models.DTO.CreateComplaintRequestDTO",
-        "IsRequired": true
+        "Name": "UserId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "OrganizationId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "CategoryId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Description",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Priority",
+        "Type": "ComplaintTicketAPI.Models.Priority",
+        "IsRequired": false
+      },
+      {
+        "Name": "status",
+        "Type": "ComplaintTicketAPI.Models.Status",
+        "IsRequired": false
+      },
+      {
+        "Name": "CommentByUser",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "AttachmentUrl",
+        "Type": "System.Collections.Generic.List\u00601[[Microsoft.AspNetCore.Http.IFormFile, Microsoft.AspNetCore.Http.Features, Version=6.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "AcceptTermsAndConditions",
+        "Type": "System.Boolean",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -200,9 +240,34 @@
         "IsRequired": false
       },
       {
-        "Name": "organizationProfileDTO",
-        "Type": "ComplaintTicketAPI.Models.DTO.OrganizationProfileDTO",
-        "IsRequired": true
+        "Name": "Name",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePicture",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Types",
+        "Type": "ComplaintTicketAPI.Models.Type",
+        "IsRequired": false
+      },
+      {
+        "Name": "Address",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Phone",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -221,9 +286,44 @@
         "IsRequired": false
       },
       {
-        "Name": "profileUpdateDTO",
-        "Type": "ComplaintTicketAPI.Models.DTO.ProfileUpdateDTO",
-        "IsRequired": true
+        "Name": "FirstName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "LastName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePicture",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      },
+      {
+        "Name": "Address",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DateOfBirth",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Phone",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Preferences",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

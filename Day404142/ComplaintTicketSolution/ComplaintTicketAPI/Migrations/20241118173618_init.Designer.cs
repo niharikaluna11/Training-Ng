@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ComplaintTicketAPI.Migrations
 {
     [DbContext(typeof(ComplaintTicketContext))]
-    [Migration("20241109143918_init")]
+    [Migration("20241118173618_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -99,39 +99,6 @@ namespace ComplaintTicketAPI.Migrations
                     b.ToTable("ComplaintFiles");
                 });
 
-            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClosedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("InProgressCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OpenCount")
-                        .HasColumnType("int");
-
-                    b.Property<double>("PercentageOfTotal")
-                        .HasColumnType("float");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("ComplaintReports");
-                });
-
             modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintStatus", b =>
                 {
                     b.Property<int>("Id")
@@ -200,6 +167,9 @@ namespace ComplaintTicketAPI.Migrations
 
                     b.Property<string>("Phone")
                         .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Types")
@@ -281,6 +251,9 @@ namespace ComplaintTicketAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
@@ -326,17 +299,6 @@ namespace ComplaintTicketAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Complaint");
-                });
-
-            modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintReport", b =>
-                {
-                    b.HasOne("ComplaintTicketAPI.Models.ComplaintCategory", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintStatusDate", b =>

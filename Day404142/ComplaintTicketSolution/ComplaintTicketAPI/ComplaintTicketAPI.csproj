@@ -19,4 +19,11 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 
+ 
+  <ItemGroup>
+    <Folder Include="ComplaintFiles\" />
+    <Folder Include="ProfilePicture\Organization\" />
+    <Folder Include="ProfilePicture\User\" />
+  </ItemGroup>
+
 </Project>
