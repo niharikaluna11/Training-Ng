@@ -1,0 +1,107 @@
+<script>
+
+
+export default {
+  name: 'ProductCompoent',
+  data() {
+    return {
+     select:(prod)=>{
+      console.log(prod+" selected");
+       this.$emit('add-to-cart', prod);//bubble up the event
+      }
+    }
+  },
+  props: {
+
+      product: {
+        name: '',
+        unitPrice: 0,
+        quantity: 0,
+        description: '',
+        basicImage: ''
+
+      }
+    }
+}
+</script>
+<template>
+  <div>
+    <h1>Product</h1>
+    <div>{{ product.name }}</div> 
+    <button @click="select(product.name)">Add to Cart</button>
+  </div>
+  </template>
+  <style>
+
+</style>
+----------------------------------------------------
+<script>
+import { GetProducts } from '@/scripts/ProductService';
+import ProductComponent from './ProductComponent.vue';
+
+export default {
+  name: 'ProductsCompoent',
+  data() {
+    return {
+      products: [],
+      cart:[],
+      addToCart:(product)=>{
+        console.log(product);
+        this.cart.push(product);
+      }
+    }
+  },
+  components: {
+    ProductComponent
+  },
+  created() {
+    GetProducts().then(response => {
+      this.products = response.data;
+      console.log(this.products);
+    });
+  }
+}
+</script>
+<template>
+  <div>
+    <h1>Product</h1>
+    <h2>Cart</h2>
+    <div v-for="product in cart" :key="product">
+      <div>{{ product }}</div>
+    </div>  
+    <hr/>
+    <div v-for="product in products" :key="product.id">
+      <ProductComponent @add-to-cart="addToCart" :product="product" />
+    </div>
+  </div>
+  </template>
+  <style>
+
+</style>
+------------------------------------------------------
+import HelloWorld from "@/components/HelloWorld.vue";
+import LoginComponent from "@/components/Login/LoginComponent.vue";
+import ProductsComponent from "@/components/ProductsComponent.vue";
+import { createRouter,createWebHistory } from "vue-router";
+
+
+const routes=[
+    {path: '/', component: HelloWorld},
+    {path: '/login', component: LoginComponent},
+    {path: '/products', component: ProductsComponent,
+        beforeEnter: (to, from, next) => {
+            if (sessionStorage.getItem('token')) {
+                next();
+            } else {
+                next('/login');
+        }
+    }
+    }
+];
+
+const router = createRouter({
+    history: createWebHistory(),
+    routes
+});
+
+export default router;
