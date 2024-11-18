@@ -48,7 +48,7 @@ public class ComplaintController : ControllerBase
 
     [HttpPost("FileComplaint")]
    [Authorize(Roles = "Admin,User")]
-    public async Task<ActionResult> CreateComplaint(CreateComplaintRequestDTO complaintDto)
+    public async Task<ActionResult> CreateComplaint([FromForm] CreateComplaintRequestDTO complaintDto)
     {
         if (complaintDto == null || !ModelState.IsValid)
         {
@@ -59,9 +59,7 @@ public class ComplaintController : ControllerBase
         {
             var createdComplaint = await _complaintService.CreateComplaint(complaintDto);
 
-            // Use the route parameter name 'id' as it matches the one in GetComplaint
-            /// return CreatedAtAction(nameof(GetComplaint), new { id = createdComplaint.Id }, createdComplaint);
-           // var id = createdComplaint.Id;
+           
             return Ok(createdComplaint);
         }
         catch (InvalidOperationException ex)

@@ -59,7 +59,7 @@ namespace ComplaintTicketAPI.Controllers
 
         [HttpPut("update-User-profile")]
        [Authorize(Roles = "User,Admin")]
-        public async Task<IActionResult> UpdateUserProfile(int userId, [FromBody] ProfileUpdateDTO profileUpdateDTO)
+        public async Task<IActionResult> UpdateUserProfile(int userId, [FromForm] ProfileUpdateDTO profileUpdateDTO)
         {
             try
             {
@@ -90,7 +90,7 @@ namespace ComplaintTicketAPI.Controllers
         
         [HttpPut("update-Organization-profile")]
         [Authorize(Roles = "Admin,Organization")]
-        public async Task<IActionResult> UpdateOrgProfile(int userId, [FromBody] OrganizationProfileDTO organizationProfileDTO)
+        public async Task<IActionResult> UpdateOrgProfile(int userId, [FromForm] OrganizationProfileDTO organizationProfileDTO)
         {
             try
             {
