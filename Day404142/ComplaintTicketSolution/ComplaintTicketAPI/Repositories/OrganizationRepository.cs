@@ -62,7 +62,7 @@ namespace ComplaintTicketAPI.Repositories
 
         public async Task<Organization> Update(Organization entity, int key)
         {
-            var organization = await Get(key);
+            var organization =  await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == key);
             if (organization != null)
             {
                 try

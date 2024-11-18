@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 namespace ComplaintTicketAPI.Repositories
 {
     //alll done
-    public class ComplaintFileRepository : IRepository<int, ComplaintFile>
+    public class ComplaintFileRepository : IComplaintFileRepository
     {
         private readonly ComplaintTicketContext _context;
 
@@ -16,6 +16,11 @@ namespace ComplaintTicketAPI.Repositories
             _context = context;
         }
 
+        public async Task AddFiles(IEnumerable<ComplaintFile> files)
+        {
+            await _context.ComplaintFiles.AddRangeAsync(files);
+            await _context.SaveChangesAsync();
+        }
         public async Task<ComplaintFile> Add(ComplaintFile entity)
         {
             try
