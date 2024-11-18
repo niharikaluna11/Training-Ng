@@ -9,6 +9,9 @@ namespace ComplaintTicketAPI.Models.DTO
         [Required(ErrorMessage = "Company Name is required")]
         public string Name { get; set; }
 
+        [Required(ErrorMessage = "Profile Picture is required")]
+        public IFormFile ProfilePicture { get; set; }
+
         [Required(ErrorMessage = "Type of Company is required")]
         public Type Types { get; set; }
         // Enum or string: Company 1, Government 2, Agent 3

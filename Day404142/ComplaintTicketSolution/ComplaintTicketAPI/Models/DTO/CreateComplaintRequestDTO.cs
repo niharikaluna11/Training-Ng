@@ -24,7 +24,7 @@ namespace ComplaintTicketAPI.Models.DTO
         public string CommentByUser { get; set; }   // Comment by user when submitting the complaint
 
         [Required(ErrorMessage = "Atleast One File is required")]
-        public string AttachmentUrl { get; set; }   // Optional URL for an attachment (file path or link to document/image)
+        public List<IFormFile> AttachmentUrl { get; set; }
 
         [Required(ErrorMessage = "Please accept the terms and conditions")]
         public bool AcceptTermsAndConditions { get; set; }

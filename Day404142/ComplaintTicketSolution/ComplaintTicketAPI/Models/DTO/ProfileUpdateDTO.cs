@@ -11,6 +11,9 @@ namespace ComplaintTicketAPI.Models.DTO
 
         public string LastName { get; set; }
 
+        [Required(ErrorMessage = "Profile Picture is required")]
+        public IFormFile ProfilePicture { get; set; }
+
         [Required(ErrorMessage = "Address is required")]
         public string Address { get; set; }
         public DateTime DateOfBirth { get; set; }

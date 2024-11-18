@@ -12,6 +12,7 @@
         public string Address { get; set; }
         public DateTime? DateOfBirth { get; set; }
 
+        public String? ProfilePicture { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
         public string Preferences { get; set; } 
