@@ -10,12 +10,14 @@ using Microsoft.EntityFrameworkCore;
 using ComplaintTicketAPI.Context;
 using ComplaintTicketAPI.EmailInterface;
 using ComplaintTicketAPI.EmailModel;
+using Org.BouncyCastle.Security;
+using System.Data;
 
 namespace ComplaintTicketAPI.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<string, User> _userRepo;
+        private readonly IUserRepository _userRepo;
         private readonly IRepository<int, UserProfile> _profileRepo;
         private readonly IRepository<int, Organization> _organizationRepo;
         private readonly IMapper _mapper;
@@ -25,7 +27,7 @@ namespace ComplaintTicketAPI.Services
 
         private readonly ComplaintTicketContext _context;
         public UserService(
-            IRepository<string, User> userRepository,
+            IUserRepository userRepository,
             IRepository<int, UserProfile> profileRepo,
             IRepository<int, Organization> organizationRepo,
             ILogger<UserService> logger,
@@ -56,21 +58,25 @@ namespace ComplaintTicketAPI.Services
             _emailSender.SendEmail(message);
         }
 
-        public async Task<LoginResponseDTO> Authenticate(LoginRequestDTO loginUser)
+        public async Task<SuccessResponseDTO<LoginResponseDTO>> Authenticate(LoginRequestDTO loginUser)
         {
             try
             {
-                var user = await _userRepo.Get(loginUser.Username);
+                // Fetch the user by username or email
+                var user = await _userRepo.GetByUsernameOrEmail(loginUser.UsernameOrEmail);
                 if (user == null) throw new Exception("User not found");
 
+                // Verify the password using the stored hash key
                 using var hmac = new HMACSHA256(user.HashKey);
                 byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginUser.Password));
                 if (!passwordHash.SequenceEqual(user.Password))
-                    throw new Exception("Invalid username or password");
+                    throw new Exception("Invalid username/email or password");
 
-                return new LoginResponseDTO
+
+                var userDetails = new LoginResponseDTO
                 {
                     Username = user.Username,
+                    Email = user.Email,
                     Id = user.Id,
                     Token = await _tokenService.GenerateToken(new UserTokenDTO
                     {
@@ -78,15 +84,45 @@ namespace ComplaintTicketAPI.Services
                         Role = user.Roles.ToString()
                     })
                 };
+
+                // Return a success response with the DTO
+                return new SuccessResponseDTO<LoginResponseDTO>
+                {
+                    Success = true,
+                    Message = $"The User {loginUser.UsernameOrEmail} is successfully Login",
+                    Data = userDetails
+                };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error during authentication for user: {Username}", loginUser.Username);
+                _logger.LogError(ex, "Error during authentication for user: {Login}", loginUser.UsernameOrEmail );
                 throw new Exception("Authentication failed");
             }
         }
 
-        public async Task<LoginResponseDTO> Register(RegisterUserDto registerUser)
+
+        public SuccessResponseDTO<LoginResponseDTO> RegisterUser(string username, string role, string email,int id)
+        {
+            // Create a DTO instance with user details
+            var userDetails = new LoginResponseDTO
+            {
+                Username = username,
+                Role = role,
+                Email = email,
+                Id=id
+            };
+
+            // Return a success response with the DTO
+            return new SuccessResponseDTO<LoginResponseDTO>
+            {
+                Success = true,
+                Message = $"The User  {userDetails.Username}  is successfully registered",
+                Data = userDetails
+            };
+        }
+
+
+        public async Task<SuccessResponseDTO<LoginResponseDTO>> Register(RegisterUserDto registerUser)
         {
             using var hmac = new HMACSHA256();
             byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password));
@@ -94,6 +130,7 @@ namespace ComplaintTicketAPI.Services
             var user = new User
             {
                 Username = registerUser.Username,
+                Email=registerUser.Email,
                 Password = passwordHash,
                 HashKey = hmac.Key,
                 Roles = registerUser.Role
@@ -107,80 +144,32 @@ namespace ComplaintTicketAPI.Services
 
                     try
                     {
-                        string body = $@"
-                                <html>
-                                <head>
-                                    <style>
-                                        body {{
-                                            font-family: Arial, sans-serif;
-                                            background-color: #f0f8ff;
-                                            color: #333;
-                                        }}
-                                        .header {{
-                                            background-color: #0073e6;
-                                            color: white;
-                                            padding: 10px;
-                                            text-align: center;
-                                            font-size: 24px;
-                                        }}
-                                        .greeting {{
-                                            font-size: 18px;
-                                            color: #333;
-                                        }}
-                                        .content {{
-                                            margin-top: 20px;
-                                            color: #333;
-                                        }}
-                                        .credentials {{
-                                            margin-top: 10px;
-                                            font-weight: bold;
-                                        }}
-                                        .footer {{
-                                            margin-top: 20px;
-                                            font-size: 14px;
-                                            color: #555;
-                                        }}
-                                        .signature {{
-                                            color: #0073e6;
-                                        }}
-                                    </style>
-                                </head>
-                                <body>
-                                    <div class='header'>
-                                        <h1>Welcome to TicketSolve!</h1>
-                                    </div>
-
-                                    <p class='greeting'>Dear <strong>{addedUser.Roles.ToString()} {registerUser.FName} {registerUser.LName}</strong>,</p>
-    
-                                    <p class='content'>We are pleased to inform you that your account has been successfully created.</p>
-                                    <p class='content'>Below are your login credentials for accessing our service:</p>
-    
-                                    <div class='credentials'>
-                                        <p><strong>Username:</strong> {registerUser.Username}</p>
-                                        <p><strong>Password:</strong> {registerUser.Password}</p>
-                                    </div>
-
-                                    <p class='content footer'>Should you have any questions or require assistance, please feel free to contact our support team.</p>
-                                    <p class='footer'>Best regards,<br/><span class='signature'>TicketSolve Team</span></p>
-                                </body>
-                                </html>";
+                        string body = GenerateEmailBody(addedUser.Roles.ToString(),
+                            registerUser.FName,
+                            registerUser.LName,
+                            registerUser.Username
+                            );
 
                         string email = registerUser.Email;
                         SendMail("Your Account Has Been Created", email, body);
 
                     }
                     catch { throw new Exception("Mail Cannot be send Becuase of Invalid Mail"); }
-               
+                    
+                    try
+                    {
+                        await CreateProfileOrOrganizationAsync(addedUser, registerUser);
 
-                    await CreateProfileOrOrganizationAsync(addedUser, registerUser);
-                    return new LoginResponseDTO { Username = user.Username,
-                        Id = user.Id,
-                        Token = await _tokenService.GenerateToken(new UserTokenDTO
-                        {
-                            Username = user.Username,
-                            Role = user.Roles.ToString()
-                        })
-                    };
+                    }
+                    catch(Exception ex)
+                    {
+                        throw new Exception("Cannot create profile for user");
+                    }
+
+                    var response = RegisterUser(registerUser.FName, registerUser.Role.ToString(), registerUser.Email,user.Id);
+
+
+                    return response;
                 }
 
                 throw new Exception("User could not be added");
@@ -193,6 +182,70 @@ namespace ComplaintTicketAPI.Services
                 throw new Exception("Registration failed");
             }
         }
+
+        private string GenerateEmailBody(string role, string firstName, string lastName, string username)
+        {
+            return $@"
+    <html>
+    <head>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                background-color: #ffffff;
+                color: #000000;
+                margin: 0;
+                padding: 20px;
+                line-height: 1.6;
+            }}
+            .header {{
+                text-align: center;
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 20px;
+            }}
+            .content {{
+                margin-top: 20px;
+            }}
+            .credentials {{
+                margin-top: 10px;
+                font-weight: bold;
+            }}
+            .footer {{
+                margin-top: 30px;
+                font-size: 14px;
+                color: #333333;
+            }}
+            .signature {{
+                font-weight: bold;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class='header'>
+            Welcome to TicketSolve
+        </div>
+
+        <p>Dear <strong>{firstName} {lastName}</strong>,</p>
+
+        <p>We are pleased to inform you that your account has been successfully created.</p>
+        <p>Below are your login credentials for accessing our service:</p>
+
+        <div class='credentials'>
+            <p><strong>Username:</strong> {username}</p>
+            <p><strong>Role:</strong> {role}</p>    
+        </div>
+
+        <p class='content'>Should you have any questions or require assistance, please feel free to contact our support team.</p>
+
+        <p class='footer'>
+            Best regards,<br/>
+            <span class='signature'>TicketSolve Team</span>
+        </p>
+    </body>
+    </html>";
+        }
+
+
 
         private async Task CreateProfileOrOrganizationAsync(User addedUser, RegisterUserDto registerUser)
         {
@@ -254,7 +307,8 @@ namespace ComplaintTicketAPI.Services
                     Email = registerUser.Email,
                     Phone = string.Empty,
                     Address = string.Empty,
-                    Types = registerUser.Types
+                    Types = registerUser.Types ?? Models.Type.Company  
+
                 };
                 await _organizationRepo.Add(organization);
             }
