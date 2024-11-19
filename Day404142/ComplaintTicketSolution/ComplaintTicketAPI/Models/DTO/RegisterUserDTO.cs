@@ -30,7 +30,9 @@ namespace ComplaintTicketAPI.Models.DTO
         [Required(ErrorMessage = "Role is required")]
         public Role Role { get; set; }
 
-        public Type Types { get; set; }
+      
+        
+        public Type? Types { get; set; }
 
     }
 }

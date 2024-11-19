@@ -10,7 +10,10 @@
     {
 
         public int Id { get; set; }
+        
         public string Username { get; set; }
+        public string Email { get; set; }
+
         public byte[] Password { get; set; }
         public byte[] HashKey { get; set; }
 
@@ -20,9 +23,11 @@
         public ICollection<Complaint> Complaints { get; set; }
             //= new List<Complaint>();
         public Organization? Organization { get;  set; }
-       
 
-
+                
+        public bool IsOtpVerified { get; set; } = false; // Tracks whether OTP is verified
+        public string? ResetToken { get; set; }
+        public DateTime? TokenExpiry { get; set; }
 
     }
 
