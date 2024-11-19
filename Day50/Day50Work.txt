@@ -1,0 +1,5 @@
+npm i pinia
+
+
+const pinia=createpinia()
+createApp(app).use(pinia).use(router).mount(app)
