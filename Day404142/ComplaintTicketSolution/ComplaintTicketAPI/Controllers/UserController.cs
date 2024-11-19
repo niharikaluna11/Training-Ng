@@ -16,7 +16,7 @@ namespace ComplaintTicketAPI.Controllers
     
     public class UserController : ControllerBase
     {
-
+        //private readonly OtpService _otpService;
         private readonly IUserService _userService;
         private readonly ILogger<User> _logger;
 
