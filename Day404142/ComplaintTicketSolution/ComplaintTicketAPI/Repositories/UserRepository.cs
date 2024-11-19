@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTicketAPI.Repositories
 {
-    public class UserRepository : IRepository<string, User>
+    public class UserRepository : IUserRepository
     {
         private readonly ComplaintTicketContext _context;
 
@@ -17,6 +17,23 @@ namespace ComplaintTicketAPI.Repositories
             _context = context;
         }
 
+
+        public async Task UpdateUser(User user)
+        {
+            _context.Users.Update(user);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<User?> GetUserByResetToken(string token)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.ResetToken == token);
+        }
+
+        public async Task<User> GetByUsernameOrEmail(string UsernameorEmail)
+        {
+            return await _context.Users
+                .FirstOrDefaultAsync(u => u.Username == UsernameorEmail || u.Email == UsernameorEmail);
+        }
         public async Task<User> Add(User entity)
         {
             if (await UserExists(entity.Username))
@@ -118,6 +135,7 @@ namespace ComplaintTicketAPI.Repositories
                 throw new Exception("An unexpected error occurred while updating the user.", ex);
             }
         }
+        
 
         private async Task<bool> UserExists(string username)
         {
