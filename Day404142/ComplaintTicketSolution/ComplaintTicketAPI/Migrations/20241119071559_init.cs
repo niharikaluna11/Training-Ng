@@ -45,6 +45,7 @@ namespace ComplaintTicketAPI.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     HashKey = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Roles = table.Column<string>(type: "nvarchar(max)", nullable: false)

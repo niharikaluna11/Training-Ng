@@ -161,6 +161,54 @@
     ]
   },
   {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ForgotPasswordController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/ForgotPassword/reset-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "resetRequest",
+        "Type": "ComplaintTicketAPI.Models.DTO.ForgotPasswordDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ForgotPasswordController",
+    "Method": "SendPasswordResetLink",
+    "RelativePath": "api/ForgotPassword/send-reset-link",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "UsernameorEmail",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ForgotPasswordController",
+    "Method": "VerifyResetOtp",
+    "RelativePath": "api/ForgotPassword/verify-otp",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "otp",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ComplaintTicketAPI.Controllers.OrganizationController",
     "Method": "GetAvailablePriorityLevels",
     "RelativePath": "api/Organization/Complaints/AvailablePriorities",

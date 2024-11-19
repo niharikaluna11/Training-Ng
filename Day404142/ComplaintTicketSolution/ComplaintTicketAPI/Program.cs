@@ -45,35 +45,26 @@ namespace ComplaintTicketAPI
 
 
             #region Repositories
-            
-           
-
             builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
             builder.Services.AddScoped<IComplaintFileRepository, ComplaintFileRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintCategory>, ComplaintCategoryRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintStatus>, ComplaintStatusRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintStatusDate>, ComplaintStatusDateRepository>();
-            // builder.Services.AddScoped<IEmailSender, EmailConfiguration>();
-
             builder.Services.AddScoped<IRepository<int, UserProfile>, UserProfileRepository>();
-            builder.Services.AddScoped<IRepository<string, User>, UserRepository>();
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IRepository<int, Organization>, OrganizationRepository>();
             #endregion
 
             #region Services  
-            
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IComplaintCategoryService, ComplaintCategoryService>();
             builder.Services.AddScoped<IComplaintService, ComplaintService>();
-            
+            builder.Services.AddScoped<IForgotPasswordService, ForgotPasswordService>();
             builder.Services.AddScoped<IEmailSender, EmailSender>();
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
             builder.Services.AddScoped<IOrganizationProfileService, OrganizationProfileService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
-
-
-            // Register UpdateComplaintService
             builder.Services.AddScoped<IUpdateComplaintService, UpdateComplaintService>();
             #endregion
             var emailConfig = builder.Configuration
