@@ -1,15 +1,16 @@
 // src/router.js
 import { createRouter, createWebHistory } from "vue-router";
-import HelloWorld from "@/components/HelloWorld.vue";
+import HomePage from "@/components/HomePage.vue";
 import LoginComponent from "@/components/Login/LoginComponent.vue";
 import RegisterComponent from "@/components/Login/RegisterComponent.vue";
 import GetAllComplaintComponent from "./components/Complaint/GetAllComplaintComponent.vue";
 
 const routes = [
-    { path: '/', component: HelloWorld },
-    { path: '/login', component: LoginComponent },
-    {path:'/register' , component:RegisterComponent},
-    {path:'/complaint' , component:GetAllComplaintComponent}
+    { path: '/', component: HomePage },
+    { path: '/HomePage', component: HomePage },
+    { path: '/Login', component: LoginComponent },
+    {path:'/Register' , component:RegisterComponent},
+    {path:'/Complaint' , component:GetAllComplaintComponent}
     
 ];
 
