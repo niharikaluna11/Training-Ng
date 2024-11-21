@@ -1,10 +1,5 @@
 <template>
 
-
-
-
-
-
   <div class="login-page">
     <header class="header">
       <div class="logo">
@@ -17,18 +12,10 @@
           </router-link></a>
       </nav>
     </header>
-
-
-
-
-
     <main class="main-content">
       <div class="graphic">
         <img src="@/Images/loginPage.jpg" alt="Login Page Illustration" />
       </div>
-
-
-
       <section class="hero">
         <h1 class="welcome-message">Welcome Back!</h1>
 
@@ -63,10 +50,10 @@
 </template>
 
 
-
-
-
 <script>
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 import { login } from '@/scripts/LoginService';
 
 export default {
@@ -75,6 +62,39 @@ export default {
     return {
       username: '',
       password: '',
+      login: async () => {
+        event.preventDefault();
+        console.log(this.username, this.password)
+        const data = await login(this.username, this.password);
+        console.log(data);
+        if (data.status == 200) {
+          this.username = '';
+          this.password = '';
+          sessionStorage.setItem("token", data.data.data.token);
+
+          toast.success(
+            `${data.data.data.username} is logged in`,
+            {
+              rtl: true,
+              limit: 2,
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+
+        }
+        else {
+          console.log(data);
+          // alert("Login failed: " + data.response.data.errorMessage);
+          toast.error(
+            `${data.response.data.errorMessage}`,
+            {
+              rtl: true,
+              limit: 2,
+              position: toast.POSITION.TOP_RIGHT,
+            },
+          );
+        }
+      }
     };
   },
   computed: {
@@ -83,24 +103,8 @@ export default {
     },
   },
   methods: {
-  login(event) {
-    event.preventDefault();
-    login(this.username, this.password)
-      .then((response) => {
-        console.log(response);
-        if (response.data.success === true) {  
-          sessionStorage.setItem("token", response.data.data.token);
-          alert(`${response.data.data.username} is logged in`);
-        } else {
-          alert("Login failed: " + response.data.message);
-        }
-      })
-      .catch((error) => {
-        console.error("Error during login:", error);
-        alert("Authentication Failed.");
-      });
+
   },
-},
 };
 </script>
 
