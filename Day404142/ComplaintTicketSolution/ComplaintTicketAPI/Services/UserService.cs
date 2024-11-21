@@ -5,6 +5,7 @@ using ComplaintTicketAPI.EmailModel;
 using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
+using ComplaintTicketAPI.Validations;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
@@ -90,6 +91,7 @@ namespace ComplaintTicketAPI.Services
                     Username = user.Username,
                     Email = user.Email,
                     Id = user.Id,
+                    Role=user.Roles.ToString(),
                     Token = await _tokenService.GenerateToken(new UserTokenDTO
                     {
                         Username = user.Username,
@@ -144,6 +146,25 @@ namespace ComplaintTicketAPI.Services
         {
             try
             {
+                // Validate username explicitly using UsernameValidator
+                var usernameValidator = new UsernameValidator(_userRepo);
+                var usernameValidationResult = await usernameValidator.ValidateAsync(registerUser.Username);
+
+                if (!usernameValidationResult.Success)
+                {
+                    return usernameValidationResult; // Return validation error directly
+                }
+
+                var emailValidator = new EmailValidator(_userRepo);
+                var emailValidationResult = await emailValidator.ValidateAsync(registerUser.Email);
+
+                if (!emailValidationResult.Success)
+                {
+                    return emailValidationResult; // Return validation error directly
+                }
+
+
+                // Generate password hash and hash key
                 using var hmac = new HMACSHA256();
                 byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password));
 
@@ -156,16 +177,20 @@ namespace ComplaintTicketAPI.Services
                     Roles = registerUser.Role
                 };
 
+                // Add the user to the repository
                 var addedUser = await _userRepo.Add(user);
+
                 if (addedUser != null)
                 {
-                    // Send email and create profile/organization asynchronously
+                    // Attempt to send a confirmation email
                     try
                     {
-                        string body = GenerateEmailBody(addedUser.Roles.ToString(),
+                        string body = GenerateEmailBody(
+                            addedUser.Roles.ToString(),
                             registerUser.FName,
                             registerUser.LName,
-                            registerUser.Username);
+                            registerUser.Username
+                        );
                         string email = registerUser.Email;
                         SendMail("Your Account Has Been Created", email, body);
                     }
@@ -174,11 +199,12 @@ namespace ComplaintTicketAPI.Services
                         return new ErrorResponseDTO
                         {
                             Success = false,
-                            ErrorMessage = $"An unexpected error occurred during registration. Failed to send email: {emailEx.Message}",
-                            ErrorCode = 500
+                            ErrorMessage = $"Registration successful, but email could not be sent: {emailEx.Message}",
+                            ErrorCode = 500 // Internal Server Error
                         };
                     }
 
+                    // Attempt to create a profile or organization
                     try
                     {
                         await CreateProfileOrOrganizationAsync(addedUser, registerUser);
@@ -188,14 +214,21 @@ namespace ComplaintTicketAPI.Services
                         return new ErrorResponseDTO
                         {
                             Success = false,
-                            ErrorMessage = $"An unexpected error occurred while creating profile: {profileEx.Message}",
-                            ErrorCode = 500
+                            ErrorMessage = $"Registration successful, but profile creation failed: {profileEx.Message}",
+                            ErrorCode = 500 // Internal Server Error
                         };
                     }
 
-                    return RegisterUser(registerUser.Username, registerUser.Role.ToString(), registerUser.Email, user.Id);
+                    // Return success response
+                    return RegisterUser(
+                        registerUser.Username,
+                        registerUser.Role.ToString(),
+                        registerUser.Email,
+                        addedUser.Id
+                    );
                 }
 
+                // If the user was not added successfully, return an error
                 return new ErrorResponseDTO
                 {
                     Success = false,
@@ -205,9 +238,7 @@ namespace ComplaintTicketAPI.Services
             }
             catch (Exception ex)
             {
-                // Log the exception (consider using a logging library like Serilog, NLog, etc.)
-                // Logger.LogError(ex, "Registration failed.");
-
+                // Handle unexpected errors
                 return new ErrorResponseDTO
                 {
                     Success = false,
@@ -216,6 +247,7 @@ namespace ComplaintTicketAPI.Services
                 };
             }
         }
+
 
 
 

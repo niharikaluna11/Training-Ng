@@ -6,6 +6,7 @@ using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
 using ComplaintTicketAPI.Repositories;
+using ComplaintTicketAPI.Validations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
 
@@ -97,6 +98,15 @@ namespace ComplaintTicketAPI.Services
             try
             {
                 var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
+
+                var phoneValidator = new PhoneValidator();
+                var phoneValidationResult = await phoneValidator.ValidateAsync(updateDto.Phone);
+
+                if (!phoneValidationResult.Success)
+                {
+                    throw new Exception("invalid phone number");
+                    // return phoneValidationResult; // Return validation error directly
+                }
                 if (profile != null)
                 {
 

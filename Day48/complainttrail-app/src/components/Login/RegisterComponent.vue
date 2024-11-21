@@ -19,7 +19,7 @@
       </div>
 
       <section class="hero">
-        <h1>Get Started!</h1>
+        <h1 style="font-size: 3em; color: #9484c4;">Get Started!</h1>
         <div class="form-group name-group">
           <div class="input-container">
             <input v-model="fname" type="text" placeholder="First Name" required class="input-field" />
@@ -42,7 +42,7 @@
         </div>
 
         <div class="form-group">
-          <input v-model="date" type="datetime-local" class="input-field" />
+          <input v-model="date" type="date" class="input-field" id="date" />
         </div>
 
         <div class="form-group role-group">
@@ -65,8 +65,8 @@
 
         <div class="button-group">
           <button :disabled="!isFormValid" @click="Register" class="login-button">Sign Up</button>
-          <button class="login-button" >
-            <router-link to="login" >Sign In</router-link>
+          <button class="login-button">
+            <router-link to="login">Sign In</router-link>
           </button>
         </div>
       </section>
@@ -78,9 +78,10 @@
 </template>
 
 
-
 <script>
 import { Register } from "@/scripts/RegisterService";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   name: "RegisterComponent",
@@ -111,27 +112,66 @@ export default {
     }
   },
   methods: {
-    Register(event) {
-      event.preventDefault();
-      Register(
-        this.fname,
-        this.lname,
-        this.username,
-        this.password,
-        this.email,
-        this.date,
-        this.role,
-        this.organizationType
-      )
-        .then((response) => {
-          alert(response.data.username + " is registered");
-        })
-        .catch((err) => {
-          console.log(err);
-          alert(err.response);
-        });
+    async Register(event) {
+      event.preventDefault();  // Prevent default form submission
+
+      const newdate = new Date(this.date).toISOString();  // Format date correctly
+
+      try {
+        const response = await Register(
+          this.fname,
+          this.lname,
+          this.username,
+          this.password,
+          this.email,
+          newdate,
+          this.role,
+          this.organizationType
+        );
+
+        // Handle successful registration
+        if (response.status === 200) {
+          this.fname = "",
+            this.lname = "",
+            this.username = "",
+            this.password = "",
+            this.email = "",
+            this.role = "",
+            this.organizationType = "",
+            toast.success(
+              `${response.data.data.username} is registered `,
+              {
+                rtl: true,
+                limit: 2,
+                position: toast.POSITION.TOP_CENTER,
+              }
+            );
+        } else {
+
+          toast.error(
+            `${response.data.response.data.errorMessage || "An unexpected error occurred during registration."}`,
+            {
+              rtl: true,
+              limit: 2,
+              position: toast.POSITION.TOP_RIGHT,
+            }
+          );
+        }
+      } catch (err) {
+        // Handle any unexpected errors
+        console.error('Registration error:', err);
+        toast.error(
+          `Registration failed: ${err.response.data.errorMessage || "An unexpected error occurred."}`,
+          {
+            rtl: true,
+            limit: 2,
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+      }
     },
     checkRole() {
+      // Check if the role is not equal to 2, reset organizationType
       if (this.role !== 2) {
         this.organizationType = "";
       }
@@ -139,7 +179,6 @@ export default {
   }
 };
 </script>
-
 
 
 <style scoped>
@@ -219,6 +258,7 @@ body {
   font-size: 2.5rem;
   margin-bottom: 20px;
 }
+
 /* General Form Group */
 .form-group {
   margin-bottom: 15px;
@@ -242,7 +282,8 @@ body {
 /* First Name and Last Name in One Line */
 .name-group {
   display: flex;
-  gap: 15px; /* Space between First Name and Last Name */
+  gap: 15px;
+  /* Space between First Name and Last Name */
 }
 
 .input-container {
@@ -252,7 +293,8 @@ body {
 /* Role and Organization Select in One Line */
 .role-group {
   display: flex;
-  gap: 15px; /* Space between Role and Organization Type */
+  gap: 15px;
+  /* Space between Role and Organization Type */
 }
 
 /* Button Group (half width, in one line) */
@@ -263,7 +305,8 @@ body {
 }
 
 .login-button {
-  width: 60%; /* Button takes up almost half of the width */
+  width: 60%;
+  /* Button takes up almost half of the width */
   padding: 12px;
   background-color: #9484c4;
   color: white;

@@ -1,46 +1,65 @@
 ﻿using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Models.DTO;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace ComplaintTicketAPI.Validations
 {
-    public class EmailValidator : ValidationAttribute
+    public class EmailValidator : ICustomValidator
     {
-        // Regular expression pattern for validating email format
         private const string EmailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$";
+        private readonly IUserRepository _userRepository;
 
-        public EmailValidator() : base("Invalid email format.")
+        public EmailValidator(IUserRepository userRepository)
         {
+            _userRepository = userRepository ?? throw new ArgumentNullException(nameof(userRepository));
         }
 
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        public async Task<BaseResponseDTO> ValidateAsync(object value)
         {
-            // If the value is null or empty, skip the validation
-            if (string.IsNullOrEmpty(value?.ToString()))
+            var email = value?.ToString();
+
+            // Check if email is empty or null
+            if (string.IsNullOrEmpty(email))
             {
-                return ValidationResult.Success;
+                return new ErrorResponseDTO
+                {
+                    Success = false,
+                    ErrorMessage = "Email cannot be empty.",
+                    ErrorCode = 400 // Bad Request
+                };
             }
 
-            // Validate the email format using the regular expression
-            var email = value.ToString();
+            // Validate email format using Regex
             if (!Regex.IsMatch(email, EmailPattern))
             {
-                return new ValidationResult("The email address is not in a valid format.");
-            }
-            var userRepository = (IUserRepository?)validationContext.GetService(typeof(IUserRepository));
-            if (userRepository == null)
-            {
-                throw new InvalidOperationException("IUserRepository could not be resolved. Ensure it is registered in the DI container.");
-            }
-            var isUsernameTaken = userRepository.EmailExists(email).Result; // Avoid .Result in production; use async alternatives.
-            if (isUsernameTaken)
-            {
-                return new ValidationResult("Email already Exist .Please Login.");
+                return new ErrorResponseDTO
+                {
+                    Success = false,
+                    ErrorMessage = "The email address is not in a valid format.",
+                    ErrorCode = 400 // Bad Request
+                };
             }
 
+            // Check if the email already exists in the repository
+            var emailExists = await _userRepository.EmailExists(email);
+            if (emailExists)
+            {
+                return new ErrorResponseDTO
+                {
+                    Success = false,
+                    ErrorMessage = "The email already exists. Please login.",
+                    ErrorCode = 409 // Conflict
+                };
+            }
 
-            // If email is valid
-            return ValidationResult.Success;
+            // Return success if all validations pass
+            return new BaseResponseDTO
+            {
+                Success = true,
+                Message = "Email validation passed."
+            };
         }
-        }
+    }
 }

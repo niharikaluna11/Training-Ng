@@ -14,8 +14,7 @@ namespace ComplaintTicketAPI.Models.DTO
         public string LName { get; set; }
 
         [Required(ErrorMessage = "Username is required")]
-
-        [UsernameValidator]
+       
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
@@ -23,8 +22,8 @@ namespace ComplaintTicketAPI.Models.DTO
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
-
-        [EmailValidator]
+        
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
         public string Email { get; set; }
         public DateTime DateOfBirth { get; set; }
 

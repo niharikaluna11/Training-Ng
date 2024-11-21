@@ -1,3 +1,104 @@
+<script>
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+import { login } from '@/scripts/LoginService';
+import { jwtDecode } from 'jwt-decode';
+
+
+
+export default {
+  name: 'LoginComponent',
+  data() {
+    return {
+      username: '',
+      password: '',
+      login: async () => {
+        event.preventDefault();
+        console.log(this.username, this.password)
+        const data = await login(this.username, this.password);
+        console.log(data);
+        if (data.status == 200) {
+          this.username = '';
+          this.password = '';
+
+          // Store the token in sessionStorage
+          sessionStorage.setItem("token", data.data.data.token);
+
+          // Retrieve the token from sessionStorage
+          const token = sessionStorage.getItem("token");
+          toast.success(
+            `${data.data.data.username} is logged in`,
+            {
+              rtl: true,
+              limit: 2,
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+
+          if (token) {
+            try {
+              // Decode the token
+              const decode = jwtDecode(token);
+              console.log("Decoded Token:", decode);
+
+              // Validate the token expiration
+              const currentTime = Math.floor(Date.now() / 1000); // Current time in seconds
+              if (decode.exp && decode.exp < currentTime) {
+                console.error('Token has expired');
+                sessionStorage.removeItem('token');
+                this.$router.push('/login'); // Redirect to login
+              } else {
+                // Check the user's role
+                if (decode.role === 'Admin') {
+                  console.log('Welcome, ABHI K LIE USER BUT ADMIN!');
+                  this.$router.push('/UserDashboard'); // Redirect Admin users
+                } else if (decode.role === 'User') {
+                  console.log('Welcome, User!');
+                  this.$router.push('/UserDashboard'); // Redirect regular users
+                }
+                else {
+                  console.log('Welcome, ABHI K LIE USER BUT ORG!');
+                  this.$router.push('/UserDashboard'); // Redirect regular users
+                }
+              }
+            } catch (error) {
+              console.error("Error decoding token:", error);
+            }
+          } else {
+            console.error("No token found in sessionStorage");
+          }
+
+
+
+
+        }
+        else {
+          console.log(data);
+          // alert("Login failed: " + data.response.data.errorMessage);
+          toast.error(
+            `${data.response.data.errorMessage}`,
+            {
+              rtl: true,
+              limit: 2,
+              position: toast.POSITION.TOP_RIGHT,
+            },
+          );
+        }
+      }
+    };
+  },
+  computed: {
+    isFormValid() {
+      return this.username.trim() !== "" && this.password.trim() !== "";
+    },
+  },
+  methods: {
+
+  },
+};
+</script>
+
 <template>
 
   <div class="login-page">
@@ -17,7 +118,7 @@
         <img src="@/Images/loginPage.jpg" alt="Login Page Illustration" />
       </div>
       <section class="hero">
-        <h1 class="welcome-message">Welcome Back!</h1>
+        <h1 class="welcome-message" style="font-size: 3em; color: #9484c4;">Welcome Back!</h1>
 
         <div class="form-group">
           <input v-model="username" type="text" placeholder="Username or Email Address" required class="input-field" />
@@ -50,63 +151,6 @@
 </template>
 
 
-<script>
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-
-import { login } from '@/scripts/LoginService';
-
-export default {
-  name: 'LoginComponent',
-  data() {
-    return {
-      username: '',
-      password: '',
-      login: async () => {
-        event.preventDefault();
-        console.log(this.username, this.password)
-        const data = await login(this.username, this.password);
-        console.log(data);
-        if (data.status == 200) {
-          this.username = '';
-          this.password = '';
-          sessionStorage.setItem("token", data.data.data.token);
-
-          toast.success(
-            `${data.data.data.username} is logged in`,
-            {
-              rtl: true,
-              limit: 2,
-              position: toast.POSITION.TOP_CENTER,
-            }
-          );
-
-        }
-        else {
-          console.log(data);
-          // alert("Login failed: " + data.response.data.errorMessage);
-          toast.error(
-            `${data.response.data.errorMessage}`,
-            {
-              rtl: true,
-              limit: 2,
-              position: toast.POSITION.TOP_RIGHT,
-            },
-          );
-        }
-      }
-    };
-  },
-  computed: {
-    isFormValid() {
-      return this.username.trim() !== "" && this.password.trim() !== "";
-    },
-  },
-  methods: {
-
-  },
-};
-</script>
 
 
 

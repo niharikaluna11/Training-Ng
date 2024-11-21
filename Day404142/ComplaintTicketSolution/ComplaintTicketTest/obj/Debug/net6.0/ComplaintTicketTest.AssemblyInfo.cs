@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ComplaintTicketTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e273cc4aaf0f31e12f70acc53492bc7a2a36be2f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+daaa91fac11c2997338ebf237d145fe8188fa650")]
 [assembly: System.Reflection.AssemblyProductAttribute("ComplaintTicketTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ComplaintTicketTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

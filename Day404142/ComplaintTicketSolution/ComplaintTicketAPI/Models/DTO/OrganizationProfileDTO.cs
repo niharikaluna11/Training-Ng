@@ -20,13 +20,11 @@ namespace ComplaintTicketAPI.Models.DTO
         public string Address { get; set; }
 
         [Required(ErrorMessage = "Phone Number is required")]
-
-        [PhoneValidator]
         public string Phone { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
 
-        [EmailValidator]
+      //  [EmailValidator]
         public string Email { get; set; }
     }
 }
