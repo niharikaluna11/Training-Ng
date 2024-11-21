@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using ComplaintTicketAPI.Interfaces;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace ComplaintTicketAPI.Validations
@@ -26,6 +27,17 @@ namespace ComplaintTicketAPI.Validations
             {
                 return new ValidationResult("The email address is not in a valid format.");
             }
+            var userRepository = (IUserRepository?)validationContext.GetService(typeof(IUserRepository));
+            if (userRepository == null)
+            {
+                throw new InvalidOperationException("IUserRepository could not be resolved. Ensure it is registered in the DI container.");
+            }
+            var isUsernameTaken = userRepository.EmailExists(email).Result; // Avoid .Result in production; use async alternatives.
+            if (isUsernameTaken)
+            {
+                return new ValidationResult("Email already Exist .Please Login.");
+            }
+
 
             // If email is valid
             return ValidationResult.Success;

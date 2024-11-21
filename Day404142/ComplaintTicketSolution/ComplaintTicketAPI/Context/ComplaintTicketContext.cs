@@ -100,6 +100,15 @@ namespace ComplaintTicketAPI.Context
             modelBuilder.Entity<Organization>()
                 .Property(o => o.Types)
                 .HasConversion<string>();
+
+
+            modelBuilder.Entity<User>()
+              .HasIndex(u => u.Username)
+              .IsUnique();
+
+            modelBuilder.Entity<User>()
+              .HasIndex(u => u.Email)
+              .IsUnique();
         }
     }
 }

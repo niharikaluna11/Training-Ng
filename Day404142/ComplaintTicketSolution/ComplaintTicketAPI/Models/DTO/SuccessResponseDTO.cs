@@ -1,6 +1,6 @@
 ﻿namespace ComplaintTicketAPI.Models.DTO
 {
-    public class SuccessResponseDTO<T>
+    public class SuccessResponseDTO<T> : BaseResponseDTO
     {
         
         public bool Success { get; set; }

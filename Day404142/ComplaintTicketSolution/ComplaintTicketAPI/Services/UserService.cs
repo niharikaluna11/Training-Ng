@@ -1,17 +1,13 @@
-﻿using ComplaintTicketAPI.Interfaces;
-using ComplaintTicketAPI.Models.DTO;
-using ComplaintTicketAPI.Models;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
 using ComplaintTicketAPI.Context;
 using ComplaintTicketAPI.EmailInterface;
 using ComplaintTicketAPI.EmailModel;
-using Org.BouncyCastle.Security;
-using System.Data;
+using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Models;
+using ComplaintTicketAPI.Models.DTO;
+using Microsoft.EntityFrameworkCore;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace ComplaintTicketAPI.Services
 {
@@ -48,7 +44,7 @@ namespace ComplaintTicketAPI.Services
         }
 
 
-        private void SendMail(string title,string email, string body)
+        private void SendMail(string title, string email, string body)
         {
             var rng = new Random();
             var message = new Message(new string[] {
@@ -58,19 +54,35 @@ namespace ComplaintTicketAPI.Services
             _emailSender.SendEmail(message);
         }
 
-        public async Task<SuccessResponseDTO<LoginResponseDTO>> Authenticate(LoginRequestDTO loginUser)
+        public async Task<BaseResponseDTO> Authenticate(LoginRequestDTO loginUser)
         {
             try
             {
                 // Fetch the user by username or email
                 var user = await _userRepo.GetByUsernameOrEmail(loginUser.UsernameOrEmail);
-                if (user == null) throw new Exception("User not found");
+                if (user == null)
+                {
+                    return new ErrorResponseDTO
+                    {
+                        Success = false,
+                        ErrorMessage = " User not Found ",
+                        ErrorCode = 401 // Example error code, replace with appropriate one
+                    };
+                }
 
                 // Verify the password using the stored hash key
                 using var hmac = new HMACSHA256(user.HashKey);
                 byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(loginUser.Password));
                 if (!passwordHash.SequenceEqual(user.Password))
-                    throw new Exception("Invalid username/email or password");
+                {
+                    return new ErrorResponseDTO
+                    {
+                        Success = false,
+                        ErrorMessage = "The password is incorrect. Please try again",
+                        ErrorCode = 401
+                    };
+                }
+
 
 
                 var userDetails = new LoginResponseDTO
@@ -93,15 +105,22 @@ namespace ComplaintTicketAPI.Services
                     Data = userDetails
                 };
             }
+
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error during authentication for user: {Login}", loginUser.UsernameOrEmail );
-                throw new Exception("Authentication failed");
+                // _logger.LogError(ex, "Error during authentication for user: {Login}", user.UsernameOrEmail);
+
+                return new ErrorResponseDTO
+                {
+                    Success = false,
+                    ErrorMessage = "An unexpected error occurred during authentication.",
+                    ErrorCode = 500
+                };
             }
         }
 
 
-        public SuccessResponseDTO<LoginResponseDTO> RegisterUser(string username, string role, string email,int id)
+        public SuccessResponseDTO<LoginResponseDTO> RegisterUser(string username, string role, string email, int id)
         {
             // Create a DTO instance with user details
             var userDetails = new LoginResponseDTO
@@ -109,7 +128,7 @@ namespace ComplaintTicketAPI.Services
                 Username = username,
                 Role = role,
                 Email = email,
-                Id=id
+                Id = id
             };
 
             // Return a success response with the DTO
@@ -121,67 +140,84 @@ namespace ComplaintTicketAPI.Services
             };
         }
 
-
-        public async Task<SuccessResponseDTO<LoginResponseDTO>> Register(RegisterUserDto registerUser)
+        public async Task<BaseResponseDTO> Register(RegisterUserDto registerUser)
         {
-            using var hmac = new HMACSHA256();
-            byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password));
-
-            var user = new User
-            {
-                Username = registerUser.Username,
-                Email=registerUser.Email,
-                Password = passwordHash,
-                HashKey = hmac.Key,
-                Roles = registerUser.Role
-            };
-
             try
             {
+                using var hmac = new HMACSHA256();
+                byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password));
+
+                var user = new User
+                {
+                    Username = registerUser.Username,
+                    Email = registerUser.Email,
+                    Password = passwordHash,
+                    HashKey = hmac.Key,
+                    Roles = registerUser.Role
+                };
+
                 var addedUser = await _userRepo.Add(user);
                 if (addedUser != null)
                 {
-
+                    // Send email and create profile/organization asynchronously
                     try
                     {
                         string body = GenerateEmailBody(addedUser.Roles.ToString(),
                             registerUser.FName,
                             registerUser.LName,
-                            registerUser.Username
-                            );
-
+                            registerUser.Username);
                         string email = registerUser.Email;
                         SendMail("Your Account Has Been Created", email, body);
-
                     }
-                    catch { throw new Exception("Mail Cannot be send Becuase of Invalid Mail"); }
-                    
+                    catch (Exception emailEx)
+                    {
+                        return new ErrorResponseDTO
+                        {
+                            Success = false,
+                            ErrorMessage = $"An unexpected error occurred during registration. Failed to send email: {emailEx.Message}",
+                            ErrorCode = 500
+                        };
+                    }
+
                     try
                     {
                         await CreateProfileOrOrganizationAsync(addedUser, registerUser);
-
                     }
-                    catch(Exception ex)
+                    catch (Exception profileEx)
                     {
-                        throw new Exception("Cannot create profile for user");
+                        return new ErrorResponseDTO
+                        {
+                            Success = false,
+                            ErrorMessage = $"An unexpected error occurred while creating profile: {profileEx.Message}",
+                            ErrorCode = 500
+                        };
                     }
 
-                    var response = RegisterUser(registerUser.FName, registerUser.Role.ToString(), registerUser.Email,user.Id);
-
-
-                    return response;
+                    return RegisterUser(registerUser.Username, registerUser.Role.ToString(), registerUser.Email, user.Id);
                 }
 
-                throw new Exception("User could not be added");
-
-
+                return new ErrorResponseDTO
+                {
+                    Success = false,
+                    ErrorMessage = "User could not be added due to validation errors or other issues.",
+                    ErrorCode = 400 // Bad Request
+                };
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error during user registration for user: {Username}", registerUser.Username);
-                throw new Exception("Registration failed");
+                // Log the exception (consider using a logging library like Serilog, NLog, etc.)
+                // Logger.LogError(ex, "Registration failed.");
+
+                return new ErrorResponseDTO
+                {
+                    Success = false,
+                    ErrorMessage = $"Registration failed due to an unexpected error: {ex.Message}",
+                    ErrorCode = 500 // Internal Server Error
+                };
             }
         }
+
+
 
         private string GenerateEmailBody(string role, string firstName, string lastName, string username)
         {
@@ -219,30 +255,30 @@ namespace ComplaintTicketAPI.Services
                 font-weight: bold;
             }}
         </style>
-    </head>
-    <body>
-        <div class='header'>
-            Welcome to TicketSolve
-        </div>
+        </head>
+        <body>
+            <div class='header'>
+                Welcome to TicketSolve
+            </div>
 
-        <p>Dear <strong>{firstName} {lastName}</strong>,</p>
+            <p>Dear <strong>{firstName} {lastName}</strong>,</p>
 
-        <p>We are pleased to inform you that your account has been successfully created.</p>
-        <p>Below are your login credentials for accessing our service:</p>
+            <p>We are pleased to inform you that your account has been successfully created.</p>
+            <p>Below are your login credentials for accessing our service:</p>
 
-        <div class='credentials'>
-            <p><strong>Username:</strong> {username}</p>
-            <p><strong>Role:</strong> {role}</p>    
-        </div>
+            <div class='credentials'>
+                <p><strong>Username:</strong> {username}</p>
+                <p><strong>Role:</strong> {role}</p>    
+            </div>
 
-        <p class='content'>Should you have any questions or require assistance, please feel free to contact our support team.</p>
+            <p class='content'>Should you have any questions or require assistance, please feel free to contact our support team.</p>
 
-        <p class='footer'>
-            Best regards,<br/>
-            <span class='signature'>TicketSolve Team</span>
-        </p>
-    </body>
-    </html>";
+            <p class='footer'>
+                Best regards,<br/>
+                <span class='signature'>TicketSolve Team</span>
+            </p>
+        </body>
+        </html>";
         }
 
 
@@ -307,7 +343,7 @@ namespace ComplaintTicketAPI.Services
                     Email = registerUser.Email,
                     Phone = string.Empty,
                     Address = string.Empty,
-                    Types = registerUser.Types ?? Models.Type.Company  
+                    Types = registerUser.Types ?? Models.Type.Company
 
                 };
                 await _organizationRepo.Add(organization);
@@ -327,11 +363,11 @@ namespace ComplaintTicketAPI.Services
                 var users = await _context.Users.ToListAsync();
                 return _mapper.Map<IEnumerable<UserDTO>>(users);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw new Exception("Failed to Get Users");
             }
-            
+
         }
     }
 }

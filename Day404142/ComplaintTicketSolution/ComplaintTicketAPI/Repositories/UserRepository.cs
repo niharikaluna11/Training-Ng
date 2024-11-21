@@ -137,17 +137,36 @@ namespace ComplaintTicketAPI.Repositories
         }
         
 
-        private async Task<bool> UserExists(string username)
+        public async Task<bool> UserExists(string username)
         {
+           
             try
             {
                 return await _context.Users.AnyAsync(u => u.Username == username);
             }
             catch (Exception ex)
             {
-                return false;
+                // Log the exception
+                throw new Exception("An error occurred while checking username uniqueness.", ex);
             }
 
         }
+
+        public async Task<bool> EmailExists(string email)
+        {
+
+            try
+            {
+                return await _context.Users.AnyAsync(u => u.Email == email);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                throw new Exception("An error occurred while checking email uniquenness", ex);
+            }
+
+        }
+
+
     }
 }

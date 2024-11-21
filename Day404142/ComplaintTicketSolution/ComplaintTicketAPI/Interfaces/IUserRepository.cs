@@ -8,5 +8,11 @@ namespace ComplaintTicketAPI.Interfaces
         Task<User> GetByUsernameOrEmail(string UsernameorEmail);
         Task<User?> GetUserByResetToken(string token);
         Task UpdateUser(User user);
+        Task<bool> UserExists(string username);
+
+        Task<bool> EmailExists(string email);
+
+        
+
     }
 }

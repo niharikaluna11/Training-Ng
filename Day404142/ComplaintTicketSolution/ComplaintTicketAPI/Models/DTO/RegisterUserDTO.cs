@@ -14,7 +14,8 @@ namespace ComplaintTicketAPI.Models.DTO
         public string LName { get; set; }
 
         [Required(ErrorMessage = "Username is required")]
-        [MinLength(2, ErrorMessage = "Username should be at least 2 characters long")]
+
+        [UsernameValidator]
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Password is required")]

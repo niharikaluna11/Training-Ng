@@ -34,33 +34,52 @@ namespace ComplaintTicketAPI.Controllers
        
         public async Task<IActionResult> UserRegistration(RegisterUserDto entity)
         {
-            try
+            
+            var response = await _userService.Register(entity);
+            if (response is ErrorResponseDTO errorResponse)
             {
-                var newUser = await _userService.Register(entity);
-                return Ok(newUser);
+                return StatusCode(errorResponse.ErrorCode, errorResponse);
             }
-            catch (Exception ex)
+
+            if (response is SuccessResponseDTO<LoginResponseDTO> successResponse)
             {
-                _logger.LogError(ex, "An error occurred during user registration.");
-                return StatusCode(StatusCodes.Status500InternalServerError, "Cannot Register User.");
+                return Ok(successResponse);
             }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDTO
+            {
+                Success = false,
+                ErrorMessage = "An unexpected error occurred.",
+                ErrorCode = 500
+            });
         }
 
+    
+
         [HttpPost("LoginOFUser")]
-        
         public async Task<IActionResult> LoginUser(LoginRequestDTO entity)
         {
-            try
+            var response = await _userService.Authenticate(entity);
+
+            if (response is ErrorResponseDTO errorResponse)
             {
-                var newUser = await _userService.Authenticate(entity);
-                return Ok(newUser);
+                return StatusCode(errorResponse.ErrorCode, errorResponse);
             }
-            catch (Exception ex)
+
+            if (response is SuccessResponseDTO<LoginResponseDTO> successResponse)
             {
-                _logger.LogError(ex.Message);
-                return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
+                return Ok(successResponse);
             }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDTO
+            {
+                Success = false,
+                ErrorMessage = "An unexpected error occurred.",
+                ErrorCode = 500
+            });
         }
+
+
 
     }
 }

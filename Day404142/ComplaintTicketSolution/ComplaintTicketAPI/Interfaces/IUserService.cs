@@ -5,8 +5,8 @@ namespace ComplaintTicketAPI.Interfaces
 {
     public interface IUserService
     {
-        Task<SuccessResponseDTO<LoginResponseDTO>> Authenticate(LoginRequestDTO loginUser);
+        Task<BaseResponseDTO> Authenticate(LoginRequestDTO loginUser);
         Task<IEnumerable<UserDTO>> GetAllUsersAsync();
-        Task<SuccessResponseDTO<LoginResponseDTO>> Register(RegisterUserDto registerUser);
+        Task<BaseResponseDTO> Register(RegisterUserDto registerUser);
     }
 }
