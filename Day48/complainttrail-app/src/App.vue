@@ -20,6 +20,7 @@ export default {
 
 :root {
   --c-text-primary: #282a32;
+  --c-text-light: #ddd9ee;
   --c-text-secondary: #686b87;
   --c-text-action: #404089;
   --c-accent-primary: #434ce8;
@@ -33,6 +34,7 @@ export default {
 body {
   line-height: 1.5;
   min-height: 100vh;
+  margin: 0px;
   font-family: "Be Vietnam Pro", sans-serif;
   background-color: var(--c-background-secondary);
   color: var(--c-text-primary);
@@ -54,8 +56,10 @@ body {
   display: flex;
   align-items: center;
   height: 80px;
+  width: 100%;
+  position: fixed;
   border-bottom: 1px solid var(--c-border-primary);
-  background-color: var(--c-background-primary);
+  background-color: var(--c-text-light);
 }
 
 .content-header {
@@ -84,7 +88,7 @@ body {
 .content-header-actions {
   a:first-child {
     @media (min-width: 500px) {
-      display: none;
+      display: contents;
     }
   }
 }
@@ -258,10 +262,18 @@ body {
   height: 44px;
   border-radius: 50%;
   overflow: hidden;
+  background-color: #f0f0f0;
+  /* Optional: Background for fallback */
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .main {
-  padding-top: 3rem;
+  padding-top: 5rem;
 }
 
 .main-header {

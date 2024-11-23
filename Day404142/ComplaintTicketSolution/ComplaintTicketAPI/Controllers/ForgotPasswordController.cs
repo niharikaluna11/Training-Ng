@@ -1,8 +1,7 @@
-﻿using ComplaintTicketAPI.Interfaces;
+﻿using ComplaintTicketAPI.Interfaces.InteraceServices;
 using ComplaintTicketAPI.Models.DTO;
+using ComplaintTicketAPI.Models.DTO.ResponseDTO;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading.Tasks;
 
 namespace ComplaintTicketAPI.Controllers
 {
@@ -20,55 +19,72 @@ namespace ComplaintTicketAPI.Controllers
         [HttpPost("send-reset-link")]
         public async Task<IActionResult> SendPasswordResetLink(string UsernameorEmail)
         {
-            try
+
+            var response = await _forgotPasswordService.SendPasswordResetLink(UsernameorEmail);
+            if (response is ErrorResponseDTO errorResponse)
             {
-                await _forgotPasswordService.SendPasswordResetLink(UsernameorEmail);
-                return Ok(new { Message = "Password reset link with OTP has been sent to your email." });
+                return StatusCode(errorResponse.ErrorCode, errorResponse);
             }
-            catch (ArgumentException ex)
+
+            if (response is BaseResponseDTO successResponse)
             {
-                return BadRequest(new { Error = ex.Message });
+                return Ok(successResponse);
             }
-            catch (Exception ex)
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDTO
             {
-                return StatusCode(500, new { Error = "An error occurred while processing your request.", Details = ex.Message });
-            }
+                Success = false,
+                ErrorMessage = "An unexpected error occurred.",
+                ErrorCode = 500
+            });
         }
 
         [HttpGet("verify-otp")]
         public async Task<IActionResult> VerifyResetOtp(string otp)
         {
-            try
+
+            var response = await _forgotPasswordService.VerifyResetOtp(otp);
+            if (response is ErrorResponseDTO errorResponse)
             {
-                bool isValid = await _forgotPasswordService.VerifyResetOtp(otp);
-                if (!isValid)
-                {
-                    return BadRequest(new { Error = "Invalid or expired OTP." });
-                }
-                return Ok(new { Message = "OTP is valid." });
+                return StatusCode(errorResponse.ErrorCode, errorResponse);
             }
-            catch (Exception ex)
+
+            if (response is BaseResponseDTO successResponse)
             {
-                return StatusCode(500, new { Error = "An error occurred while processing your request.", Details = ex.Message });
+                return Ok(successResponse);
             }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDTO
+            {
+                Success = false,
+                ErrorMessage = "An unexpected error occurred.",
+                ErrorCode = 500
+            });
+
+
         }
 
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ForgotPasswordDto resetRequest)
         {
-            try
+
+            var response = await _forgotPasswordService.ResetPassword(resetRequest.UsernameOrEmail, resetRequest.Otp, resetRequest.NewPassword, resetRequest.ConfirmNewPassword);
+            if (response is ErrorResponseDTO errorResponse)
             {
-                await _forgotPasswordService.ResetPassword(resetRequest.UsernameOrEmail, resetRequest.Otp, resetRequest.NewPassword, resetRequest.ConfirmNewPassword);
-                return Ok(new { Message = "Password has been reset successfully." });
+                return StatusCode(errorResponse.ErrorCode, errorResponse);
             }
-            catch (ArgumentException ex)
+
+            if (response is BaseResponseDTO successResponse)
             {
-                return BadRequest(new { Error = ex.Message });
+                return Ok(successResponse);
             }
-            catch (Exception ex)
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDTO
             {
-                return StatusCode(500, new { Error = "An error occurred while processing your request.", Details = ex.Message });
-            }
+                Success = false,
+                ErrorMessage = "An unexpected error occurred.",
+                ErrorCode = 500
+            });
         }
     }
 

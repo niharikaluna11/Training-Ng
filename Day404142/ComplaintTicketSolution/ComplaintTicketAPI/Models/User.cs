@@ -4,8 +4,13 @@
     {
         Admin =0,
         User =1,
-        Organization=2
+        Organization= 2
     }
+
+    public enum PersonStatus { 
+        Activated=1, Deactivated=2
+    }
+
     public class User
     {
 
@@ -23,9 +28,9 @@
         public ICollection<Complaint> Complaints { get; set; }
             //= new List<Complaint>();
         public Organization? Organization { get;  set; }
+        public bool IsDeleted { get; set; }
 
-                
-        public bool IsOtpVerified { get; set; } = false; // Tracks whether OTP is verified
+        public PersonStatus PStatus { get; set; } = PersonStatus.Activated;
         public string? ResetToken { get; set; }
         public DateTime? TokenExpiry { get; set; }
 

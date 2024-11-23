@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models.DTO;
 using ComplaintTicketAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using ComplaintTicketAPI.Services;
 using Microsoft.AspNetCore.Cors;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
 
 namespace ComplaintTicketAPI.Controllers
 {
@@ -74,22 +74,29 @@ namespace ComplaintTicketAPI.Controllers
             return Ok(organizations);
         }
 
-        // Get a list of all users (Only accessible by Admins)
         [HttpGet("Users/All")]
-        [Authorize(Roles = "Admin")]
+        //[Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _userService.GetAllUsersAsync();
-
-            if (users == null )
+            try
             {
-                return NotFound("No users found.");
-            }
+                var users = await _userService.GetAllUsersAsync();
 
-            return Ok(users);
+                if (!users.Any())
+                {
+                    return NotFound("No users found.");
+                }
+
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, "An error occurred while fetching users.");
+                return StatusCode(500, "Internal server error while fetching users.");
+            }
         }
 
-      
+
 
         // Get a list of available priority levels for complaints
         [HttpGet("Complaints/AvailablePriorities")]

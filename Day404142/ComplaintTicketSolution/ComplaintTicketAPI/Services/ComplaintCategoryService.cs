@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ComplaintTicketAPI.Context;
-using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.EntityFrameworkCore;

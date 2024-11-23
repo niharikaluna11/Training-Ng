@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using ComplaintTicketAPI.Models.DTO;
 using ComplaintTicketAPI.Models;
-using ComplaintTicketAPI.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ComplaintTicketAPI.Context;
 using Microsoft.Extensions.Logging;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
 
 namespace ComplaintTicketAPI.Services
 {

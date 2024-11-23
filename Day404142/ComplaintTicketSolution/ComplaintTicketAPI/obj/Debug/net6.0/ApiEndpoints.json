@@ -1,5 +1,37 @@
 [
   {
+    "ContainingType": "ComplaintTicketAPI.Controllers.AdminRightController",
+    "Method": "ReactivateUser",
+    "RelativePath": "api/AdminRight/reactivate/{key}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "key",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.AdminRightController",
+    "Method": "SoftDeleteUser",
+    "RelativePath": "api/AdminRight/softdelete/{key}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "key",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "ComplaintController",
     "Method": "CreateComplaint",
     "RelativePath": "api/Complaint/FileComplaint",
@@ -260,6 +292,26 @@
   },
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
+    "Method": "GetAllOrgProfiles",
+    "RelativePath": "api/Profile/Get-ALl-organizations-profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
+    "Method": "GetAllUserProfiles",
+    "RelativePath": "api/Profile/Get-ALl-users-profile",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
     "Method": "GetProfile",
     "RelativePath": "api/Profile/Get-profile",
     "HttpMethod": "GET",
@@ -446,6 +498,43 @@
         "Name": "entity",
         "Type": "ComplaintTicketAPI.Models.DTO.RegisterUserDto",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserController",
+    "Method": "SendRegistrationOtp",
+    "RelativePath": "api/User/send-otp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserController",
+    "Method": "VerifyRegistrationOtp",
+    "RelativePath": "api/User/verify-otp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "otp",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

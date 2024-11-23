@@ -19,7 +19,11 @@ export default {
             </div>
             <div class="header-navigation">
                 <nav class="header-navigation-links">
-                    <a href="#"> Home </a>
+                    <a href="#">
+                        <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
+                            Home
+                        </router-link>
+                    </a>
                     <a href="#"> Dashboard </a>
                     <a href="#"> Projects </a>
                     <a href="#"> Tasks </a>

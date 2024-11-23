@@ -1,6 +1,6 @@
 ﻿using ComplaintTicketAPI.Context;
 using ComplaintTicketAPI.Exceptions;
-using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Interfaces.InterfaceRepository;
 using ComplaintTicketAPI.Models;
 using Microsoft.EntityFrameworkCore;
 

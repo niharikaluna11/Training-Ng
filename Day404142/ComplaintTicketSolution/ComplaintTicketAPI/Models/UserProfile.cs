@@ -15,8 +15,10 @@
         public String? ProfilePicture { get; set; }
         public string Email { get; set; }
         public string Phone { get; set; }
-        public string Preferences { get; set; } 
+        public string Preferences { get; set; }
+
+       // public PersonStatus PStatus { get; set; } = PersonStatus.Activated;
         // Any additional user preferences
-  
+
     }
 }

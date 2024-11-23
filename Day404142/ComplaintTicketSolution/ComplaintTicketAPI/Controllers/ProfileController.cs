@@ -1,4 +1,4 @@
-﻿using ComplaintTicketAPI.Interfaces;
+﻿using ComplaintTicketAPI.Interfaces.InteraceServices;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -118,6 +118,48 @@ namespace ComplaintTicketAPI.Controllers
             }
         }
 
+        [HttpGet("Get-ALl-organizations-profile")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllOrgProfiles()
+        {
+            try
+            {
+                var orgProfiles = await _userProfileService.GetALLOrgProfile();
+                if (orgProfiles == null || orgProfiles.Count == 0)
+                {
+                    return NotFound("No organization profiles found.");
+                }
 
-    }
+                return Ok(orgProfiles);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        // Endpoint to get all user profiles
+        [HttpGet("Get-ALl-users-profile")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAllUserProfiles()
+        {
+            try
+            {
+                var userProfiles = await _userProfileService.GetALLUserProfile();
+                if (userProfiles == null || userProfiles.Count == 0)
+                {
+                    return NotFound("No user profiles found.");
+                }
+
+                return Ok(userProfiles);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+    
+
+
+}
 }

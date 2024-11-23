@@ -1,5 +1,6 @@
 ﻿using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models.DTO;
+using ComplaintTicketAPI.Models.DTO.ResponseDTO;
 using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 

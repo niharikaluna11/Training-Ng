@@ -1,5 +1,4 @@
 ﻿using ComplaintTicketAPI.Controllers;
-using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
 using ComplaintTicketAPI.Context;
@@ -12,6 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
 
 namespace ComplaintTicketApiTests.Controllers
 {

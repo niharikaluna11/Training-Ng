@@ -1,6 +1,7 @@
-﻿using ComplaintTicketAPI.Interfaces;
+﻿using ComplaintTicketAPI.Interfaces.InteraceServices;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
+using ComplaintTicketAPI.Models.DTO.ResponseDTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -54,7 +55,52 @@ namespace ComplaintTicketAPI.Controllers
             });
         }
 
-       
+
+        [HttpPost("send-otp")]
+        public async Task<IActionResult> SendRegistrationOtp(string email)
+        {
+            var response = await _userService.SendRegistrationOtp(email);
+            if (response is ErrorResponseDTO errorResponse)
+            {
+                return StatusCode(errorResponse.ErrorCode, errorResponse);
+            }
+
+            if (response is BaseResponseDTO successResponse)
+            {
+                return Ok(successResponse);
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDTO
+            {
+                Success = false,
+                ErrorMessage = "An unexpected error occurred.",
+                ErrorCode = 500
+            });
+           
+        }
+
+        [HttpPost("verify-otp")]
+        public async Task<IActionResult> VerifyRegistrationOtp( string email, string otp)
+        {
+            var response = await _userService.VerifyRegistrationOtp(email, otp);
+
+            if (response is ErrorResponseDTO errorResponse)
+            {
+                return StatusCode(errorResponse.ErrorCode, errorResponse);
+            }
+
+            if (response is BaseResponseDTO successResponse)
+            {
+                return Ok(successResponse);
+            }
+
+            return StatusCode(StatusCodes.Status500InternalServerError, new ErrorResponseDTO
+            {
+                Success = false,
+                ErrorMessage = "An unexpected error occurred.",
+                ErrorCode = 500
+            });
+        }
 
 
 

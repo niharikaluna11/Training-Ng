@@ -21,8 +21,8 @@
         public string Email { get; set; }
 
         // Navigation property for related reports
-        
 
+       // public PersonStatus PStatus { get; set; } = PersonStatus.Activated;
 
     }
 }

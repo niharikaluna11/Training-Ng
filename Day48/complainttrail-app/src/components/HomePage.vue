@@ -38,7 +38,7 @@
             <i class="ph-bell-bold"></i>
           </a>
           <a href="#" class="avatar">
-            <img src="" alt="profile" />
+            <img src="@/Images/profilepicimg.jpg" alt="profile">
           </a>
         </div>
       </div>

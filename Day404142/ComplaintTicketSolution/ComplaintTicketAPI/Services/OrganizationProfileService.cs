@@ -1,5 +1,4 @@
-﻿using ComplaintTicketAPI.Interfaces;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
@@ -10,6 +9,8 @@ using ComplaintTicketAPI.EmailInterface;
 using MimeKit.Encodings;
 using ComplaintTicketAPI.Context;
 using Microsoft.EntityFrameworkCore;
+using ComplaintTicketAPI.Interfaces.InterfaceRepository;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
 
 namespace ComplaintTicketAPI.Services
 {

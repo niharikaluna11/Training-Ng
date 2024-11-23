@@ -1,6 +1,6 @@
 ﻿using ComplaintTicketAPI.Context;
 using ComplaintTicketAPI.Exceptions;
-using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Interfaces.InterfaceRepository;
 using ComplaintTicketAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -67,15 +67,42 @@ namespace ComplaintTicketAPI.Repositories
 
             try
             {
-                _context.Users.Remove(user);
+                user.IsDeleted = true;
+                user.PStatus = PersonStatus.Deactivated;
+                
                 await _context.SaveChangesAsync();
-                return user;
+
+                return user;  
             }
             catch (Exception ex)
             {
                 throw new Exception("An error occurred while deleting the user.", ex);
             }
         }
+        public async Task<User> Reactivate(string key)
+        {
+            var user = await Get(key);
+            if (user == null || !user.IsDeleted)
+            {
+                throw new CouldNotDeleteException("User is not soft deleted.");
+            }
+
+            try
+            {
+                // Reactivate the user (mark as not deleted)
+                user.IsDeleted = false;
+                user.PStatus = PersonStatus.Activated;
+
+                await _context.SaveChangesAsync();
+
+                return user;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while reactivating the user.", ex);
+            }
+        }
+
 
         public async Task<User> Get(string key)
         {

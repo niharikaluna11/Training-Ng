@@ -1,5 +1,4 @@
-﻿using ComplaintTicketAPI.Interfaces;
-using ComplaintTicketAPI.Models.DTO;
+﻿using ComplaintTicketAPI.Models.DTO;
 using ComplaintTicketAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -7,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using ComplaintTicketAPI.Context;
 using AutoMapper;
 using Microsoft.AspNetCore.Cors;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
 
 [Route("api/[controller]")]
 [EnableCors("AllowAll")]

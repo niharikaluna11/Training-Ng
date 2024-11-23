@@ -8,6 +8,7 @@ namespace ComplaintTicketAPI.Context
         public ComplaintTicketContext(DbContextOptions<ComplaintTicketContext> options) : base(options) { }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<UserOtp> UserOtp { get; set; }
         public DbSet<UserProfile> Profiles { get; set; }
         public DbSet<Complaint> Complaints { get; set; }
         public DbSet<ComplaintFile> ComplaintFiles { get; set; }
@@ -15,8 +16,8 @@ namespace ComplaintTicketAPI.Context
         public DbSet<ComplaintStatus> ComplaintStatuses { get; set; }
         public DbSet<ComplaintStatusDate> ComplaintStatusDates { get; set; }
         public DbSet<Organization> Organizations { get; set; }
-      
 
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

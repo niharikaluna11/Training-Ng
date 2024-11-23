@@ -100,54 +100,91 @@ export default {
 </script>
 
 <template>
-
-  <div class="login-page">
-    <header class="header">
-      <div class="logo">
-        <img src="@/Images/logo_transparent.png" alt="Customer Service Logo" />
-      </div>
-      <nav class="navbar">
+  <header class="header">
+    <div class="header-content responsive-wrapper">
+      <div class="header-logo">
         <a href="#">
-          <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
-            Home
-          </router-link></a>
-      </nav>
-    </header>
-    <main class="main-content">
-      <div class="graphic">
-        <img src="@/Images/loginPage.jpg" alt="Login Page Illustration" />
-      </div>
-      <section class="hero">
-        <h1 class="welcome-message" style="font-size: 3em; color: #9484c4;">Welcome Back!</h1>
-
-        <div class="form-group">
-          <input v-model="username" type="text" placeholder="Username or Email Address" required class="input-field" />
-        </div>
-        <div class="form-group">
-          <input v-model="password" type="password" placeholder="Password" required class="input-field" />
-        </div>
-
-        <div class="form-options">
-          <div class="checkbox-group">
-            <input type="checkbox" id="keep-logged-in" />
-            <label for="keep-logged-in">Keep me logged in</label>
+          <div>
+            <img src="https://assets.codepen.io/285131/untitled-ui-icon.svg" />
           </div>
-          <router-link to="forgot-password" class="forgot-password-link">Forgot Password?</router-link>
+          <img src="https://assets.codepen.io/285131/untitled-ui.svg" />
+          <!-- <img src="@/Images/logo_transparent.png" alt="Customer Service Agent"
+            style="display: block;max-width: 30%;" /> -->
+        </a>
+      </div>
+      <div class="header-navigation">
+        <nav class="header-navigation-links">
+          <a href="#"> <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
+              Home
+            </router-link> </a>
+
+        </nav>
+        <div class="header-navigation-actions">
+
+          <a href="#" class="icon-button">
+            <i class="ph-gear-bold"></i>
+          </a>
+          <a href="#" class="icon-button">
+            <i class="ph-bell-bold"></i>
+          </a>
+          <a href="#" class="avatar">
+            <img src="@/Images/profilepicimg.jpg" alt="profile">
+          </a>
         </div>
+      </div>
+      <a href="#" class="button">
+        <i class="ph-list-bold"></i>
+        <span>Menu</span>
+      </a>
+    </div>
+  </header>
 
-        <button :disabled="!isFormValid" @click="login" class="login-button">
-          Login
-        </button>
+  <main class="main">
+    <div class="responsive-wrapper">
+      <div class="content-header">
+        <div class="content-header-intro">
+          <div class="graphic">
+            <img src="@/Images/loginPage.jpg" alt="Login Page Illustration" />
+          </div>
+        </div>
+        <div class="content-header-actions">
 
-        <p class="signup-message">
-          Don’t have an account yet?
-          <router-link to="register" class="signup-link">Sign Up</router-link>
-        </p>
-      </section>
-    </main>
+          <section class="hero">
+            <h1 class="welcome-message" style="font-size: 3em; color: #9484c4;">Welcome Back!</h1>
+
+            <div class="form-group">
+              <input v-model="username" type="text" placeholder="Username or Email Address" required
+                class="input-field" />
+            </div>
+            <div class="form-group">
+              <input v-model="password" type="password" placeholder="Password" required class="input-field" />
+            </div>
+
+            <div class="form-options">
+              <div class="checkbox-group">
+                <input type="checkbox" id="keep-logged-in" />
+                <label for="keep-logged-in">Keep me logged in</label>
+              </div>
+              <router-link to="forgot-password" class="forgot-password-link">Forgot Password?</router-link>
+            </div>
+
+            <button :disabled="!isFormValid" @click="login" class="login-button">
+              Login
+            </button>
+
+            <p class="signup-message">
+              Don’t have an account yet?
+              <router-link to="Register">Sign Up!</router-link>
+            </p>
+
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
 
 
-  </div>
+
 </template>
 
 
@@ -155,21 +192,12 @@ export default {
 
 
 <style scoped>
-/* General Styles */
-* {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  box-sizing: border-box;
+.content-header {
+  padding-top: 0px;
 }
 
-body {
-  font-family: "Arial", sans-serif;
-  color: #333;
-}
 
-/* Consolidated Hero Section */
-.hero {
+Section .hero {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -177,6 +205,7 @@ body {
   max-width: 400px;
   margin: auto;
   padding: 20px;
+  padding-top: 0px;
 }
 
 .hero h1 {
@@ -268,89 +297,14 @@ body {
 .signup-message {
   margin-top: 15px;
   font-size: 0.9rem;
-  color: #555;
+  color: #3e3e3e;
 }
 
-.signup-link {
-  color: #9484c4;
-  font-weight: bold;
-  text-decoration: none;
-}
 
-.signup-link:hover {
-  text-decoration: underline;
-}
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .hero {
-    max-width: 100%;
-  }
 
-  .welcome-message {
-    font-size: 2rem;
-  }
 
-  .login-button {
-    font-size: 1rem;
-  }
-}
 
-@media (max-width: 480px) {
-  .welcome-message {
-    font-size: 1.8rem;
-  }
-
-  .input-field {
-    font-size: 0.9rem;
-  }
-
-  .login-button {
-    font-size: 0.9rem;
-  }
-}
-
-/* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #fff;
-  height: 6rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #555;
-  background: transparent;
-}
-
-.logo img {
-  width: 120px;
-  height: auto;
-  transition: transform 0.5s;
-}
-
-.logo img:hover {
-  transform: scale(1.1);
-}
-
-/* Main Content */
-.main-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin: 5px auto;
-  padding: 5px 5px;
-  max-width: 1200px;
-  gap: 5px;
-}
-
-/* Graphic Section */
 .graphic img {
   max-width: 100%;
   height: auto;
@@ -396,7 +350,6 @@ body {
   cursor: not-allowed;
 }
 
-/* Navigation */
 .navigation {
   display: flex;
   align-items: center;
@@ -407,69 +360,11 @@ body {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  /* Ensures "New User?" appears above "Register" */
 }
 
 .new-user {
   font-size: 0.9rem;
   color: #555;
   margin-bottom: 5px;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: #9484c4;
-  font-weight: bold;
-  transition: color 0.3s;
-}
-
-.nav-link:hover {
-  color: #7d6abf;
-}
-
-.forgot-password {
-  margin-left: auto;
-  /* Pushes "Forgot Password" to the right if needed */
-  font-size: 0.9rem;
-}
-
-.nav-link {
-  text-decoration: none;
-  color: #9484c4;
-  font-weight: bold;
-}
-
-.nav-link:hover {
-  text-decoration: underline;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .main-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .hero {
-    max-width: 100%;
-  }
-
-  .hero h1 {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero h1 {
-    font-size: 1.8rem;
-  }
-
-  .input-field {
-    font-size: 0.9rem;
-  }
-
-  .login-button {
-    font-size: 0.9rem;
-  }
 }
 </style>

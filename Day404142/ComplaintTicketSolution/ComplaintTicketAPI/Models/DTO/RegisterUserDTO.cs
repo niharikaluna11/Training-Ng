@@ -18,8 +18,8 @@ namespace ComplaintTicketAPI.Models.DTO
         public string Username { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
-        [MinLength(5, ErrorMessage = "Password should be at least 5 characters long")]
-        public string Password { get; set; }
+        
+         public string Password { get; set; }
 
         [Required(ErrorMessage = "Email is required")]
         
@@ -30,8 +30,7 @@ namespace ComplaintTicketAPI.Models.DTO
         [Required(ErrorMessage = "Role is required")]
         public Role Role { get; set; }
 
-      
-        
+        public string Otp { get; set; }
         public Type? Types { get; set; }
 
     }

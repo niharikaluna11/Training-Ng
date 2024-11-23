@@ -1,4 +1,4 @@
-﻿using ComplaintTicketAPI.Interfaces;
+﻿using ComplaintTicketAPI.Interfaces.InteraceServices;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;

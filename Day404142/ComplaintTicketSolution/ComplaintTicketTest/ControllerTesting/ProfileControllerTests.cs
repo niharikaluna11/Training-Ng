@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using ComplaintTicketAPI.Controllers;
-using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
 using Microsoft.Extensions.Logging;
 using Moq;
 

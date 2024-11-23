@@ -1,4 +1,4 @@
-﻿using ComplaintTicketAPI.Models.DTO;
+﻿using ComplaintTicketAPI.Models.DTO.ResponseDTO;
 
 namespace ComplaintTicketAPI.Interfaces
 {

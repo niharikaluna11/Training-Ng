@@ -2,7 +2,8 @@
 using ComplaintTicketAPI.Context;
 using ComplaintTicketAPI.EmailInterface;
 using ComplaintTicketAPI.EmailModel;
-using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
+using ComplaintTicketAPI.Interfaces.InterfaceRepository;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.EntityFrameworkCore;

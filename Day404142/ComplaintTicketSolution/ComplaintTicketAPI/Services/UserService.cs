@@ -2,13 +2,19 @@
 using ComplaintTicketAPI.Context;
 using ComplaintTicketAPI.EmailInterface;
 using ComplaintTicketAPI.EmailModel;
+using ComplaintTicketAPI.Exceptions;
 using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
+using ComplaintTicketAPI.Interfaces.InterfaceRepository;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
+using ComplaintTicketAPI.Models.DTO.ResponseDTO;
+using ComplaintTicketAPI.Repositories;
 using ComplaintTicketAPI.Validations;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Cryptography;
 using System.Text;
+using static System.Net.WebRequestMethods;
 
 namespace ComplaintTicketAPI.Services
 {
@@ -16,6 +22,7 @@ namespace ComplaintTicketAPI.Services
     {
         private readonly IUserRepository _userRepo;
         private readonly IRepository<int, UserProfile> _profileRepo;
+        private readonly IUserOtpRepository _userotpRepo;
         private readonly IRepository<int, Organization> _organizationRepo;
         private readonly IMapper _mapper;
         private readonly ILogger<UserService> _logger;
@@ -31,7 +38,8 @@ namespace ComplaintTicketAPI.Services
             ITokenService tokenService,
             ComplaintTicketContext context
             , IMapper mapper,
-            IEmailSender emailSender
+            IEmailSender emailSender,
+            IUserOtpRepository userotpRepo
             )
         {
             _context = context;
@@ -42,6 +50,7 @@ namespace ComplaintTicketAPI.Services
             _logger = logger;
             _tokenService = tokenService;
             _emailSender = emailSender;
+            _userotpRepo = userotpRepo;
         }
 
 
@@ -54,6 +63,92 @@ namespace ComplaintTicketAPI.Services
                     body);
             _emailSender.SendEmail(message);
         }
+
+        // Reactivate a user (soft delete)
+        public async Task<User> ReactivateUserAsync(string key)
+        {
+            var user = await _userRepo.GetByUsernameOrEmail(key);
+            if (user == null || !user.IsDeleted)
+            {
+                throw new CouldNotDeleteException("User is not Deactivated. It is activated already.");
+            }
+
+            try
+            {
+                // Mark the user as reactivated (not deleted)
+                user.IsDeleted = false;
+                user.PStatus = PersonStatus.Activated; // Set status to Activated
+
+                // Log the update before saving
+                _logger.LogInformation($"Attempting to reactivate user: {user.Username} (ID: {user.Id})");
+
+                // Explicitly update the user in the DbContext to ensure tracking
+                _context.Users.Update(user);
+
+                // Save changes to the database
+                int affectedRows = await _context.SaveChangesAsync();
+
+                // If no rows were affected, something went wrong with saving
+                if (affectedRows == 0)
+                {
+                    throw new Exception("No rows were affected by the reactivation operation.");
+                }
+
+                // Log success
+                _logger.LogInformation($"User {user.Username} (ID: {user.Id}) was successfully reactivated.");
+
+                return user;  // Return the updated user
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Log database-related errors
+                _logger.LogError(dbEx, "Database update failed during reactivation operation.");
+                throw new Exception("Database update failed while reactivating the user.", dbEx);
+            }
+            catch (Exception ex)
+            {
+                // Log general errors
+                _logger.LogError(ex, "An error occurred while reactivating the user.");
+                throw new Exception("An error occurred while reactivating the user.", ex);
+            }
+        }
+
+
+        public async Task<User> SoftDeleteUserAsync(string key)
+        {
+            var user = await _userRepo.GetByUsernameOrEmail(key);
+            if (user == null)
+            {
+                throw new CouldNotDeleteException("User not found.");
+            }
+            if (user.IsDeleted==true)
+            {
+                throw new CouldNotDeleteException("User is already Deactivated");
+            }
+
+            try
+            {
+                // Mark the user as soft deleted
+                user.IsDeleted = true;
+                user.PStatus = PersonStatus.Deactivated;
+
+                // Explicitly update the user in the DbContext to ensure tracking
+                _context.Users.Update(user);
+
+                // Save changes to the database
+                await _context.SaveChangesAsync();
+
+                return user;  // Return the updated user
+            }
+            catch (Exception ex)
+            {
+                // Log any errors and rethrow the exception
+                _logger.LogError(ex, "An error occurred while deleting the user.");
+                throw new Exception("An error occurred while deleting the user.", ex);
+            }
+        }
+
+
 
         public async Task<BaseResponseDTO> Authenticate(LoginRequestDTO loginUser)
         {
@@ -91,7 +186,7 @@ namespace ComplaintTicketAPI.Services
                     Username = user.Username,
                     Email = user.Email,
                     Id = user.Id,
-                    Role=user.Roles.ToString(),
+                    Role = user.Roles.ToString(),
                     Token = await _tokenService.GenerateToken(new UserTokenDTO
                     {
                         Username = user.Username,
@@ -162,9 +257,24 @@ namespace ComplaintTicketAPI.Services
                 {
                     return emailValidationResult; // Return validation error directly
                 }
+                var passwordValidator = new PasswordValidator(_userRepo);
+                var passwordValidationResult = await passwordValidator.ValidateAsync(registerUser.Password, registerUser.Username);
+
+                if (!passwordValidationResult.Success)
+                {
+                    return passwordValidationResult; // Return validation error directly
+                }
 
 
-                // Generate password hash and hash key
+                // Check OTP
+                var otpResponse = await VerifyRegistrationOtp(registerUser.Email, registerUser.Otp);
+
+                if (!otpResponse.Success)
+                {
+                    return otpResponse; // Return OTP validation error
+                }
+
+                
                 using var hmac = new HMACSHA256();
                 byte[] passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(registerUser.Password));
 
@@ -352,10 +462,6 @@ namespace ComplaintTicketAPI.Services
                 };
                 await _profileRepo.Add(profile);
 
-
-
-
-
             }
             catch (Exception ex)
             {
@@ -387,19 +493,114 @@ namespace ComplaintTicketAPI.Services
             }
         }
 
+    
         public async Task<IEnumerable<UserDTO>> GetAllUsersAsync()
         {
             try
             {
-
                 var users = await _context.Users.ToListAsync();
+
+                // No need to check for null as ToListAsync() will return an empty list if no users
                 return _mapper.Map<IEnumerable<UserDTO>>(users);
             }
             catch (Exception ex)
             {
-                throw new Exception("Failed to Get Users");
+                _logger.LogError(ex, "An error occurred while retrieving users.");
+                throw new Exception("Failed to Get Users", ex);
+            }
+        }
+
+
+        public async Task<BaseResponseDTO> SendRegistrationOtp(string email)
+        {
+            var emailValidator = new EmailValidator(_userRepo);
+            var emailValidationResult = await emailValidator.ValidateAsync(email);
+
+            if (!emailValidationResult.Success)
+            {
+                return emailValidationResult; // Return validation error directly
             }
 
+            var user = await _userRepo.GetByUsernameOrEmail(email);
+
+            if (user != null)
+            {
+                return new ErrorResponseDTO
+                {
+                    Success = false,
+                    ErrorMessage = "User already exists with this email.",
+                    ErrorCode = 400
+                };
+            }
+
+            // Generate a 6-digit OTP
+            string otp = GenerateOtp();
+
+            // Save the OTP and expiry time in a temporary user record or in-memory cache
+            var tempUser = new UserOtp
+            {
+                Email = email,
+                Otp = otp,
+                OtpExpiry = DateTime.Now.AddMinutes(10)
+            };
+
+            await _userotpRepo.Add(tempUser);
+
+            SendMail("Registration OTP", email, $"Your OTP for registration is: {otp} . Valid for 10 mins only");
+
+            return new BaseResponseDTO
+            {
+                Success = true,
+                Message = "OTP has been sent to your email."
+            };
         }
+
+        public async Task<BaseResponseDTO> VerifyRegistrationOtp(string email, string otp)
+        {
+            var emailValidator = new EmailValidator(_userRepo);
+            var emailValidationResult = await emailValidator.ValidateAsync(email);
+
+            if (!emailValidationResult.Success)
+            {
+                return emailValidationResult; // Return validation error directly
+            }
+
+            var user = await _userotpRepo.Get(email,otp);
+
+            if (user == null || user.Otp != otp)
+            {
+                return new ErrorResponseDTO
+                {
+                    Success = false,
+                    ErrorMessage = "Invalid OTP or email.",
+                    ErrorCode = 400
+                };
+            }
+
+            if (user.OtpExpiry < DateTime.Now)
+            {
+                return new ErrorResponseDTO
+                {
+                    Success = false,
+                    ErrorMessage = "OTP has expired.",
+                    ErrorCode = 400
+                };
+            }
+
+            return new BaseResponseDTO
+            {
+                Success = true,
+                Message = "OTP is valid."
+            };
+        }
+
+
+        private string GenerateOtp()
+        {
+            var random = new Random();
+            string otp = random.Next(100000, 999999).ToString(); // Generates a 6-digit OTP
+            return otp;
+        }
+
     }
 }

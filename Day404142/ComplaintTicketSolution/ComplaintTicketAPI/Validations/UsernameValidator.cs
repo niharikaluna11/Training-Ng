@@ -1,5 +1,7 @@
 ﻿using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Interfaces.InterfaceRepository;
 using ComplaintTicketAPI.Models.DTO;
+using ComplaintTicketAPI.Models.DTO.ResponseDTO;
 using System.Text.RegularExpressions;
 
 namespace ComplaintTicketAPI.Validations

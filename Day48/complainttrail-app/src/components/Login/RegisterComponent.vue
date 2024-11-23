@@ -1,80 +1,111 @@
 <template>
-  <div class="register-page">
-    <header class="header">
-      <div class="logo">
-        <img src="@/Images/logo_transparent.png" alt="Customer Service Logo" />
-      </div>
-      <nav class="navbar">
+  <header class="header">
+    <div class="header-content responsive-wrapper">
+      <div class="header-logo">
         <a href="#">
-          <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
-            Home
-          </router-link>
+          <div>
+            <img src="https://assets.codepen.io/285131/untitled-ui-icon.svg" />
+          </div>
+          <img src="https://assets.codepen.io/285131/untitled-ui.svg" />
+          <!-- <img src="@/Images/logo_transparent.png" alt="Customer Service Agent"
+            style="display: block;max-width: 30%;" /> -->
         </a>
-      </nav>
-    </header>
-
-    <main class="main-content">
-      <div class="graphic">
-        <img src="@/Images/RegisterPage1.png" alt="Register Page Illustration" />
       </div>
+      <div class="header-navigation">
+        <nav class="header-navigation-links">
+          <a href="#"> <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
+              Home
+            </router-link> </a>
 
-      <section class="hero">
-        <h1 style="font-size: 3em; color: #9484c4;">Get Started!</h1>
-        <div class="form-group name-group">
-          <div class="input-container">
-            <input v-model="fname" type="text" placeholder="First Name" required class="input-field" />
+        </nav>
+        <div class="header-navigation-actions">
+
+          <a href="#" class="icon-button">
+            <i class="ph-gear-bold"></i>
+          </a>
+          <a href="#" class="icon-button">
+            <i class="ph-bell-bold"></i>
+          </a>
+          <a href="#" class="avatar">
+            <img src="@/Images/profilepicimg.jpg" alt="profile">
+          </a>
+        </div>
+      </div>
+      <a href="#" class="button">
+        <i class="ph-list-bold"></i>
+        <span>Menu</span>
+      </a>
+    </div>
+  </header>
+
+  <main class="main">
+    <div class="responsive-wrapper">
+      <div class="content-header">
+        <div class="content-header-intro">
+          <div class="graphic">
+            <img src="@/Images/RegisterPage1.png" alt="Register Page Illustration" />
           </div>
-          <div class="input-container">
-            <input v-model="lname" type="text" placeholder="Last Name" required class="input-field" />
-          </div>
         </div>
+        <div class="content-header-actions">
+          <section class="hero">
+            <h1 style="font-size: 3em; color: #9484c4;">Get Started!</h1>
+            <div class="form-group name-group">
+              <div class="input-container">
+                <input v-model="fname" type="text" placeholder="First Name" required class="input-field" />
+              </div>
+              <div class="input-container">
+                <input v-model="lname" type="text" placeholder="Last Name" required class="input-field" />
+              </div>
+            </div>
 
-        <div class="form-group">
-          <input v-model="username" type="text" placeholder="Username" required class="input-field" />
+            <div class="form-group">
+              <input v-model="username" type="text" placeholder="Username" required class="input-field" />
+            </div>
+
+            <div class="form-group">
+              <input v-model="password" type="password" placeholder="Password" required class="input-field" />
+            </div>
+
+            <div class="form-group">
+              <input v-model="email" type="email" placeholder="Email" required class="input-field" />
+            </div>
+
+            <div class="form-group">
+              <input v-model="date" type="date" class="input-field" id="date" />
+            </div>
+
+            <div class="form-group role-group">
+              <select v-model="role" @change="checkRole" class="input-field">
+                <option disabled value="">Select Role</option>
+                <option :value="0">Admin</option>
+                <option :value="1">User</option>
+                <option :value="2">Organization</option>
+              </select>
+            </div>
+
+            <div v-if="role === 2" class="form-group">
+              <select v-model="organizationType" class="input-field">
+                <option disabled value="">Select Type</option>
+                <option :value="1">Company</option>
+                <option :value="2">Government</option>
+                <option :value="3">Agent</option>
+              </select>
+            </div>
+
+            <div class="button-group">
+              <button :disabled="!isFormValid" @click="Register" class="login-button">Sign Up</button>
+              <button class="login-button">
+                <router-link to="login">Sign In</router-link>
+              </button>
+            </div>
+          </section>
+
         </div>
-
-        <div class="form-group">
-          <input v-model="password" type="password" placeholder="Password" required class="input-field" />
-        </div>
-
-        <div class="form-group">
-          <input v-model="email" type="email" placeholder="Email" required class="input-field" />
-        </div>
-
-        <div class="form-group">
-          <input v-model="date" type="date" class="input-field" id="date" />
-        </div>
-
-        <div class="form-group role-group">
-          <select v-model="role" @change="checkRole" class="input-field">
-            <option disabled value="">Select Role</option>
-            <option :value="0">Admin</option>
-            <option :value="1">User</option>
-            <option :value="2">Organization</option>
-          </select>
-        </div>
-
-        <div v-if="role === 2" class="form-group">
-          <select v-model="organizationType" class="input-field">
-            <option disabled value="">Select Type</option>
-            <option :value="1">Company</option>
-            <option :value="2">Government</option>
-            <option :value="3">Agent</option>
-          </select>
-        </div>
-
-        <div class="button-group">
-          <button :disabled="!isFormValid" @click="Register" class="login-button">Sign Up</button>
-          <button class="login-button">
-            <router-link to="login">Sign In</router-link>
-          </button>
-        </div>
-      </section>
+      </div>
+    </div>
+  </main>
 
 
-
-    </main>
-  </div>
 </template>
 
 
@@ -180,60 +211,11 @@ export default {
 };
 </script>
 
-
 <style scoped>
-/* General Styles */
-* {
-  margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-  box-sizing: border-box;
+.content-header {
+  padding-top: 0px;
 }
 
-body {
-  font-family: "Arial", sans-serif;
-  color: #333;
-}
-
-/* Header */
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background-color: #fff;
-  height: 6rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-  font-size: 1.5em;
-  font-weight: bold;
-  color: #555;
-  background: transparent;
-}
-
-.logo img {
-  width: 120px;
-  height: auto;
-  transition: transform 0.5s;
-}
-
-.logo img:hover {
-  transform: scale(1.1);
-}
-
-/* Main Content */
-.main-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-  flex-wrap: wrap;
-  margin: 5px auto;
-  max-width: 1200px;
-}
-
-/* Graphic Section */
 .graphic img {
   border-radius: 10px;
   max-width: 100%;
@@ -252,6 +234,7 @@ body {
   text-align: left;
   max-width: 400px;
   padding: 20px;
+  padding-top: 0px;
 }
 
 .hero h1 {
@@ -343,47 +326,5 @@ body {
 
 .nav-link:hover {
   text-decoration: underline;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-  .main-content {
-    flex-direction: column;
-    text-align: center;
-  }
-
-  .hero {
-    max-width: 100%;
-  }
-
-  .hero h1 {
-    font-size: 2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .graphic img {
-    max-height: 200px;
-  }
-}
-
-@media (max-width: 480px) {
-  .graphic img {
-    max-height: 150px;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero h1 {
-    font-size: 1.8rem;
-  }
-
-  .input-field {
-    font-size: 0.9rem;
-  }
-
-  .login-button {
-    font-size: 0.9rem;
-  }
 }
 </style>

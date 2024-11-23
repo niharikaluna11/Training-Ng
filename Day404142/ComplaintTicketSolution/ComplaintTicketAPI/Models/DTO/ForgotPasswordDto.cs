@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using ComplaintTicketAPI.Validations;
 
 namespace ComplaintTicketAPI.Models.DTO
 {

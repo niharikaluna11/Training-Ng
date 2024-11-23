@@ -3,6 +3,9 @@ using ComplaintTicketAPI.EmailInterface;
 using ComplaintTicketAPI.EmailModel;
 using ComplaintTicketAPI.EmailService;
 using ComplaintTicketAPI.Interfaces;
+using ComplaintTicketAPI.Interfaces.InteraceServices;
+using ComplaintTicketAPI.Interfaces.InterfaceRepository;
+using ComplaintTicketAPI.Mapper;
 using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Repositories;
 using ComplaintTicketAPI.Services;
@@ -41,11 +44,18 @@ namespace ComplaintTicketAPI
 
             #region AutoMapper
             builder.Services.AddAutoMapper(typeof(Program));
+            builder.Services.AddAutoMapper(typeof(Userprofilemapper));
+            builder.Services.AddAutoMapper(typeof(ComplaintCategoryProfile));
+            builder.Services.AddAutoMapper(typeof(ComplaintCategoryResProfile));
+            builder.Services.AddAutoMapper(typeof(ComplaintStatusProfile));
+            builder.Services.AddAutoMapper(typeof(OrganizationDetailsProfile));
+            builder.Services.AddAutoMapper(typeof(UpdateComplaintProfile));
             #endregion
 
 
             #region Repositories
             builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
+            builder.Services.AddScoped<IUserOtpRepository, UserOtpRepositoy>();
             builder.Services.AddScoped<IComplaintFileRepository, ComplaintFileRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintCategory>, ComplaintCategoryRepository>();
             builder.Services.AddScoped<IRepository<int, ComplaintStatus>, ComplaintStatusRepository>();
