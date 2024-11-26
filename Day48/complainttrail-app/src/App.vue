@@ -29,6 +29,8 @@ export default {
   --c-background-secondary: #fdfcff;
   --c-background-tertiary: #ecf3fe;
   --c-background-quaternary: #e9ecf4;
+  --ds-surface-sunken: #F7F8F9;
+  --ds-border: #091E4224;
 }
 
 body {
@@ -46,8 +48,8 @@ body {
 }
 
 .responsive-wrapper {
-  width: 80%;
-  max-width: 1280px;
+  width: 100%;
+  max-width: 1300px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -55,11 +57,11 @@ body {
 .header {
   display: flex;
   align-items: center;
-  height: 80px;
+  height: 50px;
   width: 100%;
   position: fixed;
-  border-bottom: 1px solid var(--c-border-primary);
-  background-color: var(--c-text-light);
+  border-bottom: 1px solid #d3d3d3;
+  background-color: var(--c-background-primary);
 }
 
 .content-header {
@@ -138,7 +140,7 @@ body {
         right: 0;
         bottom: 0;
         overflow: hidden;
-        height: 50%;
+        height: 30%;
         border-bottom-left-radius: 8px;
         border-bottom-right-radius: 8px;
         background-color: rgba(#fff, 0.2);

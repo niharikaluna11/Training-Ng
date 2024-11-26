@@ -25,12 +25,21 @@ namespace ComplaintTicketAPI.Services
             {
                 string _token = string.Empty;
 
-                // Create claims based on user info
                 var _claims = new[]
                 {
                     new Claim(JwtRegisteredClaimNames.GivenName, user.Username),
                     new Claim(ClaimTypes.Role, user.Role),
+                    //new Claim("UserID", user.userid),
+                    new Claim("Username", user.Username),
                 };
+                // Create claims based on user info
+                //var _claims = new[]
+                //{
+                //    new Claim("UserId",user.userid),
+                //    new Claim(JwtRegisteredClaimNames.GivenName, user.Username),
+                //    new Claim(ClaimTypes.Role, user.Role),
+                    
+                //};
 
                 // Create security key from secret key
                 var _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));

@@ -13,30 +13,32 @@
       </div>
       <div class="header-navigation">
         <nav class="header-navigation-links">
-          <a href="#"> <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
-              Home
-            </router-link> </a>
+          <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
+            <a href="#">Home </a>
+          </router-link>
           <a href="#About"> About </a>
           <a href="#Feature"> Features </a>
           <a href="#learn-more"> Contact us </a>
 
         </nav>
         <div class="header-navigation-actions">
-          <a href="#" class="button">
+         
+          <router-link to="/Login" class="nav-link active text-light signup" aria-current="page">
+            <a href="#" class="button">
             <i class="ph-lightning-bold"></i>
-            <span>
-              <router-link to="/Login" class="nav-link active text-light signup" aria-current="page">
-                Sign Up
-              </router-link>
 
-            </span>
+              <span>Sign Up</span>
+           
           </a>
+        </router-link>
           <a href="#" class="icon-button">
             <i class="ph-gear-bold"></i>
           </a>
           <a href="#" class="icon-button">
             <i class="ph-bell-bold"></i>
           </a>
+
+
           <a href="#" class="avatar">
             <img src="@/Images/profilepicimg.jpg" alt="profile">
           </a>

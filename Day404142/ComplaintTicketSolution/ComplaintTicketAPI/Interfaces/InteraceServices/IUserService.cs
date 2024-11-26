@@ -7,6 +7,7 @@ namespace ComplaintTicketAPI.Interfaces.InteraceServices
     public interface IUserService
 
     {
+        Task<User> GetUserByUsername(string username);
         Task<User> ReactivateUserAsync(string key);
         Task<User> SoftDeleteUserAsync(string key);
         Task<BaseResponseDTO> SendRegistrationOtp(string email);

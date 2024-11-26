@@ -73,10 +73,20 @@ namespace ComplaintTicketAPI.Services
             {
                 return new UserProfile
                 {
+                    //UserId = profile.UserId,
+                    //FirstName = profile.FirstName ?? orgprofile.Name, // If FirstName is null, use orgprofile.Name
+                    //ProfilePicture = profile.ProfilePicture ?? orgprofile.ProfilePicture,
+                    //Address = profile.Address ?? orgprofile.Address
                     UserId = profile.UserId,
                     FirstName = profile.FirstName ?? orgprofile.Name, // If FirstName is null, use orgprofile.Name
-
-                    Address = profile.Address ?? orgprofile.Address // Add other fields from orgprofile as needed
+                    LastName = profile.LastName ?? "", // Use empty string if LastName is null
+                    Address = profile.Address ?? orgprofile.Address ?? "", // Use orgprofile.Address if profile.Address is null
+                    DateOfBirth = profile.DateOfBirth, // Assuming DateOfBirth is nullable and is returned as-is
+                    ProfilePicture = profile.ProfilePicture ?? orgprofile.ProfilePicture ?? "", // Use orgprofile.ProfilePicture if profile.ProfilePicture is null
+                    Email = profile.Email ?? "", // Use empty string if Email is null
+                    Phone = profile.Phone ?? "", // Use empty string if Phone is null
+                    Preferences = profile.Preferences ?? "",
+                    // Add other fields from orgprofile as needed
                 };
 
             }

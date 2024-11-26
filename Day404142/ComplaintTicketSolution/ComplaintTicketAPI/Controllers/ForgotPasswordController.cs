@@ -17,10 +17,10 @@ namespace ComplaintTicketAPI.Controllers
         }
 
         [HttpPost("send-reset-link")]
-        public async Task<IActionResult> SendPasswordResetLink(string UsernameorEmail)
+        public async Task<IActionResult> SendPasswordResetLink(UsernameorEmailDTO usernameorEmail)
         {
 
-            var response = await _forgotPasswordService.SendPasswordResetLink(UsernameorEmail);
+            var response = await _forgotPasswordService.SendPasswordResetLink(usernameorEmail.UsernameOrEmail);
             if (response is ErrorResponseDTO errorResponse)
             {
                 return StatusCode(errorResponse.ErrorCode, errorResponse);

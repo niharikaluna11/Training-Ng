@@ -54,6 +54,12 @@ namespace ComplaintTicketAPI.Services
         }
 
 
+        public async Task<User> GetUserByUsername(string username)
+        {
+            // Example using Entity Framework
+            return await _context.Users
+                                 .FirstOrDefaultAsync(u => u.Username == username);
+        }
         private void SendMail(string title, string email, string body)
         {
             var rng = new Random();
@@ -189,6 +195,7 @@ namespace ComplaintTicketAPI.Services
                     Role = user.Roles.ToString(),
                     Token = await _tokenService.GenerateToken(new UserTokenDTO
                     {
+                        userid = user.Id,
                         Username = user.Username,
                         Role = user.Roles.ToString()
                     })

@@ -1,63 +1,60 @@
 import axios from "axios";
 
-// Update user profile by userId
-export const updateUserProfile = async (userId, profileData) => {
+// Update user profile
+export const updateUserProfile = async (userId, formData) => {
     try {
-        // Create a FormData object to handle multipart/form-data
-        const formData = new FormData();
+        // Retrieve the token from sessionStorage
+        const token = sessionStorage.getItem("token");
 
-        // Append the fields to the FormData object
-        formData.append("userId", userId);
-        formData.append("FirstName", profileData.FirstName);
-        formData.append("LastName", profileData.LastName);
-        formData.append("ProfilePicture", profileData.ProfilePicture); // This should be a File object (image data)
-        formData.append("Address", profileData.Address);
-        formData.append("DateOfBirth", profileData.DateOfBirth); // Format: "YYYY-MM-DDT00:00:00Z"
-        formData.append("Email", profileData.Email);
-        formData.append("Phone", profileData.Phone);
-        formData.append("Preferences", profileData.Preferences);
+        if (!token) {
+            throw new Error("Authorization token not found in sessionStorage.");
+        }
 
-        // Sending PUT request to update the user profile
+        // Sending PUT request to update user profile
         const response = await axios.put(
             `http://localhost:5062/api/Profile/update-User-profile?userId=${userId}`,
-            formData, {
-            headers: {
-                "Content-Type": "multipart/form-data", // Specify the content type for file uploads
-            },
-        }
+            formData, // Send form data with file and text inputs
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data", // Ensure content type is multipart
+                },
+            }
         );
-        return response; // Returns the response from the API
+
+        return response.data; // Return response data (updated user profile)
     } catch (err) {
-        return err; // In case of an error, return the error
+        console.error("Error updating user profile:", err);
+        throw err; // Throw error for handling in caller
     }
-}
+};
 
 
-export const updateOrganizationProfile = async (userId, profileData) => {
+// Update organization profile
+export const updateOrganizationProfile = async (userId, formData) => {
     try {
-        // Create a FormData object to handle multipart/form-data
-        const formData = new FormData();
+        // Retrieve the token from sessionStorage
+        const token = sessionStorage.getItem("token");
 
-        // Append the fields to the FormData object
-        formData.append("userId", userId);
-        formData.append("Name", profileData.Name);
-        formData.append("ProfilePicture", profileData.ProfilePicture); // This should be a File object (image data)
-        formData.append("Types", profileData.Types);
-        formData.append("Address", profileData.Address);
-        formData.append("Phone", profileData.Phone);
-        formData.append("Email", profileData.Email);
-
-        // Sending PUT request to update the organization profile
-        const response = await axios.put(
-            `http://localhost:5062/api/Profile/update-Organization-profile`,
-            formData, {
-            headers: {
-                "Content-Type": "multipart/form-data", // Specify the content type for file uploads
-            },
+        if (!token) {
+            throw new Error("Authorization token not found in sessionStorage.");
         }
+
+        // Sending PUT request to update organization profile
+        const response = await axios.put(
+            `http://localhost:5062/api/Profile/update-Organization-profile?userId=${userId}`,
+            formData, // Send form data with file and text inputs
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    "Content-Type": "multipart/form-data", // Ensure content type is multipart
+                },
+            }
         );
-        return response; // Returns the response from the API
+
+        return response.data; // Return response data (updated organization profile)
     } catch (err) {
-        return err; // In case of an error, return the error
+        console.error("Error updating organization profile:", err);
+        throw err; // Throw error for handling in caller
     }
-}
+};

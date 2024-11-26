@@ -1,24 +1,8 @@
 [
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.AdminRightController",
-    "Method": "ReactivateUser",
-    "RelativePath": "api/AdminRight/reactivate/{key}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "key",
-        "Type": "System.String",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ComplaintTicketAPI.Controllers.AdminRightController",
     "Method": "SoftDeleteUser",
-    "RelativePath": "api/AdminRight/softdelete/{key}",
+    "RelativePath": "api/AdminRight/Deactivating",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -26,7 +10,23 @@
       {
         "Name": "key",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.AdminRightController",
+    "Method": "ReactivateUser",
+    "RelativePath": "api/AdminRight/reactivate",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "key",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -217,9 +217,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "UsernameorEmail",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "usernameorEmail",
+        "Type": "ComplaintTicketAPI.Models.DTO.UsernameorEmailDTO",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -472,6 +472,22 @@
   },
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.UserController",
+    "Method": "GetUserIdByUsername",
+    "RelativePath": "api/User/GetUserIdByUsername",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserController",
     "Method": "LoginUser",
     "RelativePath": "api/User/LoginOFUser",
     "HttpMethod": "POST",
@@ -511,9 +527,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "email",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "emailDto",
+        "Type": "ComplaintTicketAPI.Models.DTO.EmailDTO",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

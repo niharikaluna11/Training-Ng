@@ -28,7 +28,33 @@ namespace ComplaintTicketAPI.Controllers
         }
         // ILogger<Student> logger
 
- 
+        [HttpGet("GetUserIdByUsername")]
+        public async Task<IActionResult> GetUserIdByUsername(string username)
+        {
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return BadRequest(new { Message = "Username cannot be empty." });
+            }
+
+            try
+            {
+                // Assume GetUserByUsernameAsync fetches a user object by username
+                var user = await _userService.GetUserByUsername(username);
+
+                if (user == null)
+                {
+                    return NotFound(new { Message = "User not found." });
+                }
+
+                return Ok(new { UserId = user.Id, FirstName = user.Username });
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                return StatusCode(500, new { Message = "An error occurred.", Details = ex.Message });
+            }
+        }
+
 
 
         [HttpPost("RegistrationOFUser")]
@@ -57,9 +83,9 @@ namespace ComplaintTicketAPI.Controllers
 
 
         [HttpPost("send-otp")]
-        public async Task<IActionResult> SendRegistrationOtp(string email)
+        public async Task<IActionResult> SendRegistrationOtp(EmailDTO emailDto)
         {
-            var response = await _userService.SendRegistrationOtp(email);
+            var response = await _userService.SendRegistrationOtp(emailDto.Email);
             if (response is ErrorResponseDTO errorResponse)
             {
                 return StatusCode(errorResponse.ErrorCode, errorResponse);

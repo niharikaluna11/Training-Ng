@@ -1,3 +1,141 @@
+<script>
+import { Register, SendOtp } from "@/scripts/RegisterService";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
+export default {
+  name: "RegisterComponent",
+  data() {
+    return {
+      fname: "",
+      lname: "",
+      username: "",
+      password: "",
+      email: "",
+      otp: "",
+      date: "",
+      role: "",
+      organizationType: ""
+    };
+  },
+  computed: {
+    isFormValid() {
+      return (
+        this.fname.trim() &&
+        this.lname.trim() &&
+        this.username.trim() &&
+        this.password.trim() &&
+        this.email.trim() &&
+        this.otp.trim() &&
+        this.date.trim() &&
+        this.role !== "" &&
+        (this.role !== 2 || this.organizationType !== "")
+      );
+    }
+  },
+  methods: {
+    // Send OTP method
+    async sendOtp() {
+      if (!this.email) {
+        toast.error("Please enter a valid email address.");
+        return;
+      }
+      try {
+        // Call SendOtp function and pass the email
+        const response = await SendOtp(this.email);
+
+        // If OTP is successfully sent
+        if (response.status === 200) {
+          toast.success("OTP sent successfully!", {
+            rtl: true,
+            limit: 2,
+            position: toast.POSITION.TOP_CENTER,
+          });
+        }
+      } catch (error) {
+        // Handle any error from SendOtp function
+        console.error("Error sending OTP:", error);
+        toast.error("Failed to send OTP.", {
+          rtl: true,
+          limit: 2,
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    },
+
+    // Register method
+    async Register(event) {
+      event.preventDefault();  // Prevent default form submission
+
+      const newdate = new Date(this.date).toISOString();  // Format the date correctly
+
+      try {
+        const response = await Register(
+          this.fname,
+          this.lname,
+          this.username,
+          this.password,
+          this.email,
+          this.otp,
+          newdate,
+          this.role,
+          this.organizationType
+        );
+
+        // Handle successful registration
+        if (response.status === 200) {
+          this.fname = "";
+          this.lname = "";
+          this.username = "";
+          this.password = "";
+          this.email = "";
+          this.role = "";
+          this.organizationType = "";
+          toast.success(
+            `${response.data.data.username} is registered.`,
+            {
+              rtl: true,
+              limit: 2,
+              position: toast.POSITION.TOP_CENTER,
+            }
+          );
+        } else {
+          toast.error(
+            `${response.data.response.data.errorMessage || "An unexpected error occurred during registration."}`,
+            {
+              rtl: true,
+              limit: 2,
+              position: toast.POSITION.TOP_RIGHT,
+            }
+          );
+        }
+      } catch (err) {
+        // Handle any unexpected errors
+        console.error("Registration error:", err);
+        toast.error(
+          `Registration failed: ${err.response?.data?.errorMessage || "An unexpected error occurred."}`,
+          {
+            rtl: true,
+            limit: 2,
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+      }
+    },
+
+    // Method to check role and reset organizationType if needed
+    checkRole() {
+      if (this.role !== 2) {
+        this.organizationType = "";
+      }
+    }
+  }
+};
+</script>
+
+
+
+
 <template>
   <header class="header">
     <div class="header-content responsive-wrapper">
@@ -43,7 +181,7 @@
       <div class="content-header">
         <div class="content-header-intro">
           <div class="graphic">
-            <img src="@/Images/RegisterPage1.png" alt="Register Page Illustration" />
+            <img src="@/Images/signupvector.avif" alt="Register Page Illustration" />
           </div>
         </div>
         <div class="content-header-actions">
@@ -68,6 +206,15 @@
 
             <div class="form-group">
               <input v-model="email" type="email" placeholder="Email" required class="input-field" />
+              <button type="button" @click="sendOtp" class="send-otp-btn" style="float: right;">
+                Send OTP
+              </button>
+            </div>
+
+
+
+            <div class="form-group">
+              <input v-model="otp" type="text" placeholder="Otp" required class="input-field" />
             </div>
 
             <div class="form-group">
@@ -81,22 +228,23 @@
                 <option :value="1">User</option>
                 <option :value="2">Organization</option>
               </select>
+
+              <div v-if="role === 2" class="form-group" style="flex: 1;">
+                <select v-model="organizationType" class="input-field">
+                  <option disabled value="">Select Type</option>
+                  <option :value="1">Company</option>
+                  <option :value="2">Government</option>
+                  <option :value="3">Agent</option>
+                </select>
+              </div>
             </div>
 
-            <div v-if="role === 2" class="form-group">
-              <select v-model="organizationType" class="input-field">
-                <option disabled value="">Select Type</option>
-                <option :value="1">Company</option>
-                <option :value="2">Government</option>
-                <option :value="3">Agent</option>
-              </select>
-            </div>
 
             <div class="button-group">
               <button :disabled="!isFormValid" @click="Register" class="login-button">Sign Up</button>
-              <button class="login-button">
-                <router-link to="login">Sign In</router-link>
-              </button>
+              <router-link to="login"> <button class="login-button">
+                  Sign In
+                </button></router-link>
             </div>
           </section>
 
@@ -109,152 +257,85 @@
 </template>
 
 
-<script>
-import { Register } from "@/scripts/RegisterService";
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-
-export default {
-  name: "RegisterComponent",
-  data() {
-    return {
-      fname: "",
-      lname: "",
-      username: "",
-      password: "",
-      email: "",
-      date: "",
-      role: "",
-      organizationType: ""
-    };
-  },
-  computed: {
-    isFormValid() {
-      return (
-        this.fname.trim() &&
-        this.lname.trim() &&
-        this.username.trim() &&
-        this.password.trim() &&
-        this.email.trim() &&
-        this.date.trim() &&
-        this.role !== "" &&
-        (this.role !== 2 || this.organizationType !== "")
-      );
-    }
-  },
-  methods: {
-    async Register(event) {
-      event.preventDefault();  // Prevent default form submission
-
-      const newdate = new Date(this.date).toISOString();  // Format date correctly
-
-      try {
-        const response = await Register(
-          this.fname,
-          this.lname,
-          this.username,
-          this.password,
-          this.email,
-          newdate,
-          this.role,
-          this.organizationType
-        );
-
-        // Handle successful registration
-        if (response.status === 200) {
-          this.fname = "",
-            this.lname = "",
-            this.username = "",
-            this.password = "",
-            this.email = "",
-            this.role = "",
-            this.organizationType = "",
-            toast.success(
-              `${response.data.data.username} is registered `,
-              {
-                rtl: true,
-                limit: 2,
-                position: toast.POSITION.TOP_CENTER,
-              }
-            );
-        } else {
-
-          toast.error(
-            `${response.data.response.data.errorMessage || "An unexpected error occurred during registration."}`,
-            {
-              rtl: true,
-              limit: 2,
-              position: toast.POSITION.TOP_RIGHT,
-            }
-          );
-        }
-      } catch (err) {
-        // Handle any unexpected errors
-        console.error('Registration error:', err);
-        toast.error(
-          `Registration failed: ${err.response.data.errorMessage || "An unexpected error occurred."}`,
-          {
-            rtl: true,
-            limit: 2,
-            position: toast.POSITION.TOP_RIGHT,
-          }
-        );
-      }
-    },
-    checkRole() {
-      // Check if the role is not equal to 2, reset organizationType
-      if (this.role !== 2) {
-        this.organizationType = "";
-      }
-    }
-  }
-};
-</script>
-
 <style scoped>
-.content-header {
-  padding-top: 0px;
+.main {
+  padding-top: 2rem;
 }
 
+
+.content-header-actions {
+  flex: 1;
+  width: 100%;
+  /* Ensure full width without extra gaps */
+  max-width: 500px;
+  /* Optional to restrict the content size */
+  margin: 0 auto;
+  /* Center the container */
+}
+
+/* Image styling in the content */
 .graphic img {
   border-radius: 10px;
   max-width: 100%;
   max-height: 400px;
-  /* Adjust this value as needed */
   width: auto;
   height: auto;
   object-fit: contain;
+  padding-left: 60px;
   /* Ensures the image retains its aspect ratio */
 }
 
+.content-header {
+  padding-top: 0px;
+  margin: 0px;
+  margin-right: 0px;
+}
 
-/* Hero Section */
+/* Hero Section Styling */
 .hero {
   flex: 1;
   text-align: left;
-  max-width: 400px;
-  padding: 20px;
+  max-width: 500px;
+  padding-left: 0px;
+  padding-right: 0px;
   padding-top: 0px;
+  margin-right: 0px;
+}
+
+/* Hero Section */
+section.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .hero h1 {
-  font-size: 2.5rem;
+  margin-top: 10px;
+  font-size: 2rem;
   margin-bottom: 20px;
+  color: #9484c4;
 }
 
-/* General Form Group */
+/* Form Groups (Spacing and Layout) */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   width: 100%;
+  position: relative;
+  /* Used for "Send OTP" button placement */
 }
 
+/* Input Fields */
 .input-field {
   width: 100%;
+  height: 40px;
+  /* Consistent height across all inputs */
   padding: 10px;
   font-size: 1rem;
   border: 1px solid #ccc;
   border-radius: 5px;
   outline: none;
+  box-sizing: border-box;
 }
 
 .input-field:focus {
@@ -262,7 +343,7 @@ export default {
   box-shadow: 0 0 5px rgba(148, 132, 196, 0.5);
 }
 
-/* First Name and Last Name in One Line */
+/* Name Group (First Name and Last Name in one line) */
 .name-group {
   display: flex;
   gap: 15px;
@@ -271,16 +352,81 @@ export default {
 
 .input-container {
   flex: 1;
+  /* Ensures equal width for both input fields */
 }
 
-/* Role and Organization Select in One Line */
+/* Email Field with "Send OTP" Button */
+.form-group input[type="email"] {
+  padding-right: 120px;
+  /* Space for the "Send OTP" button */
+}
+
+.form-group input[type="email"]:focus {
+  border-color: #9484c4;
+  box-shadow: 0 0 5px rgba(148, 132, 196, 0.5);
+}
+
+/* "Send OTP" Button Styling */
+.send-otp-btn {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  background-color: #9484c4;
+  color: white;
+  font-size: 0.9rem;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.send-otp-btn:hover {
+  background-color: #7d6abf;
+}
+
+.send-otp-btn:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+/* Role and Organization Select Fields */
 .role-group {
   display: flex;
   gap: 15px;
-  /* Space between Role and Organization Type */
+  /* Space between Role and Organization dropdowns */
 }
 
-/* Button Group (half width, in one line) */
+.role-group select {
+  flex: 1;
+  /* Ensures equal width for both dropdowns */
+}
+
+/* General Dropdown Styling */
+.form-group select {
+  width: 100%;
+  height: 40px;
+  /* Consistent height with input fields */
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  width: 100%;
+}
+
+.form-group select:focus {
+  border-color: #9484c4;
+  box-shadow: 0 0 5px rgba(148, 132, 196, 0.5);
+}
+
+/* Button Group Styling */
 .button-group {
   display: flex;
   justify-content: space-between;
@@ -288,8 +434,8 @@ export default {
 }
 
 .login-button {
-  width: 60%;
-  /* Button takes up almost half of the width */
+  width: 200px;
+  /* Buttons take up most of the width */
   padding: 12px;
   background-color: #9484c4;
   color: white;
@@ -308,8 +454,6 @@ export default {
   background-color: #ccc;
   cursor: not-allowed;
 }
-
-
 
 /* Navigation */
 .navigation {
