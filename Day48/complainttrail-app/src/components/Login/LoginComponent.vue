@@ -1,14 +1,15 @@
 <script>
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-
 import { login } from '@/scripts/LoginService';
 import { jwtDecode } from 'jwt-decode';
-
-
+import BaseHeader from '../BaseHeader.vue';
 
 export default {
   name: 'LoginComponent',
+  components: {
+    BaseHeader,
+  },
   data() {
     return {
       username: '',
@@ -38,36 +39,47 @@ export default {
 
           if (token) {
             try {
-
-
               // Decode the token
               const decode = jwtDecode(token);
 
+              // Store 'given_name' in localStorage and sessionStorage
               if (decode.given_name) {
+                localStorage.setItem("username", decode.given_name);
                 sessionStorage.setItem("username", decode.given_name);
+              }
+
+              // Store 'role' in localStorage
+              if (decode["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]) {
+                localStorage.setItem(
+                  "role",
+                  decode["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+                );
               }
 
               console.log("Decoded Token:", decode);
 
-              //http://schemas.microsoft.com/ws/2008/06/identity/claims/role
-
-              if (decode["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] == 'Admin') {
+              // Redirect based on role
+              const role = decode["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+              if (role === 'Admin') {
                 console.log('Welcome, ADMIN!');
-                this.$router.push('/AdminDashboard'); // Redirect Admin users
-              }
-              else if (decode["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] == 'User') {
+                this.$router.push('/AdminDashboard');
+              } else if (role === 'User') {
                 console.log('Welcome, User!');
-                this.$router.push('/UserDashboard'); // Redirect regular users
-              }
-              else if (decode["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"] == 'Organization') {
-                console.log('Welcome, ORG');
-                this.$router.push('/OrganizationDashboard'); // Redirect regular users
+                this.$router.push('/UserDashboard');
+              } else if (role === 'Organization') {
+                console.log('Welcome, Organization!');
+                this.$router.push('/OrganizationDashboard');
+              } else {
+                console.error("Role not recognized");
+                this.$router.push('/ErrorPage');
               }
             } catch (error) {
               console.error("Error decoding token:", error);
+              toast.error('Invalid token. Please log in again.');
+              localStorage.removeItem("token");
             }
           } else {
-            console.error("No token found in sessionStorage");
+            console.error("No token found in localStorage");
           }
 
         }
@@ -99,42 +111,7 @@ export default {
 
 
 <template>
-  <header class="header">
-    <div class="header-content responsive-wrapper">
-      <div class="header-logo">
-        <a href="#">
-          <div>
-            <img src="https://assets.codepen.io/285131/untitled-ui-icon.svg" />
-          </div>
-          <img src="https://assets.codepen.io/285131/untitled-ui.svg" />
-        </a>
-      </div>
-      <div class="header-navigation">
-        <nav class="header-navigation-links">
-          <a href="#">
-            <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
-              Home
-            </router-link>
-          </a>
-        </nav>
-        <div class="header-navigation-actions">
-          <a href="#" class="icon-button">
-            <i class="ph-gear-bold"></i>
-          </a>
-          <a href="#" class="icon-button">
-            <i class="ph-bell-bold"></i>
-          </a>
-          <a href="#" class="avatar">
-            <img src="@/Images/profilepicimg.jpg" alt="profile">
-          </a>
-        </div>
-      </div>
-      <a href="#" class="button">
-        <i class="ph-list-bold"></i>
-        <span>Menu</span>
-      </a>
-    </div>
-  </header>
+  <BaseHeader class="header" />
 
   <main class="main">
     <div class="responsive-wrapper">
@@ -175,10 +152,12 @@ export default {
   </main>
 </template>
 
-
-
-
 <style scoped>
+.header {
+  height: 60px;
+  padding-top: 0px;
+}
+
 .content-header {
   padding-top: 0px;
   display: flex;
@@ -196,7 +175,6 @@ export default {
   padding: 20px;
 }
 
-
 /* Image Styling */
 .content-header-layout {
   display: flex;
@@ -209,10 +187,6 @@ export default {
   padding: 20px;
 }
 
-/* Ensure the text section aligns well */
-/* .content-header-actions {
-  max-width: 400px;
-} */
 .content-header-actions {
   flex: 1;
   /* Take up equal space */

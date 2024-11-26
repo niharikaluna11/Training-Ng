@@ -2,9 +2,13 @@
 import axios from "axios"; // Import axios here
 import { sendResetLink } from '@/scripts/ForgetPasswordService';
 import { toast } from 'vue3-toastify'; // Add notifications
+import BaseHeader from "../BaseHeader.vue";
 
 export default {
   name: 'ForgotPassword',
+  components: {
+    BaseHeader,
+  },
   data() {
     return {
       username: '',
@@ -34,13 +38,13 @@ export default {
         if (response.status === 200) {
           toast.success("Reset link sent successfully!", {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 60000, 
+            autoClose: 60000,
           });
           this.isOtpSent = true;
         } else {
           toast.error(response?.data?.message || "Failed to send reset link.", {
             position: toast.POSITION.TOP_RIGHT,
-            autoClose: 60000, 
+            autoClose: 60000,
           });
         }
       } catch (err) {
@@ -73,7 +77,7 @@ export default {
         } else {
           toast.error(response?.data?.message || "Failed to reset password.", {
             position: toast.POSITION.TOP_RIGHT,
-            autoClose: 60000, 
+            autoClose: 60000,
           });
         }
       } catch (err) {
@@ -89,91 +93,41 @@ export default {
 
 
 <template>
-  <header class="header">
-    <div class="header-content responsive-wrapper">
-      <div class="header-logo">
-        <a href="#">
-          <div>
-            <img src="https://assets.codepen.io/285131/untitled-ui-icon.svg" />
-          </div>
-          <img src="https://assets.codepen.io/285131/untitled-ui.svg" />
-        </a>
-      </div>
-      <div class="header-navigation">
-        <nav class="header-navigation-links">
-          <a href="#">
-            <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
-              Home
-            </router-link>
-          </a>
-        </nav>
-        <div class="header-navigation-actions">
-          <a href="#" class="icon-button">
-            <i class="ph-gear-bold"></i>
-          </a>
-          <a href="#" class="icon-button">
-            <i class="ph-bell-bold"></i>
-          </a>
-          <a href="#" class="avatar">
-            <img src="@/Images/profilepicimg.jpg" alt="profile">
-          </a>
-        </div>
-      </div>
-      <a href="#" class="button">
-        <i class="ph-list-bold"></i>
-        <span>Menu</span>
-      </a>
-    </div>
-  </header>
-
-
+  <BaseHeader class="header" />
   <main class="main">
     <div class="responsive-wrapper">
 
       <div class="content-header">
-        <!-- Flexbox Container for Image and Text -->
         <div class="content-header-layout">
-          <!-- Image Section -->
           <img src="@/Images/ForgotPassword/forgotpasswordimg.jpg" alt="Login Page Illustration"
             class="content-image" />
-
-          <!-- Conditional Rendering for the Form -->
           <div class="content-header-actions">
-            <!-- Show Initial Form if OTP is not sent -->
             <section v-if="!isOtpSent" class="hero">
               <h1 class="welcome-message" style="font-size: 3em; color: #9484c4;">
                 Forgot your Password!
               </h1>
-
               <div class="form-group">
                 <input v-model="username" type="text" placeholder="Username or Email Address" required
                   class="input-field" />
               </div>
-
               <button class="login-button" :disabled="!isFormValid" @click="handleSendResetLink">
                 Send Reset Link
               </button>
             </section>
-
-            <!-- Show Reset Password Form if OTP is sent -->
             <section v-else class="hero">
               <h1 class="welcome-message" style="font-size: 3em; color: #9484c4;">
                 Reset Your Password
               </h1>
-
               <div class="form-group">
                 <input v-model="otp" type="text" placeholder="Enter OTP" required class="input-field" />
               </div>
-
               <div class="form-group">
                 <input v-model="newPassword" type="password" placeholder="New Password" required class="input-field" />
               </div>
-
               <div class="form-group">
                 <input v-model="confirmNewPassword" type="password" placeholder="Confirm New Password" required
                   class="input-field" />
               </div>
-
               <button class="login-button" :disabled="!isResetFormValid" @click="handleResetPassword">
                 Reset Password
               </button>
@@ -183,11 +137,15 @@ export default {
       </div>
     </div>
   </main>
-
 </template>
 
 
 <style scoped>
+.header {
+  height: 60px;
+  padding-top: 0px;
+}
+
 .content-header {
   padding-top: 0px;
   display: flex;

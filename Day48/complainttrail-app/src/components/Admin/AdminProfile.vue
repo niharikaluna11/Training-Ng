@@ -1,6 +1,6 @@
 <script>
-import { getUserIdByUsername } from "@/scripts/GetUserId";
-import { getUserProfile } from "@/scripts/GetUserProfile";
+import { getUserIdByUsername } from "@/scripts/GetALL/GetUserId";
+import { getUserProfile } from "@/scripts/GetALL/GetUserProfile";
 import {  updateUserProfile } from "@/scripts/UpdateProfile";
 
 export default {

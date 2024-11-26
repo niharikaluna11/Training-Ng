@@ -1,56 +1,5 @@
 <template>
-  <header class="header">
-    <div class="header-content responsive-wrapper">
-      <div class="header-logo">
-        <a href="#">
-          <div>
-            <img src="https://assets.codepen.io/285131/untitled-ui-icon.svg" />
-          </div>
-          <img src="https://assets.codepen.io/285131/untitled-ui.svg" />
-          <!-- <img src="@/Images/logo_transparent.png" alt="Customer Service Agent"
-            style="display: block;max-width: 30%;" /> -->
-        </a>
-      </div>
-      <div class="header-navigation">
-        <nav class="header-navigation-links">
-          <router-link to="/HomePage" class="nav-link active text-light" aria-current="page">
-            <a href="#">Home </a>
-          </router-link>
-          <a href="#About"> About </a>
-          <a href="#Feature"> Features </a>
-          <a href="#learn-more"> Contact us </a>
-
-        </nav>
-        <div class="header-navigation-actions">
-         
-          <router-link to="/Login" class="nav-link active text-light signup" aria-current="page">
-            <a href="#" class="button">
-            <i class="ph-lightning-bold"></i>
-
-              <span>Sign Up</span>
-           
-          </a>
-        </router-link>
-          <a href="#" class="icon-button">
-            <i class="ph-gear-bold"></i>
-          </a>
-          <a href="#" class="icon-button">
-            <i class="ph-bell-bold"></i>
-          </a>
-
-
-          <a href="#" class="avatar">
-            <img src="@/Images/profilepicimg.jpg" alt="profile">
-          </a>
-        </div>
-      </div>
-      <a href="#" class="button">
-        <i class="ph-list-bold"></i>
-        <span>Menu</span>
-      </a>
-    </div>
-  </header>
-
+  <BaseHeader class="header" />
   <main class="main">
     <div class="responsive-wrapper">
       <div class="content-header">
@@ -62,77 +11,31 @@
           </section>
         </div>
         <div class="content-header-actions">
-
           <img src="@/Images/client-service.png" alt="Customer Service Agent" />
-
         </div>
       </div>
     </div>
   </main>
-
-  <main class="main">
-    <div class="responsive-wrapper">
-      <div class="content-header">
-        <div class="content-header-intro">
-
-          <img src="" alt="Customer Service Agent" />
-
-        </div>
-        <div class="content-header-actions">
-
-          <h1>About Our Services</h1>
-          <p>We provide top-notch customer service round the clock.</p>
-
-        </div>
-      </div>
-    </div>
-  </main>
-
-
-  <main class="main">
-    <div class="responsive-wrapper">
-      <div class="content-header">
-        <div class="content-header-intro">
-
-          <h1>Contact Us</h1>
-          <!-- <p>We are here to assist you. Reach out to us by filling out the form below.</p> -->
-          <form class="contact-form">
-            <div class="form-group">
-              <label for="email">Email:</label>
-              <input type="email" id="email" placeholder="Enter your email" required />
-            </div>
-            <div class="form-group">
-              <label for="message">Message:</label>
-              <textarea id="message" rows="5" placeholder="Write your message here..." required></textarea>
-            </div>
-            <button type="submit" class="submit-btn">Send Message</button>
-          </form>
-
-        </div>
-        <div class="content-header-actions">
-          <img src="@/Images/client-service.png" alt="Customer Service Agent" style="width: min-content;" />
-
-        </div>
-      </div>
-    </div>
-  </main>
-
-
-
 
 </template>
 
 <script>
+import BaseHeader from './BaseHeader.vue';
 
 export default {
   name: "HelloWorld",
+  components: {
+    BaseHeader,
+  },
 };
 </script>
 
-
-
-
 <style scoped>
+.header {
+  height: 60px;
+  padding-top: 0px;
+}
+
 .contact-section {
   margin-top: 40px;
   padding: 20px;

@@ -10,32 +10,172 @@ import AdminSideBar from "./components/Admin/AdminSideBar.vue";
 import UserSideBar from "./components/User/UserSideBar.vue";
 import OrgSideBar from "./components/Organization/OrgSideBar.vue";
 import ErrorPage from "./components/ErrorPage.vue";
-import ForgotPassword from "./components/Login/ForgotPassword/ForgotPassword.vue";
+import ForgotPassword from "./components/Login/ForgotPassword.vue";
 import AdminProfile from "./components/Admin/AdminProfile.vue";
 import AdminViewUser from "./components/Admin/AdminViewUser.vue";
 import AdminViewOrg from "./components/Admin/AdminViewOrg.vue";
+import AdminViewComplaints from "./components/Admin/AdminViewComplaints.vue";
+import AdminFileComplaint from "./components/Admin/AdminFileComplaint.vue";
+import ComplaintCategory from "./components/Admin/ComplaintCategory.vue";
 
 const routes = [
     { path: '/', component: HomePage },
     { path: '/HomePage', component: HomePage },
     { path: '/Login', component: LoginComponent },
     { path: '/Register', component: RegisterComponent },
-    { path: '/UserDashboard', component: UserDashboard },
-    { path: '/AdminDashboard', component: AdminDashboard },
-    { path: '/OrganizationDashboard', component: OrganizationDashboard },
-    { path: '/AdminSideBar', component: AdminSideBar },
-    { path: '/UserSideBar', component: UserSideBar },
-    { path: '/OrgSideBar', component: OrgSideBar },
     { path: '/ErrorPage', component: ErrorPage },
     { path: '/ForgotPassword', component: ForgotPassword },
-    { path: '/AdminProfile', component: AdminProfile },
-    { path: '/AdminViewUser', component: AdminViewUser },
-    { path: '/AdminViewOrg', component: AdminViewOrg },
+
+
+
+    {
+        path: '/UserDashboard',
+        component: UserDashboard,
+        meta: { requiresAuth: true, requiresUser: true }
+    },
+    {
+        path: '/AdminDashboard',
+        component: AdminDashboard,
+        meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+        path: '/AdminProfile',
+        component: AdminProfile,
+        meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+        path: '/OrganizationDashboard',
+        component: OrganizationDashboard,
+        meta: { requiresAuth: true, requiresOrganization: true }
+    },
+    {
+        path: '/AdminSideBar',
+        component: AdminSideBar,
+        meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+        path: '/UserSideBar',
+        component: UserSideBar,
+        meta: { requiresAuth: true }
+    },
+    {
+        path: '/OrgSideBar',
+        component: OrgSideBar,
+        meta: { requiresAuth: true, requiresOrganization: true }
+    },
+
+    {
+        path: '/AdminViewUser',
+        component: AdminViewUser,
+        meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+        path: '/AdminViewOrg',
+        component: AdminViewOrg,
+        meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+        path: '/AdminViewComplaints',
+        component: AdminViewComplaints,
+        meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+        path: '/AdminFileComplaint',
+        component: AdminFileComplaint,
+        meta: { requiresAuth: true, requiresAdmin: true }
+    },
+    {
+        path: '/ComplaintCategory',
+        component: ComplaintCategory,
+        meta: { requiresAuth: true, requiresAdmin: true }
+    },
+
+
+
 ];
+
+
 
 const router = createRouter({
     history: createWebHistory(),
     routes
 });
+router.afterEach(() => {
+    window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+    });
+});
+router.beforeEach((to, from, next) => {
+    if (to.matched.some((record) => record.meta.requiresAuth)) {
+        if (!isAuthenticated()) {
+            next({ path: "/login", query: { redirect: to.path } });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
+
+function isAuthenticated() {
+    // Check user authentication (e.g., token stored in localStorage)
+    return !!sessionStorage.getItem('token');
+}
+router.beforeEach((to, from, next) => {
+    if (to.matched.some((record) => record.meta.requiresAdmin)) {
+        if (!isAdminAuthenticated()) {
+            next({ path: "/login", query: { redirect: to.fullPath } });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
+function isAdminAuthenticated() {
+    const userRole = localStorage.getItem('role');
+    console.log(userRole);
+    if (userRole == "Admin") {
+        return true;
+    }
+}
+router.beforeEach((to, from, next) => {
+    if (to.matched.some((record) => record.meta.requiresOrganization)) {
+        if (!isOrganizationAuthenticated()) {
+            next({ path: "/login", query: { redirect: to.fullPath } });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
+function isOrganizationAuthenticated() {
+    const userRole = localStorage.getItem('role');
+    console.log(userRole);
+    if (userRole == "Organization") {
+        return true;
+    }
+}
+router.beforeEach((to, from, next) => {
+    if (to.matched.some((record) => record.meta.requiresUser)) {
+        if (!isUserAuthenticated()) {
+            next({ path: "/login", query: { redirect: to.fullPath } });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
+function isUserAuthenticated() {
+    const userRole = localStorage.getItem('role');
+    console.log(userRole);
+    if (userRole == "User") {
+        return true;
+    }
+}
 
 export default router;

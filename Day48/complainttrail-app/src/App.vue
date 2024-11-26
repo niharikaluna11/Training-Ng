@@ -31,6 +31,8 @@ export default {
   --c-background-quaternary: #e9ecf4;
   --ds-surface-sunken: #F7F8F9;
   --ds-border: #091E4224;
+  --new-color: #9484c4;
+  
 }
 
 body {
@@ -79,12 +81,7 @@ body {
     font-weight: 600;
   }
 
-  p {
-    color: var(--c-text-secondary);
-    margin-top: 0.25rem;
-    font-size: 0.875rem;
-    margin-bottom: 1rem;
-  }
+ 
 }
 
 .content-header-actions {
@@ -162,7 +159,7 @@ body {
 }
 
 .header-navigation-links {
-  display: flex;
+
   align-items: center;
 
   a {
@@ -345,10 +342,6 @@ body {
     height: 40px;
   }
 }
-
-
-
-
 
 html {
   &::-webkit-scrollbar {
