@@ -47,7 +47,7 @@ namespace ComplaintTicketAPI.Repositories
                 return await _context.Complaints
                                      .Include(c => c.User)              // Include related user data
                                      .Include(c => c.Category)           // Include related category data
-                                     .FirstOrDefaultAsync(c => c.Id == key); // Get the complaint by ID
+                                     .FirstOrDefaultAsync(c => c.ComplaintId == key); // Get the complaint by ID
             }
             catch { throw new Exception("empty complaint"); }
 
