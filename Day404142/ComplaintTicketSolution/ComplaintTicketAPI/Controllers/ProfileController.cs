@@ -1,4 +1,5 @@
 ﻿using ComplaintTicketAPI.Interfaces.InteraceServices;
+using ComplaintTicketAPI.Models;
 using ComplaintTicketAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -29,6 +30,37 @@ namespace ComplaintTicketAPI.Controllers
         }
 
         // GET: api/profile/{userId}
+
+        [HttpGet("Get-profile-pic")]
+       // [Authorize]
+        public async Task<IActionResult> GetProfilePic(string username)
+        {
+            try
+            {
+                var userProfile = await _userProfileService.GetProfilePic(username);
+
+                if (userProfile != null)
+                {
+                    return Ok(userProfile);
+                }
+
+                var organizationProfile = await _organizationProfileService.GetProfilePic(username);
+                if (organizationProfile != null)
+                {
+                    return Ok(organizationProfile);
+                }
+
+
+                return NotFound($"Profile  not found in either User or Organization profiles.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error retrieving profile.");
+                return StatusCode(StatusCodes.Status500InternalServerError, "An error occurred while processing your request.");
+            }
+        }
+
+
         [HttpGet("Get-profile")]
         [Authorize]
         public async Task<IActionResult> GetProfile(int userId)

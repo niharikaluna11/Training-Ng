@@ -46,7 +46,7 @@ namespace ComplaintTicketAPI.Controllers
                     return NotFound(new { Message = "User not found." });
                 }
 
-                return Ok(new { UserId = user.Id, FirstName = user.Username });
+                return Ok(new { UserId = user.userId, FirstName = user.Username });
             }
             catch (Exception ex)
             {

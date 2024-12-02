@@ -5,6 +5,7 @@ using ComplaintTicketAPI.Models.DTO;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using ComplaintTicketAPI.Interfaces.InteraceServices;
+using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTicketAPI.Controllers
 {
@@ -21,50 +22,7 @@ namespace ComplaintTicketAPI.Controllers
         }
 
 
-       
-        public static ComplaintDataDTO ToComplaintDataDTO(Complaint complaint)
-        {
-            // Validate that ComplaintStatusDates is not null or empty
-            var latestStatusDate = complaint.ComplaintStatusDates?
-                                         .OrderByDescending(c => c.StatusDate)
-                                         .FirstOrDefault();
 
-            return new ComplaintDataDTO
-            {
-                Id = complaint.Id,
-                Description = complaint.Description,
-                Status = latestStatusDate?.ComplaintStatus.Status ?? Status.Recieved,
-                Priority = latestStatusDate?.ComplaintStatus.Priority ?? Priority.Low,
-                CategoryName = complaint.Category?.Name,
-                LastUpdated = latestStatusDate?.StatusDate ?? DateTime.Now
-            };
-        }
-
-
-        [HttpGet("GetComplaints")]
-        [Authorize(Roles = "Admin,Organization")]
-        public async Task<ActionResult<List<ComplaintDataDTO>>> GetComplaints(int orgId)
-        {
-            try
-            {
-                var complaints = await _updateComplaintService.GetComplaintByOrganizationIdAsync(orgId);
-                if (complaints == null || !complaints.Any())
-                {
-                    return NotFound();
-                }
-
-                var complaintDTOs = complaints.Select(ToComplaintDataDTO).ToList();
-                return Ok(complaintDTOs);
-            }
-            catch (KeyNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-
-
-       
         [HttpPut("UpdateComplaintStatus")]
         [Authorize(Roles = "Admin,Organization")]
         public async Task<IActionResult> UpdateComplaintStatus([FromBody] UpdateComplaintRequestDTO updateRequest)

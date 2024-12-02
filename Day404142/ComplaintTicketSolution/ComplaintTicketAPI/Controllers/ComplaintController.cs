@@ -7,6 +7,7 @@ using ComplaintTicketAPI.Context;
 using AutoMapper;
 using Microsoft.AspNetCore.Cors;
 using ComplaintTicketAPI.Interfaces.InteraceServices;
+using ComplaintTicketAPI.Services;
 
 [Route("api/[controller]")]
 [EnableCors("AllowAll")]
@@ -15,14 +16,19 @@ public class ComplaintController : ControllerBase
 {
     private readonly IComplaintService _complaintService;
     private readonly ComplaintTicketContext _context;
+    private readonly IComplaintDetailService _complaintDetailService;
     private readonly IMapper _mapper;
-
+    private readonly IComplaintGetService _complaintGetService;
     // Constructor with dependency injection
-    public ComplaintController(IComplaintService complaintService, ComplaintTicketContext context, IMapper mapper)
+    public ComplaintController(IComplaintService complaintService,
+        ComplaintTicketContext context, IMapper mapper, 
+        IComplaintGetService complaintGetService, IComplaintDetailService complaintDetailService)
     {
         _complaintService = complaintService;
         _context = context;
         _mapper = mapper;
+        _complaintGetService = complaintGetService;
+        _complaintDetailService = complaintDetailService;
     }
 
     [HttpGet("GetComplaintById")] // Updated route parameter to match CreateComplaint usage
@@ -83,7 +89,7 @@ public class ComplaintController : ControllerBase
             var complaint = await _context.Complaints
                                           .Include(c => c.ComplaintStatusDates)
                                           .ThenInclude(cs => cs.ComplaintStatus)
-                                          .FirstOrDefaultAsync(c => c.Id == complaintId);
+                                          .FirstOrDefaultAsync(c => c.ComplaintId == complaintId);
 
             if (complaint == null)
             {
@@ -132,7 +138,7 @@ public class ComplaintController : ControllerBase
             var latestStatusComplaints = complaints
                 .Select(c => new
                 {
-                    ComplaintId = c.Id,
+                    ComplaintId = c.ComplaintId,
                     LatestStatus = c.ComplaintStatusDates
                         .OrderByDescending(cs => cs.StatusDate)  // Order by the latest status date
                         .FirstOrDefault()?.ComplaintStatus.Status  // Get the status of the most recent entry
@@ -175,7 +181,74 @@ public class ComplaintController : ControllerBase
         }
     }
 
+    [HttpGet("GetComplaints")]
+    [Authorize(Roles = "Admin,Organization")]
+    public async Task<ActionResult<PagedComplaintsDTO>> GetComplaints(int orgId, int pageNum, int pageSize)
+    {
+        try
+        {
+            // Fetch complaints for the given organization with pagination
+            var complaints = await _complaintGetService.GetComplaintByOrganizationIdAsync(orgId, pageNum, pageSize);
 
+            if (complaints == null || !complaints.Any())
+            {
+                return NotFound("No complaints found for the specified organization.");
+            }
+
+            // Fetch the total complaint count for pagination
+            var totalCount = await _complaintGetService.GetComplaintCountByOrganizationIdAsync(orgId);
+
+            // Map complaints to ComplaintDataDTO
+            var complaintDataDTOs = complaints.Select(c => new ComplaintDataDTO
+            {
+                complaintId = c.ComplaintId,
+                
+                Description = c.Description,
+               
+            }).ToList();
+
+            // Return the complaints along with total count for pagination
+            return Ok(new PagedComplaintsDTO
+            {
+                Complaints = complaintDataDTOs,
+                TotalCount = totalCount
+            });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            // If no complaints are found for the organization
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            // Catch any other exceptions
+            return StatusCode(500, "An error occurred while processing the request.");
+        }
+    }
+
+
+
+    [HttpGet("GetComplaintDetails")]
+    [Authorize]
+    public async Task<IActionResult> GetComplaintDetails(int complaintid)
+    {
+        try
+        {
+            var complaintDetails = await _complaintDetailService.GetComplaintDetailsAsync(complaintid);
+
+            
+            if (complaintDetails == null)
+            {
+                return NotFound(new { message = "Complaint not found" });
+            }
+
+            return Ok(complaintDetails);
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, new { message = "An error occurred while retrieving complaint details.", error = ex.Message });
+        }
+    }
 
 
 }

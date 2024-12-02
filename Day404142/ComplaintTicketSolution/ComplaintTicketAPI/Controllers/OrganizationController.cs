@@ -75,7 +75,7 @@ namespace ComplaintTicketAPI.Controllers
         }
 
         [HttpGet("Users/All")]
-        //[Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAllUsers()
         {
             try
@@ -98,7 +98,6 @@ namespace ComplaintTicketAPI.Controllers
 
 
 
-        // Get a list of available priority levels for complaints
         [HttpGet("Complaints/AvailablePriorities")]
         public IActionResult GetAvailablePriorityLevels()
         {
