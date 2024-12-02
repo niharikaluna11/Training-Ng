@@ -2,7 +2,7 @@
 {
     public class ComplaintCategoryResponseDTO
     {
-        public int Id { get; set; }                 // Unique identifier
+        public int categoryId { get; set; }                 // Unique identifier
         public string Name { get; set; }            // Category name
         public string Description { get; set; }     // Category description
     }

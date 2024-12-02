@@ -9,8 +9,8 @@ namespace ComplaintTicketAPI.Models.DTO
         [Required(ErrorMessage = "Company Name is required")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "Profile Picture is required")]
-        public IFormFile ProfilePicture { get; set; }
+       
+        public IFormFile? ProfilePicture { get; set; }
 
         [Required(ErrorMessage = "Type of Company is required")]
         public Type Types { get; set; }
