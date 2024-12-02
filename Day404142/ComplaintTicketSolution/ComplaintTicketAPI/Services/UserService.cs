@@ -86,7 +86,7 @@ namespace ComplaintTicketAPI.Services
                 user.PStatus = PersonStatus.Activated; // Set status to Activated
 
                 // Log the update before saving
-                _logger.LogInformation($"Attempting to reactivate user: {user.Username} (ID: {user.Id})");
+                _logger.LogInformation($"Attempting to reactivate user: {user.Username} (ID: {user.userId})");
 
                 // Explicitly update the user in the DbContext to ensure tracking
                 _context.Users.Update(user);
@@ -101,7 +101,7 @@ namespace ComplaintTicketAPI.Services
                 }
 
                 // Log success
-                _logger.LogInformation($"User {user.Username} (ID: {user.Id}) was successfully reactivated.");
+                _logger.LogInformation($"User {user.Username} (ID: {user.userId}) was successfully reactivated.");
 
                 return user;  // Return the updated user
             }
@@ -130,6 +130,10 @@ namespace ComplaintTicketAPI.Services
             if (user.IsDeleted==true)
             {
                 throw new CouldNotDeleteException("User is already Deactivated");
+            }
+            if(user.Roles==Role.Admin)
+            {
+                throw new CouldNotDeleteException("User is a admin");
             }
 
             try
@@ -171,6 +175,15 @@ namespace ComplaintTicketAPI.Services
                         ErrorCode = 401 // Example error code, replace with appropriate one
                     };
                 }
+                if(user.IsDeleted==true)
+                {
+                    return new ErrorResponseDTO
+                    {
+                        Success = false,
+                        ErrorMessage = " User not activated. Contact Admin for reactivating ",
+                        ErrorCode = 401 // Example error code, replace with appropriate one
+                    };
+                }
 
                 // Verify the password using the stored hash key
                 using var hmac = new HMACSHA256(user.HashKey);
@@ -191,11 +204,11 @@ namespace ComplaintTicketAPI.Services
                 {
                     Username = user.Username,
                     Email = user.Email,
-                    Id = user.Id,
+                    Id = user.userId,
                     Role = user.Roles.ToString(),
                     Token = await _tokenService.GenerateToken(new UserTokenDTO
                     {
-                        userid = user.Id,
+                        userid = user.userId,
                         Username = user.Username,
                         Role = user.Roles.ToString()
                     })
@@ -341,7 +354,7 @@ namespace ComplaintTicketAPI.Services
                         registerUser.Username,
                         registerUser.Role.ToString(),
                         registerUser.Email,
-                        addedUser.Id
+                        addedUser.userId
                     );
                 }
 
@@ -438,16 +451,16 @@ namespace ComplaintTicketAPI.Services
             {
                 if (addedUser.Roles == Role.Organization)
                 {
-                    await CreateOrganizationProfileAsync(addedUser.Id, registerUser);
+                    await CreateOrganizationProfileAsync(addedUser.userId, registerUser);
                 }
                 else
                 {
-                    await CreateUserProfileAsync(addedUser.Id, registerUser);
+                    await CreateUserProfileAsync(addedUser.userId, registerUser);
                 }
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error creating profile for user: {UserId}", addedUser.Id);
+                _logger.LogError(ex, "Error creating profile for user: {UserId}", addedUser.userId);
                 throw new Exception("Failed to create profile or organization");
             }
         }

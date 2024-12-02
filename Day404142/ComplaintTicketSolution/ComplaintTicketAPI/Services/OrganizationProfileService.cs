@@ -33,42 +33,72 @@ namespace ComplaintTicketAPI.Services
         }
 
 
-        public async Task<string> SaveFileAsync(IFormFile file)
+        public async Task<string> SaveFileAsync(IFormFile file, string username)
         {
             if (file == null || file.Length == 0)
             {
-                throw new ArgumentException("No file uploaded.");
+                return null;
             }
 
-            // Generate a unique file name using Guid to avoid overwriting existing files
-            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            // Create a file name that includes the username
+            var uniqueFileName = $"{username}_{Guid.NewGuid().ToString()}{Path.GetExtension(file.FileName)}";
 
             var filePath = Path.Combine(_uploadFolder, uniqueFileName);
 
-            // Save the file to the server
-            try
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await file.CopyToAsync(stream);
-                }
+                await file.CopyToAsync(stream);
+            }
 
-                // Check if the file was successfully saved
-                if (File.Exists(filePath))
-                {
-                    return uniqueFileName;
-                }
-                else
-                {
-                    _logger.LogError("File not saved.");
-                    throw new Exception("Error saving file.");
-                }
-            }
-            catch (Exception ex)
+            // Specify the folder path on GitHub where the file should be uploaded
+            string folderPath = "profilepic/organization";
+
+            // Create an instance of GitHubService and upload the file
+            var gitHubService = new GitHubService();
+            var result = await gitHubService.SaveFileToGitHub(filePath, uniqueFileName, folderPath);
+
+            return result;  // Return the result (success message or URL)
+        }
+
+
+        public async Task<ProfilePicDTO> GetProfilePic(string username)
+        {
+            // Fetch the user based on the username
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            // Check if the user exists
+            if (user == null)
             {
-                _logger.LogError(ex, "Error saving the file.");
-                throw new Exception("Error saving the file.");
+                return new ProfilePicDTO
+                {
+                    ProfilePicture = "" // Return default or empty picture
+                };
             }
+
+            var orgprofile = await _context.Organizations.FirstOrDefaultAsync(p => p.UserId == user.userId);
+
+            // Check if there's a local profile picture
+            string profilePicUrl =  orgprofile?.ProfilePicture;
+
+            // If the profile picture exists in GitHub, use the GitHub URL
+            if (!string.IsNullOrEmpty(profilePicUrl))
+            {
+                // Example URL for GitHub-hosted images
+                string githubBaseUrl = "https://raw.githubusercontent.com/niharikaluna11/my-image-repo/main/profilepic/organization/";
+
+                // Combine GitHub base URL with the image file name (e.g., username or unique name)
+                profilePicUrl = githubBaseUrl + profilePicUrl; // Assuming the image name is the same as stored in the database.
+            }
+            else
+            {
+                // If no profile picture is found, return a default placeholder image URL
+                profilePicUrl = " ";
+            }
+
+            return new ProfilePicDTO
+            {
+                ProfilePicture = profilePicUrl // Returning the full URL of the profile picture
+            };
         }
 
 
@@ -77,13 +107,47 @@ namespace ComplaintTicketAPI.Services
         {
             try
             {
-                var orgProfile = await _context.Organizations.FirstOrDefaultAsync(o => o.UserId == userId);
+                // Retrieve the organization profile for the given user ID
+                var orgProfile = await _context.Organizations
+                    .FirstOrDefaultAsync(o => o.UserId == userId);
 
+                if (orgProfile == null)
+                {
+                    // Handle case where no organization profile is found
+                    return null;
+                }
+                string profilePicUrl;
 
-                return orgProfile;
+                if (!string.IsNullOrEmpty(orgProfile.ProfilePicture))
+                {
+                    // Example URL for GitHub-hosted images
+                    string githubBaseUrl = "https://raw.githubusercontent.com/niharikaluna11/my-image-repo/main/profilepic/organization/";
+
+                    // Combine GitHub base URL with the image file name (e.g., username or unique name)
+                    profilePicUrl = githubBaseUrl + orgProfile.ProfilePicture; // Assuming the image name is the same as stored in the database.
+                }
+                else
+                {
+                    // If no profile picture is found, return a default placeholder image URL
+                    profilePicUrl = " ";
+                }
+
+                // Return the organization profile by mapping the properties
+                return new Organization
+                {
+                    orgId = orgProfile.orgId,
+                    UserId = orgProfile.UserId,
+                    Name = orgProfile.Name,
+                    ProfilePicture = profilePicUrl,
+                    Types = orgProfile.Types,  // Assuming Types is an enum and exists in your model
+                    Address = orgProfile.Address,
+                    Phone = orgProfile.Phone,
+                    Email = orgProfile.Email
+                };
             }
             catch (Exception ex)
             {
+                // Log the error and throw a generic exception
                 _logger.LogError(ex, $"Error retrieving organization profile for user ID {userId}");
                 throw new Exception("An error occurred while retrieving the organization profile.");
             }
@@ -118,59 +182,59 @@ namespace ComplaintTicketAPI.Services
                 organization.Types = updateDto.Types;
 
                 // Handle profile picture saving
-                organization.ProfilePicture = await SaveFileAsync(updateDto.ProfilePicture);
+                organization.ProfilePicture = await SaveFileAsync(updateDto.ProfilePicture,updateDto.Name);
 
                 // Send email notification
                 try
                 {
                     string body = $@"
-<html>
-<head>
-    <style>
-        body {{
-            font-family: Arial, sans-serif;
-            background-color: #f0f8ff;
-            color: #333;
-        }}
-        .header {{
-            background-color: #0073e6;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            font-size: 24px;
-        }}
-        .greeting {{
-            font-size: 18px;
-            color: #333;
-        }}
-        .content {{
-            margin-top: 20px;
-            color: #333;
-        }}
-        .footer {{
-            margin-top: 20px;
-            font-size: 14px;
-            color: #555;
-        }}
-        .signature {{
-            color: #0073e6;
-        }}
-    </style>
-</head>
-<body>
-    <div class='header'>
-        <h1>Welcome to TicketSolve!</h1>
-    </div>
+                <html>
+                <head>
+                    <style>
+                        body {{
+                            font-family: Arial, sans-serif;
+                            background-color: #f0f8ff;
+                            color: #333;
+                        }}
+                        .header {{
+                            background-color: #0073e6;
+                            color: white;
+                            padding: 10px;
+                            text-align: center;
+                            font-size: 24px;
+                        }}
+                        .greeting {{
+                            font-size: 18px;
+                            color: #333;
+                        }}
+                        .content {{
+                            margin-top: 20px;
+                            color: #333;
+                        }}
+                        .footer {{
+                            margin-top: 20px;
+                            font-size: 14px;
+                            color: #555;
+                        }}
+                        .signature {{
+                            color: #0073e6;
+                        }}
+                    </style>
+                </head>
+                <body>
+                    <div class='header'>
+                        <h1>Welcome to TicketSolve!</h1>
+                    </div>
 
-    <p class='greeting'>Dear <strong>{organization.Name}</strong>,</p>
+                    <p class='greeting'>Dear <strong>{organization.Name}</strong>,</p>
     
-    <p class='content'>We are pleased to inform you that your account profile has been successfully updated.</p>
+                    <p class='content'>We are pleased to inform you that your account profile has been successfully updated.</p>
     
-    <p class='content footer'>If you have any questions or need further assistance, please do not hesitate to contact us.</p>
+                    <p class='content footer'>If you have any questions or need further assistance, please do not hesitate to contact us.</p>
     
-    <p class='footer'>Best regards,<br/><span class='signature'>TicketSolve Team</span></p>
-</body>
-</html>";
+                    <p class='footer'>Best regards,<br/><span class='signature'>TicketSolve Team</span></p>
+                </body>
+                </html>";
 
                     string email = organization.Email;
                     SendMail("Your Account Has Been Created", email, body);

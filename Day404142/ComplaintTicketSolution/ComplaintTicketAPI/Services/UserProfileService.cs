@@ -32,70 +32,163 @@ namespace ComplaintTicketAPI.Services
             _mapper = mapper;
         }
 
-        public async Task<string> SaveFileAsync(IFormFile file)
-
+        public async Task<string> SaveFileAsync(IFormFile file, string username)
         {
-
             if (file == null || file.Length == 0)
-
             {
-
                 return null;
-
             }
 
-            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            // Create a file name that includes the username
+            var uniqueFileName = $"{username}_{Guid.NewGuid().ToString()}{Path.GetExtension(file.FileName)}";
 
             var filePath = Path.Combine(_uploadFolder, uniqueFileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
-
             {
-
                 await file.CopyToAsync(stream);
-
             }
 
-            return uniqueFileName;
+            // Specify the folder path on GitHub where the file should be uploaded
+            string folderPath = "profilepic/user";
 
+            // Create an instance of GitHubService and upload the file
+            var gitHubService = new GitHubService();
+            var result = await gitHubService.SaveFileToGitHub(filePath, uniqueFileName, folderPath);
+
+            return result;  // Return the result (success message or URL)
         }
 
 
-        
+        public async Task<ProfilePicDTO> GetProfilePic(string username)
+        {
+            // Fetch the user based on the username
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username == username);
+
+            // Check if the user exists
+            if (user == null)
+            {
+                return new ProfilePicDTO
+                {
+                    ProfilePicture = "" // Return default or empty picture
+                };
+            }
+
+            // Fetch profile and organization profile for the user
+            var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == user.userId);
+            var orgprofile = await _context.Organizations.FirstOrDefaultAsync(p => p.UserId == user.userId);
+
+            // Check if there's a local profile picture
+            string profilePicUrl = profile?.ProfilePicture ?? orgprofile?.ProfilePicture;
+
+            // If the profile picture exists in GitHub, use the GitHub URL
+            if (!string.IsNullOrEmpty(profilePicUrl))
+            {
+                // Example URL for GitHub-hosted images
+                string githubBaseUrl = "https://raw.githubusercontent.com/niharikaluna11/my-image-repo/main/profilepic/user/";
+
+                // Combine GitHub base URL with the image file name (e.g., username or unique name)
+                profilePicUrl = githubBaseUrl + profilePicUrl; // Assuming the image name is the same as stored in the database.
+            }
+            else
+            {
+                // If no profile picture is found, return a default placeholder image URL
+                profilePicUrl = " ";
+            }
+
+            return new ProfilePicDTO
+            {
+                ProfilePicture = profilePicUrl // Returning the full URL of the profile picture
+            };
+        }
+
         public async Task<UserProfile> GetProfile(int userId)
         {
-            
-            var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
-            var orgprofile = await _context.Organizations.FirstOrDefaultAsync(p => p.UserId == userId);
-
-            // If both profiles exist, return a combined profile
-            if (profile != null && orgprofile != null)
+            try
             {
-                return new UserProfile
+                // Retrieve the user profile and organization profile based on the user ID
+                var profile = await _context.Profiles.FirstOrDefaultAsync(p => p.UserId == userId);
+                var orgprofile = await _context.Organizations.FirstOrDefaultAsync(p => p.UserId == userId);
+
+                // If both profiles exist, return a combined profile
+                if (profile != null && orgprofile != null)
                 {
-                    //UserId = profile.UserId,
-                    //FirstName = profile.FirstName ?? orgprofile.Name, // If FirstName is null, use orgprofile.Name
-                    //ProfilePicture = profile.ProfilePicture ?? orgprofile.ProfilePicture,
-                    //Address = profile.Address ?? orgprofile.Address
-                    UserId = profile.UserId,
-                    FirstName = profile.FirstName ?? orgprofile.Name, // If FirstName is null, use orgprofile.Name
-                    LastName = profile.LastName ?? "", // Use empty string if LastName is null
-                    Address = profile.Address ?? orgprofile.Address ?? "", // Use orgprofile.Address if profile.Address is null
-                    DateOfBirth = profile.DateOfBirth, // Assuming DateOfBirth is nullable and is returned as-is
-                    ProfilePicture = profile.ProfilePicture ?? orgprofile.ProfilePicture ?? "", // Use orgprofile.ProfilePicture if profile.ProfilePicture is null
-                    Email = profile.Email ?? "", // Use empty string if Email is null
-                    Phone = profile.Phone ?? "", // Use empty string if Phone is null
-                    Preferences = profile.Preferences ?? "",
-                    // Add other fields from orgprofile as needed
-                };
+                    // Determine the profile picture URL
+                    string githubBaseUrl = "https://raw.githubusercontent.com/niharikaluna11/my-image-repo/main/profilepic/user/";
+                    string profilePicUrl = !string.IsNullOrEmpty(profile.ProfilePicture)
+                        ? githubBaseUrl + profile.ProfilePicture // Use profile picture from user profile
+                        : !string.IsNullOrEmpty(orgprofile.ProfilePicture)
+                            ? githubBaseUrl + orgprofile.ProfilePicture // Use profile picture from organization profile if user profile doesn't have one
+                            : " "; // Placeholder if neither profile has a picture
 
+                    return new UserProfile
+                    {
+                        UserId = profile.UserId,
+                        FirstName = profile.FirstName ?? orgprofile.Name,
+                        LastName = profile.LastName ?? "",
+                        Address = profile.Address ?? orgprofile.Address ?? "",
+                        DateOfBirth = profile.DateOfBirth,
+                        ProfilePicture = profilePicUrl,
+                        Email = profile.Email ?? "",
+                        Phone = profile.Phone ?? "",
+                        Preferences = profile.Preferences ?? "",
+                    };
+                }
+
+        
+                if (profile != null)
+                {
+                    string githubBaseUrl = "https://raw.githubusercontent.com/niharikaluna11/my-image-repo/main/profilepic/user/";
+                    string profilePicUrl = !string.IsNullOrEmpty(profile.ProfilePicture)
+                        ? githubBaseUrl + profile.ProfilePicture // Use profile picture from user profile
+                        : " "; // Placeholder if no profile picture
+
+                    return new UserProfile
+                    {
+                        UserId = profile.UserId,
+                        FirstName = profile.FirstName,
+                        LastName = profile.LastName ?? "",
+                        Address = profile.Address ?? "",
+                        DateOfBirth = profile.DateOfBirth,
+                        ProfilePicture = profilePicUrl,
+                        Email = profile.Email ?? "",
+                        Phone = profile.Phone ?? "",
+                        Preferences = profile.Preferences ?? ""
+                    };
+                }
+
+                // If only the organization profile is found, return it
+                if (orgprofile != null)
+                {
+                    string githubBaseUrl = "https://raw.githubusercontent.com/niharikaluna11/my-image-repo/main/profilepic/user/";
+                    string profilePicUrl = !string.IsNullOrEmpty(orgprofile.ProfilePicture)
+                        ? githubBaseUrl + orgprofile.ProfilePicture // Use profile picture from organization profile
+                        : " "; // Placeholder if no profile picture
+
+                    return new UserProfile
+                    {
+                        UserId = orgprofile.UserId,
+                        FirstName = orgprofile.Name, // Assuming that orgprofile.Name is used as FirstName
+                        LastName = "", // Assuming there's no LastName for organizations
+                        Address = orgprofile.Address,
+                        DateOfBirth = null, // Organizations typically don't have a date of birth
+                        ProfilePicture = profilePicUrl,
+                        Email = orgprofile.Email ?? "",
+                        Phone = orgprofile.Phone ?? "",
+                        Preferences = ""
+                    };
+                }
+
+                // Return null or throw an exception if no profile or organization is found
+                return null;
             }
-
-            // If only profile is found, return it
-            return profile;
-           
-           
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Error retrieving profile for user ID {userId}");
+                throw new Exception("An error occurred while retrieving the profile.");
+            }
         }
+
 
 
 
@@ -145,12 +238,24 @@ namespace ComplaintTicketAPI.Services
                 profiles.Phone = updateDto.Phone;
                 profiles.Preferences = updateDto.Preferences;
 
-               // _mapper.Map(updateDto, profiles);
-
-                // If profile picture is provided, save it
+                // _mapper.Map(updateDto, profiles);
                 if (updateDto.ProfilePicture != null)
                 {
-                    profiles.ProfilePicture = await SaveFileAsync(updateDto.ProfilePicture);
+                    profiles.ProfilePicture = await SaveFileAsync(updateDto.ProfilePicture, updateDto.FirstName);
+                }
+                else if(profiles.ProfilePicture!=null)
+                {
+                    // If no new picture is provided, retain the existing picture
+                    profiles.ProfilePicture = profiles.ProfilePicture ;
+                }
+                else
+                {
+                    return new ErrorResponseDTO
+                    {
+                        Success = false,
+                        ErrorMessage = $"Please upload profile pic",
+                        ErrorCode = 500 // Internal Server Error
+                    };
                 }
 
                 // Send an email notifying the user of the profile update
@@ -266,9 +371,26 @@ namespace ComplaintTicketAPI.Services
         {
             try
             {
-                // Retrieve all organization profiles from the Organizations table
                 var orgProfiles = await _context.Organizations.ToListAsync();
-                return _mapper.Map<List<OrganizationDTO>>(orgProfiles);
+
+                var orgProfilesDTO = _mapper.Map<List<OrganizationDTO>>(orgProfiles);
+
+                string githubBaseUrl = "https://raw.githubusercontent.com/niharikaluna11/my-image-repo/main/profilepic/organization/";
+
+                foreach (var org in orgProfilesDTO)
+                {
+                    if (!string.IsNullOrEmpty(org.ProfilePicture))
+                    {
+                        
+                        org.ProfilePicture = githubBaseUrl + org.ProfilePicture;  
+                    }
+                    else
+                    {
+                        org.ProfilePicture = " "; 
+                    }
+                }
+
+                return orgProfilesDTO;
             }
             catch (Exception ex)
             {
@@ -277,19 +399,35 @@ namespace ComplaintTicketAPI.Services
             }
         }
 
+
         public async Task<List<UserProfile>> GetALLUserProfile()
         {
             try
             {
-                // Retrieve all organization profiles from the Organizations table
                 var profiles = await _context.Profiles.ToListAsync();
+
+                string githubBaseUrl = "https://raw.githubusercontent.com/niharikaluna11/my-image-repo/main/profilepic/user/";
+
+                foreach (var profile in profiles)
+                {
+                    if (!string.IsNullOrEmpty(profile.ProfilePicture))
+                    {
+                        profile.ProfilePicture = githubBaseUrl + profile.ProfilePicture;  
+                    }
+                    else
+                    {
+                        profile.ProfilePicture = " ";
+                    }
+                }
+
                 return _mapper.Map<List<UserProfile>>(profiles);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while retrieving organization profiles.");
-                throw new Exception("Failed to get organization profiles.", ex);
+                _logger.LogError(ex, "An error occurred while retrieving user profiles.");
+                throw new Exception("Failed to get user profiles.", ex);
             }
         }
+
     }
 }

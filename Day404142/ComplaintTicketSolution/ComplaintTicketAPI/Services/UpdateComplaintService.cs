@@ -10,11 +10,13 @@ using ComplaintTicketAPI.EmailInterface;
 using ComplaintTicketAPI.EmailModel;
 using Microsoft.EntityFrameworkCore;
 using ComplaintTicketAPI.Interfaces.InteraceServices;
+using ComplaintTicketAPI.Context;
 
 namespace ComplaintTicketAPI.Services
 {
     public class UpdateComplaintService : IUpdateComplaintService
     {
+        private readonly ComplaintTicketContext _context;
         private readonly IComplaintRepository _complaintRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<UpdateComplaintService> _logger;
@@ -23,12 +25,14 @@ namespace ComplaintTicketAPI.Services
         private readonly IOrganizationProfileService _organizationProfileService;
 
         public UpdateComplaintService(IComplaintRepository complaintRepository,
+             ComplaintTicketContext context,
             IMapper mapper,
             ILogger<UpdateComplaintService> logger,
             IEmailSender emailSender,
             IUserProfileService userProfileService,
             IOrganizationProfileService organizationProfileService)
         {
+            _context = context;
             _complaintRepository = complaintRepository;
             _mapper = mapper;
             _logger = logger;
@@ -47,33 +51,6 @@ namespace ComplaintTicketAPI.Services
                     title,
                     body);
             _emailSender.SendEmail(message);
-        }
-
-       
-
-        public async Task<IEnumerable<Complaint>> GetComplaintByOrganizationIdAsync(int orgId)
-        {
-            try
-            {
-                // Get all complaints
-                var complaints = await _complaintRepository.GetAll();
-
-                // Filter the complaints to only include those that belong to the given orgId
-                var filteredComplaints = complaints.Where(c => c.OrganizationId == orgId).ToList();
-
-                if (!filteredComplaints.Any())
-                {
-                    // If no complaints match the given orgId, throw an exception
-                    throw new KeyNotFoundException("No complaints found for this organization.");
-                }
-
-                return filteredComplaints;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error while fetching complaints for organization ID: {OrgId}", orgId);
-                throw new Exception("An error occurred while retrieving complaints.", ex);
-            }
         }
 
 
@@ -102,13 +79,13 @@ namespace ComplaintTicketAPI.Services
                 // Add the new status update
                 complaint.ComplaintStatusDates.Add(new ComplaintStatusDate
                 {
-                    ComplaintId = complaint.Id,
+                    ComplaintId = complaint.ComplaintId,
                     ComplaintStatus = complaintStatus,
                     StatusDate = updateRequest.StatusDate
-                });
+                });     
 
                 // Attempt to update the complaint
-                var updatedComplaint = await _complaintRepository.Update(complaint, complaint.Id);
+                var updatedComplaint = await _complaintRepository.Update(complaint, complaint.ComplaintId);
                 if (updatedComplaint == null)
                 {
                     _logger.LogError("Complaint update failed, repository returned null.");
@@ -173,7 +150,7 @@ namespace ComplaintTicketAPI.Services
     
                             <p class='content'>Complaint Details:</p>
                             <div class='details'>
-                                <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                                <p><strong>Complaint ID:</strong> {complaint.ComplaintId}</p>
                                 <p><strong>New Status:</strong> {complaintStatus.Status}</p>
                                 <p><strong>Comment By Organization:</strong> {complaintStatus.CommentByUser}</p>
                                 <p><strong>Status Updated On:</strong> {updateRequest.StatusDate}</p>
@@ -247,7 +224,7 @@ namespace ComplaintTicketAPI.Services
     
                                 <p class='content'>Complaint Details:</p>
                                 <div class='details'>
-                                    <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                                    <p><strong>Complaint ID:</strong> {complaint.ComplaintId}</p>
                                     <p><strong>New Status:</strong> {complaintStatus.Status}</p>
                                     <p><strong>Comment:</strong> {complaintStatus.CommentByUser}</p>
                                     <p><strong>Status Date:</strong> {updateRequest.StatusDate}</p>
@@ -283,6 +260,7 @@ namespace ComplaintTicketAPI.Services
                 throw new Exception("An error occurred while updating the complaint.", ex);
             }
         }
+
 
 
 

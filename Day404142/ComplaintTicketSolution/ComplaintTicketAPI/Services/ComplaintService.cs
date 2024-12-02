@@ -60,32 +60,29 @@ namespace ComplaintTicketAPI.Services
         }
 
         public async Task<string> SaveFileAsync(IFormFile file)
-
         {
-
             if (file == null || file.Length == 0)
-
             {
-
                 return null;
-
             }
 
-            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var uniqueFileName = $"complaint_{Guid.NewGuid().ToString()}{Path.GetExtension(file.FileName)}";
 
             var filePath = Path.Combine(_uploadFolder, uniqueFileName);
 
             using (var stream = new FileStream(filePath, FileMode.Create))
-
             {
-
                 await file.CopyToAsync(stream);
-
             }
 
-            return uniqueFileName;
+            string folderPath = "complaints/";
 
+            var gitHubService = new GitHubService();
+            var result = await gitHubService.SaveFileToGitHub(filePath, uniqueFileName, folderPath);
+
+            return result;  
         }
+
 
         public async Task<UserProfile> GetProfile(int userId)
         {
@@ -109,14 +106,14 @@ namespace ComplaintTicketAPI.Services
                 await _complaintStatusRepository.Add(complaintStatus);
 
                 // Step 3: Create and save the complaint files
-                var complaintFiles = await SaveComplaintFiles(complaintDto.AttachmentUrl, createdComplaint.Id);
+                var complaintFiles = await SaveComplaintFiles(complaintDto.AttachmentUrl, createdComplaint.ComplaintId);
                 if (complaintFiles.Any())
                 {
                     await _complaintFileRepository.AddFiles(complaintFiles);  // Save the complaint files
                 }
 
                 // Step 4: Save the complaint status date
-                await SaveComplaintStatusDate(createdComplaint.Id, complaintStatus.Id);
+                await SaveComplaintStatusDate(createdComplaint.ComplaintId, complaintStatus.Id);
 
                 // Step 5: Get user and organization profile
                 var userProfile = await GetProfile(complaint.UserId);
@@ -143,30 +140,54 @@ namespace ComplaintTicketAPI.Services
             }
         }
 
-        // Helper function to save complaint files
         private async Task<List<ComplaintFile>> SaveComplaintFiles(IEnumerable<IFormFile> attachmentUrls, int complaintId)
         {
-            var complaintFiles = new List<ComplaintFile>();  // List to store multiple complaint files
-            if (attachmentUrls != null && attachmentUrls.Any())
+            if (attachmentUrls == null || !attachmentUrls.Any())
             {
-                foreach (var file in attachmentUrls)
+                Console.WriteLine("No attachments provided.");
+                return new List<ComplaintFile>();
+            }
+
+            var complaintFiles = new List<ComplaintFile>();
+
+            foreach (var file in attachmentUrls)
+            {
+                try
                 {
-                    var filePath = await SaveFileAsync(file);  // Save file and get the file path
+                    Console.WriteLine($"Uploading file: {file.FileName}");
+
+                    // Generate a unique name for the file
+                    var uniqueFileName = $"{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
+
+                    var filePath = await SaveFileAsync(file);
 
                     if (!string.IsNullOrEmpty(filePath))
                     {
-                        // Map the complaint file entity and set properties
-                        var complaintFile = new ComplaintFile
+                        Console.WriteLine($"File uploaded successfully: {file.FileName}");
+                        complaintFiles.Add(new ComplaintFile
                         {
                             ComplaintId = complaintId,
                             FilePath = filePath
-                        };
-                        complaintFiles.Add(complaintFile);  // Add to the list of complaint files
+                        });
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Failed to upload file: {file.FileName}");
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error uploading file {file.FileName}: {ex.Message}");
+                }
+
+                // Optional: Introduce a delay to avoid GitHub API rate limits
+                await Task.Delay(200);
             }
+
+            Console.WriteLine($"{complaintFiles.Count} files uploaded successfully out of {attachmentUrls.Count()}.");
             return complaintFiles;
         }
+
 
         // Helper function to save complaint status date
         private async Task SaveComplaintStatusDate(int complaintId, int complaintStatusId)
@@ -194,7 +215,7 @@ namespace ComplaintTicketAPI.Services
                     <p>Dear <strong>{orgProfile.Name}</strong>,</p>
                     <p>A complaint has been received for you.</p>
                     <div class='details'>
-                        <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                        <p><strong>Complaint ID:</strong> {complaint.ComplaintId}</p>
                         <p><strong>User:</strong> {userProfile.FirstName}</p>
                         <p><strong>Priority:</strong> {complaintStatus.Priority.ToString()}</p>
                         <p><strong>Comment By User:</strong> {complaintStatus.CommentByUser}</p>
@@ -214,7 +235,7 @@ namespace ComplaintTicketAPI.Services
                     <p>Dear <strong>{userProfile.FirstName} {userProfile.LastName}</strong>,</p>
                     <p>We are pleased to inform you that you have successfully filed a complaint.</p>
                     <div class='details'>
-                        <p><strong>Complaint ID:</strong> {complaint.Id}</p>
+                        <p><strong>Complaint ID:</strong> {complaint.ComplaintId}</p>
                         <p><strong>Priority:</strong> {complaintStatus.Priority.ToString()}</p>
                         <p><strong>Organization ID:</strong> {complaint.OrganizationId}</p>
                         <p><strong>Comment By You:</strong> {complaintStatus.CommentByUser}</p>
@@ -236,7 +257,6 @@ namespace ComplaintTicketAPI.Services
             }
         }
 
-      
 
 
         public async Task<Complaint> GetComplaint(int id)
@@ -244,8 +264,10 @@ namespace ComplaintTicketAPI.Services
             try
             {
                 var complaint = await _context.Complaints
-                                              // .Include(c => c.ComplaintStatusDates)  // Include related entities if needed
-                                              .FirstOrDefaultAsync(c => c.Id == id);
+                                         .Include(c => c.ComplaintFiles)
+                                              .FirstOrDefaultAsync(c => c.ComplaintId == id);
+
+               
 
                 if (complaint == null)
                 {
@@ -287,7 +309,7 @@ namespace ComplaintTicketAPI.Services
             {
                 var complaint = await _context.Complaints
                                               .Include(c => c.ComplaintStatusDates)  // Include status dates
-                                              .FirstOrDefaultAsync(c => c.Id == complaintId);
+                                              .FirstOrDefaultAsync(c => c.ComplaintId == complaintId);
 
                 if (complaint == null)
                 {
@@ -317,5 +339,51 @@ namespace ComplaintTicketAPI.Services
                 throw new Exception("An error occurred while tracking the complaint status.", ex);
             }
         }
+
+        public async Task<List<Complaint>> GetComplaintsByCategoryId(int categoryId)
+        {
+            try
+            {
+                // Fetch complaints filtered by CategoryId
+                var complaints = await _context.Complaints
+                                               .Where(c => c.CategoryId == categoryId)
+                                               .ToListAsync();
+
+                if (complaints == null || complaints.Count == 0)
+                {
+                    throw new KeyNotFoundException("No Complaints found for the specified category.");
+                }
+
+                return complaints;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error occurred while retrieving complaints by category.");
+                throw new Exception("An error occurred while retrieving complaints by category.", ex);
+            }
+        }
+
+        public async Task<string> GetComplaintCategory(int categoryid)
+        {
+            try
+            {
+                var category = await _context.ComplaintCategories
+                    .FirstOrDefaultAsync(c => c.Id == categoryid);
+
+                if (category == null)
+                {
+                    throw new KeyNotFoundException("category not found.");
+                }
+
+                return category.Name ?? "Unknown";  // Return "Unknown" if category is not set
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, "Error occurred while retrieving the category for complaint ID: {ComplaintId}", complaintId);
+                throw new Exception("An error occurred while retrieving the complaint category.", ex);
+            }
+        }
+
+
     }
 }
