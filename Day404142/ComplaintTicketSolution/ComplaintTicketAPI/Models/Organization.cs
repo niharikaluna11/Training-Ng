@@ -1,4 +1,6 @@
-﻿namespace ComplaintTicketAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ComplaintTicketAPI.Models
 {
     public enum Type
     {
@@ -8,7 +10,8 @@
     }
     public class Organization
     {
-        public int Id { get; set; }
+        [Key]
+        public int orgId { get; set; }
         
         public int UserId { get; set; }
         //fk

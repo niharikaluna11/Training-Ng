@@ -19,7 +19,7 @@
    
     public class Complaint
     {
-        public int Id { get; set; }
+        public int ComplaintId { get; set; }
         public int UserId { get; set; } // Foreign key to User
         public User User { get; set; } // Navigation property to User
 

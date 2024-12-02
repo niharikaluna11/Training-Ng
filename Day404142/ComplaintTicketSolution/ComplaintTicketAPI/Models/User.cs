@@ -1,4 +1,6 @@
-﻿namespace ComplaintTicketAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ComplaintTicketAPI.Models
 {
     public enum Role
     {
@@ -13,8 +15,8 @@
 
     public class User
     {
-
-        public int Id { get; set; }
+        [Key] 
+        public int userId { get; set; }
         
         public string Username { get; set; }
         public string Email { get; set; }
