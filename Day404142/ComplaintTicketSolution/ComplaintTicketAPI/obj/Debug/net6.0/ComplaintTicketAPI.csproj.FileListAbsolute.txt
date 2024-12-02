@@ -224,3 +224,4 @@ D:\Niharikaluna-github\Training-Ng\Day404142\ComplaintTicketSolution\ComplaintTi
 D:\Niharikaluna-github\Training-Ng\Day404142\ComplaintTicketSolution\ComplaintTicketAPI\bin\Debug\net6.0\MimeKit.dll
 D:\Niharikaluna-github\Training-Ng\Day404142\ComplaintTicketSolution\ComplaintTicketAPI\bin\Debug\net6.0\NETCore.MailKit.dll
 D:\Niharikaluna-github\Training-Ng\Day404142\ComplaintTicketSolution\ComplaintTicketAPI\bin\Debug\net6.0\BouncyCastle.Crypto.dll
+D:\Niharikaluna-github\Training-Ng\Day404142\ComplaintTicketSolution\ComplaintTicketAPI\bin\Debug\net6.0\Newtonsoft.Json.dll

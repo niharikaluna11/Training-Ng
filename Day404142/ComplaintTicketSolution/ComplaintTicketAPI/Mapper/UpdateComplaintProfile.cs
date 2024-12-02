@@ -10,7 +10,7 @@ namespace ComplaintTicketAPI.Mapper
         {
             // Map UpdateComplaintRequestDTO to Complaint
             CreateMap<UpdateComplaintRequestDTO, Complaint>()
-                .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.ComplaintId))
+                .ForMember(dest => dest.ComplaintId, opt => opt.MapFrom(src => src.ComplaintId))
                 .ForMember(dest => dest.OrganizationId, opt => opt.MapFrom(src => src.OrganizationId))
                 // Note: Mapping only necessary fields here
                 .ForMember(dest => dest.CategoryId, opt => opt.Ignore()) // Ignored if no update in category

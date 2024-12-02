@@ -121,6 +121,58 @@
   },
   {
     "ContainingType": "ComplaintController",
+    "Method": "GetComplaintDetails",
+    "RelativePath": "api/Complaint/GetComplaintDetails",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintid",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintController",
+    "Method": "GetComplaints",
+    "RelativePath": "api/Complaint/GetComplaints",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orgId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNum",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ComplaintTicketAPI.Models.DTO.PagedComplaintsDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "ComplaintController",
     "Method": "TrackComplaintStatus",
     "RelativePath": "api/Complaint/TrackComplaintStatus",
     "HttpMethod": "GET",
@@ -328,6 +380,22 @@
   },
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
+    "Method": "GetProfilePic",
+    "RelativePath": "api/Profile/Get-profile-pic",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "username",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.ProfileController",
     "Method": "UpdateOrgProfile",
     "RelativePath": "api/Profile/update-Organization-profile",
     "HttpMethod": "PUT",
@@ -427,32 +495,6 @@
       }
     ],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "ComplaintTicketAPI.Controllers.UpdateComplaintController",
-    "Method": "GetComplaints",
-    "RelativePath": "api/UpdateComplaint/GetComplaints",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orgId",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[ComplaintTicketAPI.Models.DTO.ComplaintDataDTO, ComplaintTicketAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
   },
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.UpdateComplaintController",

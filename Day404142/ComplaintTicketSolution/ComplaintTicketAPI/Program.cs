@@ -66,6 +66,8 @@ namespace ComplaintTicketAPI
             #endregion
 
             #region Services  
+            builder.Services.AddScoped<IComplaintGetService, ComplaintGetService>();
+            builder.Services.AddScoped<IComplaintDetailService, ComplaintDetailService>();
             builder.Services.AddScoped<IOrganizationService, OrganizationService>();
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<IComplaintCategoryService, ComplaintCategoryService>();
