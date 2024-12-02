@@ -1,12 +1,12 @@
 ﻿using ComplaintTicketAPI.Models.DTO;
 using ComplaintTicketAPI.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ComplaintTicketAPI.Interfaces.InteraceServices
 {
     public interface IUpdateComplaintService
     {
-        Task<IEnumerable<Complaint>> GetComplaintByOrganizationIdAsync(int orgId);
-
+       
         Task<bool> UpdateComplaintStatusAsync(UpdateComplaintRequestDTO updateRequest);
     }
 }

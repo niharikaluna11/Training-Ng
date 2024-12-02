@@ -6,6 +6,7 @@ namespace ComplaintTicketAPI.Interfaces.InteraceServices
 {
     public interface IComplaintService
     {
+        Task<List<Complaint>> GetComplaintsByCategoryId(int categoryId);
         Task<Complaint> CreateComplaint(CreateComplaintRequestDTO complaintDto);
         Task<Complaint> GetComplaint(int id); // Add GetComplaint method
 
