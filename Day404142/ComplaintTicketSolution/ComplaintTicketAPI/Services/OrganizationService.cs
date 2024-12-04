@@ -16,11 +16,51 @@ namespace ComplaintTicketAPI.Services
         private readonly IMapper _mapper;
         private readonly ILogger<OrganizationService> _logger;
 
+
+     
+
         public OrganizationService(ComplaintTicketContext context, IMapper mapper, ILogger<OrganizationService> logger)
         {
             _context = context;
             _mapper = mapper;
             _logger = logger;
+        }
+
+        public async Task<OrganizationIdDTO> GetOrganizationByUserIdAsync(int userId)
+        {
+            try
+            {
+
+                var userWithOrg = await _context.Organizations
+                  // Assuming there is a navigation property for Organization in the User entity
+                  .FirstOrDefaultAsync(u => u.UserId == userId);
+                // Check if the user exists
+                if (userWithOrg == null)
+                {
+                    throw new KeyNotFoundException($"No user found with ID {userId}");
+                }
+
+                // Check if the organization exists
+                if (userWithOrg == null)
+                {
+                    throw new KeyNotFoundException($"No organization found for user ID {userId}");
+                }
+
+                // Map the organization data to DTO
+                return _mapper.Map<OrganizationIdDTO>(userWithOrg);
+            }
+            catch (DbUpdateException dbEx)
+            {
+                // Log database update errors
+                _logger.LogError(dbEx, $"Error occurred while fetching organization for user ID {userId}.");
+                throw new Exception("An error occurred while retrieving the organization.", dbEx);
+            }
+            catch (Exception ex)
+            {
+                // Log general errors
+                _logger.LogError(ex, $"An unexpected error occurred while fetching organization for user ID {userId}.");
+                throw new Exception("An unexpected error occurred while retrieving the organization.", ex);
+            }
         }
 
         public async Task<IEnumerable<OrganizationDTO>> GetAllOrganizationsAsync()

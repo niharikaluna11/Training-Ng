@@ -368,7 +368,7 @@ namespace ComplaintTicketAPI.Services
             try
             {
                 var category = await _context.ComplaintCategories
-                    .FirstOrDefaultAsync(c => c.Id == categoryid);
+                    .FirstOrDefaultAsync(c => c.CategoryId == categoryid);
 
                 if (category == null)
                 {

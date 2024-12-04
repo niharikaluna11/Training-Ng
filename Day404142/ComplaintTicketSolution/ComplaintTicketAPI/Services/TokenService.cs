@@ -29,7 +29,7 @@ namespace ComplaintTicketAPI.Services
                 {
                     new Claim(JwtRegisteredClaimNames.GivenName, user.Username),
                     new Claim(ClaimTypes.Role, user.Role),
-                    //new Claim("UserID", user.userid),
+                    new Claim("UserID", user.userid.ToString()),
                     new Claim("Username", user.Username),
                 };
                 // Create claims based on user info

@@ -60,12 +60,13 @@ namespace ComplaintTicketAPI.Services
             {
                 // Fetch the existing complaint
                 var complaint = await _complaintRepository.Get(updateRequest.ComplaintId);
-                if (complaint == null || complaint.OrganizationId != updateRequest.OrganizationId)
+                if (complaint == null )
                 {
                     _logger.LogError("Complaint not found for organization.");
                     throw new KeyNotFoundException("Complaint not found for this organization.");
                 }
 
+              
                 // Initialize ComplaintStatusDates if it's null
                 if (complaint.ComplaintStatusDates == null)
                 {
@@ -251,12 +252,12 @@ namespace ComplaintTicketAPI.Services
             }
             catch (KeyNotFoundException knfEx)
             {
-                _logger.LogError(knfEx, "Complaint with ID {ComplaintId} not found for organization ID {OrgId}", updateRequest.ComplaintId, updateRequest.OrganizationId);
+                //_logger.LogError(knfEx, "Complaint with ID {ComplaintId} not found for organization ID {OrgId}", updateRequest.ComplaintId, updateRequest.OrganizationId);
                 throw new Exception("Complaint not found for the provided organization.", knfEx);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error while updating complaint with ID {ComplaintId} for organization ID {OrgId}", updateRequest.ComplaintId, updateRequest.OrganizationId);
+                //_logger.LogError(ex, "Error while updating complaint with ID {ComplaintId} for organization ID {OrgId}", updateRequest.ComplaintId, updateRequest.OrganizationId);
                 throw new Exception("An error occurred while updating the complaint.", ex);
             }
         }

@@ -19,7 +19,7 @@ namespace ComplaintTicketAPI.Services
         public async Task<string> GetComplaintCategoryAsync(int categoryId)
         {
             var category = await _context.ComplaintCategories
-                .FirstOrDefaultAsync(c => c.Id == categoryId);
+                .FirstOrDefaultAsync(c => c.CategoryId == categoryId);
             return category?.Name ?? "Unknown";
         }
 
@@ -32,13 +32,14 @@ namespace ComplaintTicketAPI.Services
             return files;
         }
 
-       
-        public async Task<(string Status, string Priority)> GetLatestStatusAsync(int complaintId)
+        public async Task<(string Status, string Priority, DateTime? LatestStatusDate)> GetLatestStatusAsync(int complaintId)
         {
+           
             var latestStatusDate = await _context.ComplaintStatusDates
                 .Where(cs => cs.ComplaintId == complaintId)
-                .OrderByDescending(cs => cs.StatusDate)
-                .FirstOrDefaultAsync();
+                  .OrderByDescending(cs => cs.ComplaintStatusId) 
+                     .FirstOrDefaultAsync();
+           
 
             if (latestStatusDate != null)
             {
@@ -46,20 +47,41 @@ namespace ComplaintTicketAPI.Services
                     .Where(s => s.Id == latestStatusDate.ComplaintStatusId)
                     .FirstOrDefaultAsync();
 
-                return (status.Status.ToString(), status.Priority.ToString());
+
+                if (status != null)
+                {
+                    return (status.Status.ToString(), status.Priority.ToString(), latestStatusDate.StatusDate);
+                }
             }
 
-            return ("Unknown", "Unknown");
+            // Return "Unknown" if no status is found, and null for the status date
+            return ("Unknown", "Unknown", null);
         }
 
-        public async Task<DateTime?> GetLatestStatusDateAsync(int complaintId)
+
+        public async Task<(DateTime? StatusDate, string Status)> GetLatestStatusDateAsync(int complaintId)
         {
+            
             var latestStatusDate = await _context.ComplaintStatusDates
                 .Where(cs => cs.ComplaintId == complaintId)
                 .OrderByDescending(cs => cs.StatusDate)
                 .FirstOrDefaultAsync();
 
-            return latestStatusDate?.StatusDate;
+        
+            if (latestStatusDate != null)
+            {
+                var status = await _context.ComplaintStatuses
+                    .Where(s => s.Id == latestStatusDate.ComplaintStatusId)
+                    .FirstOrDefaultAsync();
+
+                if (status != null)
+                {
+                    return (latestStatusDate.StatusDate, status.Status.ToString());
+                }
+            }
+
+        
+            return (null, "Unknown");
         }
 
         public async Task<User> GetUserDetailsAsync(int userId)
@@ -90,7 +112,7 @@ namespace ComplaintTicketAPI.Services
             var files = await GetComplaintFilesAsync(complaintId);
 
             // Get Latest Status and Priority
-            var (status, priority) = await GetLatestStatusAsync(complaintId);
+            var (status, priority,statusdate) = await GetLatestStatusAsync(complaintId);
 
             // Get Latest Status Date
             var statusDate = await GetLatestStatusDateAsync(complaintId);
@@ -117,7 +139,7 @@ namespace ComplaintTicketAPI.Services
                 Files = files,
                 Status = status,
                 Priority = priority,
-                LatestStatusDate = statusDate,
+                LatestStatusDate = statusDate.StatusDate,
                 UserDetails = userDetails,   // Include user details
                 OrganizationDetails = orgDetails  // Include organization details
             };
