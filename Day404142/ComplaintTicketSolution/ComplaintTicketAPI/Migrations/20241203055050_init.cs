@@ -13,14 +13,14 @@ namespace ComplaintTicketAPI.Migrations
                 name: "ComplaintCategories",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ComplaintCategories", x => x.Id);
+                    table.PrimaryKey("PK_ComplaintCategories", x => x.CategoryId);
                 });
 
             migrationBuilder.CreateTable(
@@ -36,6 +36,22 @@ namespace ComplaintTicketAPI.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ComplaintStatuses", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserHelps",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    query = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsResponded = table.Column<bool>(type: "bit", nullable: false),
+                    AdminResponse = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserHelps", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,26 +73,28 @@ namespace ComplaintTicketAPI.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    userId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     HashKey = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
                     Roles = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    PStatus = table.Column<int>(type: "int", nullable: false),
                     ResetToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TokenExpiry = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.userId);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Organizations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    orgId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -88,12 +106,12 @@ namespace ComplaintTicketAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Organizations", x => x.Id);
+                    table.PrimaryKey("PK_Organizations", x => x.orgId);
                     table.ForeignKey(
                         name: "FK_Organizations_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
+                        principalColumn: "userId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -120,7 +138,7 @@ namespace ComplaintTicketAPI.Migrations
                         name: "FK_Profiles_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
+                        principalColumn: "userId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -128,7 +146,7 @@ namespace ComplaintTicketAPI.Migrations
                 name: "Complaints",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ComplaintId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     OrganizationId = table.Column<int>(type: "int", nullable: false),
@@ -137,24 +155,24 @@ namespace ComplaintTicketAPI.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Complaints", x => x.Id);
+                    table.PrimaryKey("PK_Complaints", x => x.ComplaintId);
                     table.ForeignKey(
                         name: "FK_Complaints_ComplaintCategories_CategoryId",
                         column: x => x.CategoryId,
                         principalTable: "ComplaintCategories",
-                        principalColumn: "Id",
+                        principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Complaints_Organizations_OrganizationId",
                         column: x => x.OrganizationId,
                         principalTable: "Organizations",
-                        principalColumn: "Id",
+                        principalColumn: "orgId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Complaints_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
+                        principalColumn: "userId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -174,7 +192,7 @@ namespace ComplaintTicketAPI.Migrations
                         name: "FK_ComplaintFiles_Complaints_ComplaintId",
                         column: x => x.ComplaintId,
                         principalTable: "Complaints",
-                        principalColumn: "Id",
+                        principalColumn: "ComplaintId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -194,7 +212,7 @@ namespace ComplaintTicketAPI.Migrations
                         name: "FK_ComplaintStatusDates_Complaints_ComplaintId",
                         column: x => x.ComplaintId,
                         principalTable: "Complaints",
-                        principalColumn: "Id",
+                        principalColumn: "ComplaintId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ComplaintStatusDates_ComplaintStatuses_ComplaintStatusId",
@@ -264,6 +282,9 @@ namespace ComplaintTicketAPI.Migrations
 
             migrationBuilder.DropTable(
                 name: "Profiles");
+
+            migrationBuilder.DropTable(
+                name: "UserHelps");
 
             migrationBuilder.DropTable(
                 name: "UserOtp");

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ComplaintTicketAPI.Migrations
 {
     [DbContext(typeof(ComplaintTicketContext))]
-    [Migration("20241123202520_update1")]
-    partial class update1
+    [Migration("20241203055050_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,11 +26,11 @@ namespace ComplaintTicketAPI.Migrations
 
             modelBuilder.Entity("ComplaintTicketAPI.Models.Complaint", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ComplaintId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ComplaintId"), 1L, 1);
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
@@ -45,7 +45,7 @@ namespace ComplaintTicketAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("ComplaintId");
 
                     b.HasIndex("CategoryId");
 
@@ -58,11 +58,11 @@ namespace ComplaintTicketAPI.Migrations
 
             modelBuilder.Entity("ComplaintTicketAPI.Models.ComplaintCategory", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("CategoryId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -72,7 +72,7 @@ namespace ComplaintTicketAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CategoryId");
 
                     b.ToTable("ComplaintCategories");
                 });
@@ -147,11 +147,11 @@ namespace ComplaintTicketAPI.Migrations
 
             modelBuilder.Entity("ComplaintTicketAPI.Models.Organization", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("orgId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("orgId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -179,7 +179,7 @@ namespace ComplaintTicketAPI.Migrations
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("orgId");
 
                     b.HasIndex("UserId")
                         .IsUnique();
@@ -189,11 +189,11 @@ namespace ComplaintTicketAPI.Migrations
 
             modelBuilder.Entity("ComplaintTicketAPI.Models.User", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("userId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("userId"), 1L, 1);
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -227,7 +227,7 @@ namespace ComplaintTicketAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("Id");
+                    b.HasKey("userId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -236,6 +236,33 @@ namespace ComplaintTicketAPI.Migrations
                         .IsUnique();
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ComplaintTicketAPI.Models.UserHelp", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("AdminResponse")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsResponded")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("query")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserHelps");
                 });
 
             modelBuilder.Entity("ComplaintTicketAPI.Models.UserOtp", b =>
