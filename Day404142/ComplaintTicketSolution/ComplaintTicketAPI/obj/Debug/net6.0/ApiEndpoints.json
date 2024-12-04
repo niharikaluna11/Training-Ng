@@ -17,6 +17,16 @@
   },
   {
     "ContainingType": "ComplaintTicketAPI.Controllers.AdminRightController",
+    "Method": "GetDashboardSummary",
+    "RelativePath": "api/AdminRight/GetDashboardSummary",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.AdminRightController",
     "Method": "ReactivateUser",
     "RelativePath": "api/AdminRight/reactivate",
     "HttpMethod": "PUT",
@@ -105,40 +115,75 @@
   },
   {
     "ContainingType": "ComplaintController",
-    "Method": "GetComplaint",
-    "RelativePath": "api/Complaint/GetComplaintById",
+    "Method": "GetComplaintsAll",
+    "RelativePath": "api/Complaint/GetAllComplaints",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "id",
+        "Name": "pageNum",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
         "Type": "System.Int32",
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "ComplaintTicketAPI.Models.DTO.PagedComplaintsDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "ComplaintController",
-    "Method": "GetComplaintDetails",
-    "RelativePath": "api/Complaint/GetComplaintDetails",
+    "Method": "GetComplaintsC",
+    "RelativePath": "api/Complaint/GetAllComplaintsByCategoryId",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "complaintid",
+        "Name": "categoryid",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNum",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
         "Type": "System.Int32",
         "IsRequired": false
       }
     ],
-    "ReturnTypes": []
+    "ReturnTypes": [
+      {
+        "Type": "ComplaintTicketAPI.Models.DTO.PagedComplaintsDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   },
   {
     "ContainingType": "ComplaintController",
-    "Method": "GetComplaints",
-    "RelativePath": "api/Complaint/GetComplaints",
+    "Method": "GetComplaintsO",
+    "RelativePath": "api/Complaint/GetAllComplaintsByOrgId",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -170,6 +215,74 @@
         "StatusCode": 200
       }
     ]
+  },
+  {
+    "ContainingType": "ComplaintController",
+    "Method": "GetComplaintsU",
+    "RelativePath": "api/Complaint/GetAllComplaintsByUserId",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userid",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageNum",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ComplaintTicketAPI.Models.DTO.PagedComplaintsDTO",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "ComplaintController",
+    "Method": "GetComplaint",
+    "RelativePath": "api/Complaint/GetComplaintById",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintController",
+    "Method": "GetComplaintDetails",
+    "RelativePath": "api/Complaint/GetComplaintDetails",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "complaintid",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
   },
   {
     "ContainingType": "ComplaintController",
@@ -300,6 +413,22 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.OrganizationController",
+    "Method": "GetOrganizationByUserId",
+    "RelativePath": "api/Organization/GetOrgByUserID",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -596,5 +725,98 @@
       }
     ],
     "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserHelpController",
+    "Method": "GetAllQueries",
+    "RelativePath": "api/UserHelp/GetAllQueries",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[ComplaintTicketAPI.Models.UserHelp, ComplaintTicketAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserHelpController",
+    "Method": "GetQueryByEmail",
+    "RelativePath": "api/UserHelp/GetQueryByEmail",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ComplaintTicketAPI.Models.UserHelp",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserHelpController",
+    "Method": "RespondToQuery",
+    "RelativePath": "api/UserHelp/RespondToQuery",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "adminResponse",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "ComplaintTicketAPI.Controllers.UserHelpController",
+    "Method": "SubmitQuery",
+    "RelativePath": "api/UserHelp/SubmitQuery",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userHelpDto",
+        "Type": "ComplaintTicketAPI.Models.DTO.UserHelpdto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "ComplaintTicketAPI.Models.UserHelp",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
   }
 ]

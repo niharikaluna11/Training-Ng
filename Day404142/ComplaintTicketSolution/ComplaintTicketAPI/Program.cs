@@ -4,6 +4,7 @@ using ComplaintTicketAPI.EmailModel;
 using ComplaintTicketAPI.EmailService;
 using ComplaintTicketAPI.Interfaces;
 using ComplaintTicketAPI.Interfaces.InteraceServices;
+using ComplaintTicketAPI.Interfaces.InterfaceRepositories;
 using ComplaintTicketAPI.Interfaces.InterfaceRepository;
 using ComplaintTicketAPI.Mapper;
 using ComplaintTicketAPI.Models;
@@ -52,6 +53,8 @@ namespace ComplaintTicketAPI
             builder.Services.AddAutoMapper(typeof(UpdateComplaintProfile));
             #endregion
 
+            builder.Services.AddScoped<IUserHelpRepository, UserHelpRepository>();
+            builder.Services.AddScoped<IUserHelpService, UserHelpService>();
 
             #region Repositories
             builder.Services.AddScoped<IComplaintRepository, ComplaintRepository>();
