@@ -20,18 +20,18 @@
     public class Complaint
     {
         public int ComplaintId { get; set; }
-        public int UserId { get; set; } // Foreign key to User
-        public User User { get; set; } // Navigation property to User
+        public int UserId { get; set; } 
+        public User User { get; set; } 
 
-        public int OrganizationId { get; set; } // Foreign key to Organization
+        public int OrganizationId { get; set; }
         public string Description { get; set; }
      
-        public int CategoryId { get; set; } // Foreign key to ComplaintCategory
-        public ComplaintCategory Category { get; set; } // Navigation property to ComplaintCategory
+        public int CategoryId { get; set; } 
+        public ComplaintCategory Category { get; set; } 
 
-        public ICollection<ComplaintFile> ComplaintFiles { get; set; } // 1:M relation to ComplaintFile
+        public ICollection<ComplaintFile> ComplaintFiles { get; set; } 
 
-        public ICollection<ComplaintStatusDate> ComplaintStatusDates { get; set; } // M:M relation to ComplaintStatus through ComplaintStatusDate
+        public ICollection<ComplaintStatusDate> ComplaintStatusDates { get; set; } 
 
 
        

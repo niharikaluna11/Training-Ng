@@ -1,7 +1,10 @@
-﻿namespace ComplaintTicketAPI.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace ComplaintTicketAPI.Models
 {
     public class ComplaintStatusDate
     {
+        [Key]
         public int Id { get; set; } // Unique ID for the status update
 
         public int ComplaintId { get; set; } // Foreign key to Complaint
