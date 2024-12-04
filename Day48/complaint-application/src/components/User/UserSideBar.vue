@@ -1,109 +1,196 @@
 <script>
 export default {
-    name: 'UserSideBar'
+    name: 'UserSideBar',
+    methods: {
+        logout() {
+            // Clear localStorage and sessionStorage
+            localStorage.clear();
+            sessionStorage.clear();
+
+            this.$router.push('/');
+        }
+    }
 };
 </script>
 
+
+
 <template>
-    <div class="css-q334zl">
-        <div class="css-1sausy9">
-            <div class="css-nqshte" role="group" data-section="true">
-                <div role="heading" aria-level="2" data-ds--menu--heading-item="true"
-                    class="sc-jKVCRD ernfUy css-nsg8gc"></div>
-                <div role="presentation">
-                    <a data-vc="link-item" class="css-1t4qrb2" href="/" draggable="false" aria-current="page"
-                        aria-disabled="false">
-                        <span class="css-12dc8u4">
-                            <span data-item-elem-before="true" class="css-1rnc8rc">
-                                <span data-vc="icon-undefined" aria-hidden="true" class="css-snhnyn"
-                                    style="--icon-primary-color: currentColor; --icon-secondary-color: var(--ds-surface, #FFFFFF);">
-                                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path
-                                            d="m12.44 3.102.115.066 9 6a1 1 0 0 1-1.009 1.723l-.1-.059-.446-.297V18a2 2 0 0 1-1.85 1.994L18 20h-3a2 2 0 0 1-1.995-1.85L13 18v-4h-2v4a2 2 0 0 1-1.85 1.994L9 20H6a2 2 0 0 1-1.995-1.85L4 18v-7.465l-.445.297a1 1 0 0 1-1.317-.184l-.07-.093a1 1 0 0 1 .184-1.317l.093-.07 9-6a1 1 0 0 1 .994-.066Zm-.44 2.1-6 4V18h3v-4a2 2 0 0 1 1.85-1.995L11 12h2a2 2 0 0 1 1.995 1.85L15 14v4h3V9.202l-6-4Z"
-                                            fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                            </span>
-                            <div class="css-c93nfn">
-                                <span class="css-uokyes" data-item-title="true">Home</span>
-                            </div>
-                        </span>
-                    </a>
-                </div>
-                <div role="presentation">
-                    <a data-vc="link-item" class="css-1njpl1b" href="/updates" draggable="false" aria-disabled="false">
-                        <span class="css-12dc8u4">
-                            <span data-item-elem-before="true" class="css-1rnc8rc">
-                                <span data-vc="icon-undefined" aria-hidden="true" class="css-snhnyn"
-                                    style="--icon-primary-color: var(--ds-icon); --icon-secondary-color: var(--ds-surface, #FFFFFF);">
-                                    <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                        <path fill-rule="evenodd" clip-rule="evenodd"
-                                            d="M8 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h3v1a1 1 0 1 0 2 0v-1h3a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2H8Zm4 14h4V6H8v12h4Zm0-7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm1.5 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0Z"
-                                            fill="currentColor"></path>
-                                    </svg>
-                                </span>
-                            </span>
-                            <div class="css-c93nfn">
-                                <span class="css-uokyes" data-item-title="true">Status Updates</span>
-                            </div>
-                        </span>
-                    </a>
-                </div>
-            </div>
+    <aside :class="{ 'is-expanded': is_expanded }">
+
+        <div class="menu-toggle-wrap">
+            <button class="menu-toggle" @click="ToggleMenu">
+                <span class="material-icons">
+                    <!-- keyboard_double_arrow_right -->
+                    <img src="@/Images/right-keyboard.png" alt="profile"
+                        style="height: 40px;width: 40px;padding-top: 15px;">
+                </span>
+            </button>
         </div>
-    </div>
+
+        <h3></h3>
+        <div class="menu">
+
+
+            <router-link class="button" to="/UserDashboard">
+                <span class="material-icons"></span>
+                <span class="text">User Rights</span>
+            </router-link>
+
+            <router-link class="button" to="/" @click="logout">
+                <span class="material-icons"></span>
+                <span class="text">Log Out</span>
+            </router-link>
+
+        </div>
+    </aside>
 </template>
 
-<style scoped>
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
+<script setup>
+import { ref } from 'vue';
+// State to track sidebar expansion
+const is_expanded = ref(false);
 
-.css-q334zl {
-    background-color: var(--c-background-secondary);
-    padding: 10px;
-}
+// Toggle menu expansion
+const ToggleMenu = () => {
+    is_expanded.value = !is_expanded.value;
 
-.css-1sausy9 {
+};
+
+
+</script>
+
+
+<style lang="scss" scoped>
+aside {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-}
+    // width: calc(4rem + 3rem);
+    overflow: hidden;
+    min-height: 100vh;
+    //padding: 1rem;
 
-.css-1t4qrb2,
-.css-1njpl1b {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: #333;
-    padding: 10px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-}
 
-.css-1t4qrb2:hover,
-.css-1njpl1b:hover {
-    background-color: #e6e6e6;
-}
+    color: var(--light);
 
-.css-12dc8u4 {
-    display: flex;
-    align-items: center;
-}
+    transition: width 0.2s ease-out;
 
-.css-1rnc8rc {
-    margin-right: 10px;
-}
+    .flex {
+        flex: 1;
+    }
 
-.css-c93nfn {
-    display: flex;
-    align-items: center;
-}
+    button {
+        outline: none;
+        background: transparent;
+        border: none;
+        cursor: pointer;
+    }
 
-.css-uokyes {
-    font-size: 16px;
-    font-weight: bold;
+    .logo {
+        margin-bottom: 1rem;
+
+        img {
+            padding-top: 15px;
+            width: 0.5rem;
+        }
+    }
+
+    .menu-toggle-wrap {
+        display: flex;
+        justify-content: flex-end;
+
+        &.is-expanded {
+            opacity: 1;
+            visibility: visible;
+            transition: opacity 0.2s ease-out, visibility 0s;
+        }
+
+        .menu-toggle {
+            transition: transform 0.2s ease-out;
+
+            .material-icons {
+                font-size: 2rem;
+                color: var(--light);
+            }
+
+            &:hover .material-icons {
+                color: aliceblue;
+                transform: translateX(0.5rem);
+            }
+        }
+
+    }
+
+
+    h3,
+    .button .text {
+        opacity: 0;
+        transition: opacity 0.3s ease-out;
+    }
+
+    h3 {
+        color: var(--gray);
+        font-size: 12px;
+        margin-bottom: 0.5rem;
+        text-transform: uppercase;
+    }
+
+    .menu {
+        margin: 0 -1rem;
+        font-size: small;
+
+        .button {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            margin: 0px;
+            border: 0px;
+            border-radius: 0px;
+            /* padding: 0.5rem 0.5rem; */
+            transition: 0.2s ease-out;
+
+            .material-icons {
+
+                color: var(--light);
+                margin-right: 1rem;
+            }
+
+            .text {
+                color: var(--light);
+            }
+
+            &:hover,
+            &.router-link-active {
+
+
+                .material-icons,
+                .text {
+                    color: var(--c-text-secondary);
+                }
+            }
+
+
+        }
+    }
+
+    &.is-expanded {
+        width: 200px;
+
+        .menu-toggle-wrap {
+            .menu-toggle {
+                transform: rotate(-180deg);
+            }
+        }
+
+        h3,
+        .button .text {
+            opacity: 1;
+        }
+    }
+
+    @media (max-width: 768px) {
+        position: fixed;
+        z-index: 99;
+    }
 }
 </style>
