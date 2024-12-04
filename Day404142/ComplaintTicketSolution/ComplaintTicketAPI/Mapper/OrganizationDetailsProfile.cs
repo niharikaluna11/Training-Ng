@@ -11,6 +11,9 @@ namespace ComplaintTicketAPI.Mapper
         {
             // Mapping from Complaint to ComplaintDTO
             CreateMap<Organization, OrganizationDTO>().ReverseMap();
+
+            CreateMap<Organization, OrganizationIdDTO>()
+                .ForMember(dest => dest.OrganizationId, opt => opt.MapFrom(src => src.orgId)); ;
         }
     }
 }
