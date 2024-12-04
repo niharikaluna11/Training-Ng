@@ -40,7 +40,7 @@ namespace ComplaintTicketAPI.Tests.Repositories
             // Arrange
             var category = new ComplaintCategory
             {
-                Id = 1,
+                CategoryId = 1,
                 Name = "Network Issue",
                 Description = "Issues related to network connectivity"
             };
@@ -59,7 +59,7 @@ namespace ComplaintTicketAPI.Tests.Repositories
             // Arrange
             var category = new ComplaintCategory
             {
-                Id = 2,
+                CategoryId = 2,
                 Name = "Software Bug",
                 Description = "Issues related to software"
             };
@@ -87,8 +87,8 @@ namespace ComplaintTicketAPI.Tests.Repositories
         public async Task GetAll_ShouldReturnAllComplaintCategories()
         {
             // Arrange
-            var category1 = new ComplaintCategory { Id = 3, Name = "Hardware Issue", Description = "Hardware related issues" };
-            var category2 = new ComplaintCategory { Id = 4, Name = "Billing Issue", Description = "Billing related issues" };
+            var category1 = new ComplaintCategory { CategoryId = 3, Name = "Hardware Issue", Description = "Hardware related issues" };
+            var category2 = new ComplaintCategory { CategoryId = 4, Name = "Billing Issue", Description = "Billing related issues" };
             await _repository.Add(category1);
             await _repository.Add(category2);
 
@@ -106,7 +106,7 @@ namespace ComplaintTicketAPI.Tests.Repositories
             // Arrange
             var category = new ComplaintCategory
             {
-                Id = 5,
+                CategoryId = 5,
                 Name = "Initial Category",
                 Description = "Initial Description"
             };
@@ -114,7 +114,7 @@ namespace ComplaintTicketAPI.Tests.Repositories
 
             var updatedCategory = new ComplaintCategory
             {
-                Id = 5,
+                CategoryId = 5,
                 Name = "Updated Category",
                 Description = "Updated Description"
             };
@@ -133,7 +133,7 @@ namespace ComplaintTicketAPI.Tests.Repositories
             // Arrange
             var nonExistentCategory = new ComplaintCategory
             {
-                Id = 999,
+                CategoryId = 999,
                 Name = "Non-Existent Category",
                 Description = "This category does not exist"
             };
@@ -151,7 +151,7 @@ namespace ComplaintTicketAPI.Tests.Repositories
             // Arrange
             var category = new ComplaintCategory
             {
-                Id = 6,
+                CategoryId = 6,
                 Name = "Delete Test Category",
                 Description = "Description for deletion test"
             };

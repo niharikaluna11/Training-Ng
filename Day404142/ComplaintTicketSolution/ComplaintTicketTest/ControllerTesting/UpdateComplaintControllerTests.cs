@@ -7,6 +7,7 @@
 //using ComplaintTicketAPI.Models;
 //using ComplaintTicketAPI.Models.DTO;
 //using Microsoft.AspNetCore.Mvc;
+//using ComplaintTicketAPI.Interfaces.InteraceServices;
 
 //namespace ComplaintTicketApiTests.Controllers
 //{
@@ -14,12 +15,16 @@
 //    {
 //        private Mock<IUpdateComplaintService> _mockUpdateComplaintService;
 //        private UpdateComplaintController _updateComplaintController;
+//        private Mock<IComplaintDetailService> _mockComplaintDetailService;
+
+
 
 //        [SetUp]
 //        public void Setup()
 //        {
 //            _mockUpdateComplaintService = new Mock<IUpdateComplaintService>();
-//            _updateComplaintController = new UpdateComplaintController(_mockUpdateComplaintService.Object);
+//            _mockComplaintDetailService = new Mock<IComplaintDetailService>();
+//            _updateComplaintController = new UpdateComplaintController(_mockUpdateComplaintService.Object, _mockComplaintDetailService.Object);
 //        }
 
 //        [Test]
@@ -49,50 +54,49 @@
 //        }
 
 //        // Test for getting complaints successfully
-        
-
-//        // Test for "Not Found" scenario when complaint is not found
-//        [Test]
-//        public async Task GetComplaint_ShouldReturnNotFound_WhenComplaintIsNotFound()
-//        {
-//            // Arrange
-//            var orgId = 1;
-//            _mockUpdateComplaintService
-//                .Setup(service => service.GetComplaintByOrganizationIdAsync(orgId))
-//                .ThrowsAsync(new KeyNotFoundException("Complaint not found"));
-
-//            // Act
-//            var result = await _updateComplaintController.GetComplaint(orgId);
-
-//            // Assert
-//            Assert.IsNotNull(result);
-//            var notFoundResult = result.Result as NotFoundObjectResult;
-//            Assert.IsNotNull(notFoundResult);
-//            Assert.AreEqual(404, notFoundResult.StatusCode);
-//            Assert.AreEqual("Complaint not found", notFoundResult.Value);
-//        }
 
 
-      
+//        //// Test for "Not Found" scenario when complaint is not found
+//        //[Test]
+//        //public async Task GetComplaint_ShouldReturnNotFound_WhenComplaintIsNotFound()
+//        //{
+//        //    // Arrange
+//        //    var orgId = 1;
+//        //    _mockUpdateComplaintService
+//        //        .Setup(service => service.GetComplaintByOrganizationIdAsync(orgId))
+//        //        .ThrowsAsync(new KeyNotFoundException("Complaint not found"));
 
-//        // Test for updating complaint status successfully
-//        [Test]
-//        public async Task UpdateComplaintStatus_ShouldReturnOk_WhenUpdateIsSuccessful()
-//        {
-//            // Arrange
-//            var updateRequest = new UpdateComplaintRequestDTO { ComplaintId = 1, Status = (Status)2 };
-//            _mockUpdateComplaintService
-//                .Setup(service => service.UpdateComplaintStatusAsync(updateRequest))
-//                .ReturnsAsync(true); // Simulating successful update
+//        //    // Act
+//        //    var result = await _updateComplaintController.GetComplaint(orgId);
 
-//            // Act
-//            var result = await _updateComplaintController.UpdateComplaintStatus(updateRequest);
+//        //    // Assert
+//        //    Assert.IsNotNull(result);
+//        //    var notFoundResult = result.Result as NotFoundObjectResult;
+//        //    Assert.IsNotNull(notFoundResult);
+//        //    Assert.AreEqual(404, notFoundResult.StatusCode);
+//        //    Assert.AreEqual("Complaint not found", notFoundResult.Value);
+//        //}
 
-//            // Assert
-//            var okResult = result as OkResult;
-//            Assert.IsNotNull(okResult);
-//            Assert.AreEqual(200, okResult.StatusCode); // No Content (204) will still return Ok
-//        }
+
+
+
+//        //[Test]
+//        //public async Task UpdateComplaintStatus_ShouldReturnOk_WhenUpdateIsSuccessful()
+//        //{
+//        //    // Arrange
+//        //    var updateRequest = new UpdateComplaintRequestDTO { ComplaintId = 1, Status = (Status)2 };
+//        //    _mockUpdateComplaintService
+//        //        .Setup(service => service.UpdateComplaintStatusAsync(updateRequest))
+//        //        .ReturnsAsync(true); // Simulating successful update
+
+//        //    // Act
+//        //    var result = await _updateComplaintController.UpdateComplaintStatus(updateRequest);
+
+//        //    // Assert
+//        //    var okResult = result as OkResult;
+//        //    Assert.IsNotNull(okResult);
+//        //    Assert.AreEqual(200, okResult.StatusCode); // No Content (204) will still return Ok
+//        //}
 
 //        // Test for bad request when the status update fails
 //        [Test]
