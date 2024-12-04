@@ -14,7 +14,7 @@
                     <div class="profile-image">
                         <img v-if="userProfile.profilePicture" :src="userProfile.profilePicture"
                             alt="Profile Picture" />
-                        <img v-else src="default-profile.jpg" alt="Default Profile Picture" />
+                        <img v-else src="../../../public/profilepicimg.jpg" alt="Default Profile Picture" />
                     </div>
 
                     <div class="profile-details">
@@ -43,8 +43,7 @@
                         <div class="ok1">
                             <img v-if="editData.profilePicture" :src="editData.profilePicture"
                                 alt="Profile Picture Preview" />
-                            <img v-else :src="userProfile.profilePicture || 'default-profile.jpg'"
-                                alt="Profile Picture Preview" />
+                            <img v-else :src="userProfile.profilePicture || 'alt.pic'" alt="Profile Picture Preview" />
                             <input type="file" @change="handleFileChange" id="profilePicture" />
 
                         </div>
@@ -116,7 +115,7 @@ export default {
 
             this.userName = username;
             const userIdResponse = await getUserIdByUsername(username);
-            const userId = userIdResponse.data.userId;
+            const userId = userIdResponse;
 
             const userProfile = await getUserProfile(userId);
 

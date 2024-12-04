@@ -6,13 +6,27 @@
         <div class="responsive-wrapper">
 
             <!-- Search Filters -->
-            <div class="search-filters">
-                <label for="category">Category:</label>
-                <select v-model="searchCategory" id="category">
-                    <option value="">All</option>
-                    <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
-                </select>
-
+            <!-- <div class="search-filters">
+                <div class="dropdown-header" @click="toggleCategoryDropdown">
+                    <span>{{ selectedCategory?.name || "Select a Category" }}</span>
+                    <span class="dropdown-icon">▼</span>
+                </div>
+                <div class="dropdown-body" v-if="isDropdownOpen3">
+                    <div class="dropdown-search">
+                        <input type="text" v-model="searchQuery" placeholder="Search by category name..."
+                            class="search-input" />
+                        <button class="search-button" @click="clearSearch">🔍</button>
+                    </div>
+                    <ul class="dropdown-list">
+                        <li v-for="category in filteredCategories()" :key="category.id"
+                            @click="selectCategory(category)" class="dropdown-item">
+                            {{ category.name }}
+                        </li>
+                        <li v-if="filteredCategories().length === 0" class="no-results">No categories found.
+                        </li>
+                    </ul>
+                </div> -->
+            <!-- 
                 <label for="status">Status:</label>
                 <select v-model="searchStatus" id="status">
                     <option value="">All</option>
@@ -25,8 +39,8 @@
                     <option value="">All</option>
                     <option v-for="priority in priorityOptions" :key="priority" :value="priority">{{
                         getPriorityText(priority) }}</option>
-                </select>
-            </div>
+                </select> -->
+            <!-- </div> -->
 
             <!-- Complaints List -->
             <div v-if="filteredComplaints.length > 0">
@@ -39,7 +53,7 @@
                         <button @click="fetchComplaintDetails(complaint.complaintId)">
                             {{ selectedComplaintId === complaint.complaintId ? "Hide Details" : "View Details" }}
                         </button>
-                        <!-- <button @click="editComplaint(complaint.complaintId)">Update</button> -->
+
                     </div>
                 </div>
             </div>
@@ -55,37 +69,56 @@
 
             <!-- No Complaints or Error Message -->
             <div v-else>
-                <p v-if="errorMessage">{{ errorMessage }}</p>
-                <p v-else>No complaints found.</p>
+
+                <p>No complaints found.</p>
             </div>
         </div>
+
 
         <div v-if="showModal" class="modal-overlay">
             <div class="modal">
-                <h3>Complaint ID: {{ complaintDetails.complaintId }}</h3>
-                <p><strong>Category:</strong> {{ complaintDetails.categoryName }}</p>
-                <p><strong>Status:</strong> {{ complaintDetails.status }}</p>
-                <p><strong>Priority:</strong> {{ complaintDetails.priority }}</p>
-                <p><strong>Updated At:</strong> {{ formatDate(complaintDetails.latestStatusDate) }}</p>
+                <template v-if="isUpdating">
+                    <h3>Update Complaint ID: {{ complaintDetails.complaintId }}</h3>
+                    <form @submit.prevent="submitUpdate">
+                        <label for="status">Status:</label>
+                        <select v-model="updatedStatus" id="status">
+                            <option v-for="status in statusOptions" :key="status" :value="status">
+                                {{ getStatusText(status) }}
+                            </option>
+                        </select>
 
-                <div v-if="complaintDetails.files && complaintDetails.files.length > 0">
-                    <p><strong>Attached Files:</strong></p>
-                    <ul>
-                        <li v-for="file in complaintDetails.files" :key="file">{{ file }}</li>
-                    </ul>
-                </div>
+                        <label for="comment">Comment:</label>
+                        <textarea v-model="updateComment" id="comment" placeholder="Enter your comment"></textarea>
 
-                <div v-if="complaintDetails.organizationDetails">
-                    <p><strong>Organization:</strong> {{ complaintDetails.organizationDetails.name }}</p>
-                </div>
+                        <label for="status-date">Status Date:</label>
+                        <input type="datetime-local" v-model="statusDate" id="status-date" required />
 
-                <div v-if="complaintDetails.userDetails">
-                    <p><strong>User:</strong> {{ complaintDetails.userDetails.email }}</p>
-                </div>
+                        <div class="modal-buttons">
+                            <button type="submit">Save Changes</button>
+                            <button type="button" @click="cancelUpdate">Cancel</button>
+                        </div>
+                    </form>
+                </template>
 
-                <button @click="closeModal">Close</button>
+                <template v-else>
+                    <h3>Complaint ID: {{ complaintDetails.complaintId }}</h3>
+                    <p><strong>Category:</strong> {{ complaintDetails.categoryName }}</p>
+                    <p><strong>Status:</strong> {{ complaintDetails.status }}</p>
+                    <p><strong>Priority:</strong> {{ complaintDetails.priority }}</p>
+                    <p><strong>Updated At:</strong> {{ formatDate(complaintDetails.latestStatusDate) }}</p>
+                    <div v-if="complaintDetails.organizationDetails">
+                        <p><strong>Organization:</strong> {{ complaintDetails.organizationDetails.name }}</p>
+                    </div>
+                    <div v-if="complaintDetails.userDetails">
+                        <p><strong>User:</strong> {{ complaintDetails.userDetails.username }}</p>
+                    </div>
+
+                    <button @click="startUpdate">Update Complaint</button>
+                    <button @click="closeModal">Close</button>
+                </template>
             </div>
         </div>
+
 
     </main>
 </template>
@@ -96,6 +129,7 @@ import { getAllComplaints, getComplaintDetails } from "@/scripts/GetALL/GetAllCo
 import AdminHeader from "./AdminHeader.vue";
 import SideBar from "./SideBar.vue";
 import { fetchCategoriesName } from "@/scripts/GetALL/ComplaintCategoryService";
+import { updateComplaintStatus } from "@/scripts/UpdateComplaintStatus";
 // import { updateComplaintStatus } from "@/scripts/UpdateComplaintStatus";
 
 export default {
@@ -111,6 +145,7 @@ export default {
             errorMessage: "",
             selectedComplaintId: null,
             complaintDetails: null,
+            categoryId: null,
             currentPage: 1,
             pageSize: 6,
             totalPages: 1,
@@ -122,6 +157,9 @@ export default {
             categories: [],
             statusOptions: [0, 1, 2],
             priorityOptions: [0, 1, 2, 3],
+            isDropdownOpen3: false,
+            searchQuery: "",
+
         };
     },
 
@@ -140,25 +178,13 @@ export default {
             return Array.from({ length: this.totalPages }, (_, i) => i + 1);
         },
         filteredComplaints() {
-            return this.complaints.filter((complaint) => {
-                const complaintDetails = complaint.complaintDetails || {};
-
-                const matchesCategory = this.searchCategory
-                    ? complaintDetails.categoryName == this.searchCategory
-                    : true;
-                const matchesStatus = this.searchStatus
-                    ? complaintDetails.status == this.searchStatus
-                    : true;
-                const matchesPriority = this.searchPriority
-                    ? complaintDetails.priority == this.searchPriority
-                    : true;
-
-                return matchesCategory && matchesStatus && matchesPriority;
-            });
+            return this.complaints;
         },
-
     },
     methods: {
+        toggleCategoryDropdown() {
+            this.isDropdownOpen3 = !this.isDropdownOpen3;
+        },
         async fetchComplaints() {
             try {
                 const complaintsData = await getAllComplaints(this.currentPage, this.pageSize);
@@ -177,19 +203,42 @@ export default {
                 console.error("Error fetching complaints:", error);
             }
         },
-
         async fetchCategories() {
             try {
-                const categoriesData = await fetchCategoriesName();
-                console.log(categoriesData);
-                this.categories = categoriesData || []; // Store fetched categories in the `categories` array
+                // Fetch categories data using the service function
+                const response = await fetchCategoriesName(this.pageNum, this.pageSize);
+
+                // Assuming `response` is structured with a `$values` array containing categories
+                if (response && response.$values) {
+                    // Map the received data into the desired format
+                    this.categories = response.$values.map(category => ({
+                        id: category.categoryId,   // Use actual field names from your API response
+                        name: category.categoryName
+                    }));
+                } else {
+                    console.error("Invalid response format or no categories found.");
+                }
             } catch (error) {
                 console.error("Error fetching categories:", error);
             }
-
         },
 
 
+        filteredCategories() {
+            if (!this.searchQuery) {
+                return this.categories; // Show all categories when there's no search query
+            }
+            return this.categories.filter(category =>
+                category.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+            );
+        },
+        selectCategory(category) {
+            this.selectedCategory = category; // Handle selection logic
+            this.isDropdownOpen3 = false; // Close the dropdown after selection
+        },
+        clearSearch() {
+            this.searchQuery = "";
+        },
 
         async fetchComplaintDetails(complaintId) {
             try {
@@ -250,10 +299,46 @@ export default {
             }
         },
 
+
+        startUpdate() {
+            this.isUpdating = true;
+            this.updatedStatus = this.complaintDetails.status || 0; // Default to current status
+            this.updateComment = ""; // Clear comment
+            this.statusDate = new Date().toISOString().slice(0, 16); // Set current datetime as default
+        },
+        async submitUpdate() {
+
+            try {
+
+
+
+                await updateComplaintStatus(
+                    this.complaintDetails.complaintId,
+                    this.updatedStatus,
+                    this.updateComment,
+                    this.statusDate
+                );
+                alert("Complaint updated successfully.");
+                this.isUpdating = false;
+                this.fetchComplaints();
+                this.fetchCategories();
+                this.closeModal();
+            } catch (err) {
+                console.error("Error updating complaint:", err.response.data);
+                alert(err.response.data.message);
+            }
+        },
+        cancelUpdate() {
+            this.isUpdating = false;
+            this.updateComment = "";
+            this.statusDate = "";
+            this.updatedStatus = 0;
+            this.closeModal();
+        },
         closeModal() {
             this.showModal = false;
+            this.isUpdating = false;
         },
-
 
     },
 };
@@ -263,26 +348,51 @@ export default {
 
 <style scoped>
 /* Style for the status update form in the modal */
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+textarea {
+    width: 90%;
+    height: 80px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none;
+}
+
+input,
+select {
+    width: 80%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.modal-buttons button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: var(--new-color);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-buttons button:hover {
+    background-color: var(--c-text-action);
+}
+
+.modal-buttons button:focus {
+    outline: none;
+}
 
 /* Add your styles here for search inputs and other components */
 /* Style for the search filters container */
-.search-filters {
-    display: flex;
-    gap: 20px;
-    /* Gap between elements */
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    margin-left: 5px;
-    left: 5px;
-    /* Align items to the left */
-    padding: 10px;
-
-    /* Light background color */
-    border-radius: 8px;
-    /* Rounded corners */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    /* Subtle shadow for depth */
-}
+.search-filters {}
 
 /* Style for labels */
 .search-filters label {
@@ -567,5 +677,91 @@ p {
     border-radius: 10px;
     max-width: 600px;
     width: 80%;
+}
+
+
+.dropdown-header {
+    padding: 10px;
+    font-size: 1rem;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+
+.search-dropdown {
+
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+
+    border-radius: 5px;
+
+    background-color: white;
+}
+
+.dropdown-icon {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.dropdown-body {
+
+    background-color: white;
+    max-height: 250px;
+
+    border-top: 1px solid #ccc;
+}
+
+.dropdown-search {
+    display: flex;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+}
+
+.search-input {
+    flex: 1;
+    padding: 5px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.search-button {
+    margin-left: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.dropdown-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.dropdown-item {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.dropdown-item:hover {
+    background-color: #f0f0f0;
+}
+
+.no-results {
+    text-align: center;
+    color: #999;
+    padding: 10px;
 }
 </style>

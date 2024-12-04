@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="card-footer">
-                        <router-link to="/ErrorPage" class="nav-link active text-light" aria-current="page">
+                        <router-link to="/HelpPage" class="nav-link active text-light" aria-current="page">
                             <a>Help</a>
                         </router-link>
                     </div>

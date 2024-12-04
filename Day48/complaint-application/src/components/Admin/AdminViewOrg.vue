@@ -18,7 +18,7 @@
                         </div>
                         <div class="actions">
                             <button @click="editOrganization(organization)">Edit</button>
-                            <button @click="viewOrganization(organization.id)">View</button>
+                            <button @click="viewOrganization(organization)">View</button>
                             <button @click="deleteUser(organization)">Deactivate</button>
                             <button @click="ReactivateUser(organization)">Reactivate</button>
                         </div>
@@ -26,8 +26,8 @@
                 </div>
             </div>
             <div v-else>
-                <p v-if="errorMessage">{{ errorMessage }}</p>
-                <p v-else>No organizations found.</p>
+                <!-- <p v-if="errorMessage">{{ message }}</p> -->
+                <p>No organizations found.</p>
             </div>
         </div>
     </main>
@@ -158,20 +158,19 @@ export default {
             const file = event.target.files[0];
             this.editData.profilePicture = file;
         },
-        viewOrganization(organizationId) {
-            const organization = this.organizations.find(org => org.id === organizationId);
-            if (organization) {
-                organization.showDetails = !organization.showDetails; // Toggle visibility of details
-            }
-        },
+        viewOrganization(organization) {
+            // Toggle the visibility of details for the selected organization
+            organization.showDetails = !organization.showDetails;
+        }
+        ,
         getTypeText(type) {
             switch (type) {
-                case 1:
+                case 0:
                     return "Corporate";
-                case 2:
-                    return "Non-Profit";
-                case 3:
+                case 1:
                     return "Government";
+                case 2:
+                    return "Agent";
                 default:
                     return "Unknown";
             }

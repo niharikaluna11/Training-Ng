@@ -31,20 +31,32 @@
                         </form>
                     </div>
                 </div>
-                <table v-if="categories.length > 0">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="(item, index) in categories" :key="index">
-                            <td>{{ item.name }}</td>
-                            <td>{{ item.description }}</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <div v-if="categories.length > 0">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(item, index) in categories" :key="index">
+                                <td>{{ item.name }}</td>
+                                <td>{{ item.description }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="pagination-controls">
+                        <button :disabled="pageNum === 1" @click="changePage('prev')">
+                            Previous
+                        </button>
+                        <span>Page {{ pageNum }}</span>
+                        <button :disabled="categories.length < pageSize" @click="changePage('next')">
+                            Next
+                        </button>
+                    </div>
+                </div>
+
                 <p v-else>No categories available</p>
 
 
@@ -73,7 +85,7 @@ export default {
             },
             categories: [],
             pageNum: 1,
-            pageSize: 9,
+            pageSize: 6,
             isModalOpen: false,
         };
     },
@@ -105,13 +117,20 @@ export default {
             }
         },
         async fetchCategories() {
-            const token = sessionStorage.getItem("Token");  // Make sure token key is correct
             try {
-                this.categories = await fetchCategories(this.pageNum, this.pageSize, token);
+                this.categories = await fetchCategories(this.pageNum, this.pageSize);
             } catch (error) {
                 console.error(error);
                 alert("Failed to fetch categories.");
             }
+        },
+        changePage(direction) {
+            if (direction === 'prev' && this.pageNum > 1) {
+                this.pageNum--;
+            } else if (direction === 'next') {
+                this.pageNum++;
+            }
+            this.fetchCategories(); // Fetch new categories based on updated page number
         },
     },
 };
@@ -128,7 +147,7 @@ export default {
     align-items: center;
     left: 10px;
     gap: 800px;
-    /* Adds some space between the h2 and button */
+    /* Adds space between the h2 and button */
 }
 
 .admin-sidebar {
@@ -146,18 +165,18 @@ export default {
 }
 
 .responsive-wrapper h2 {
-    color: #333;
-    /* Darker text for headings */
+    color: var(--c-text-secondary);
+    /* Updated to secondary color */
     margin-bottom: 16px;
     /* Space below headings */
     font-family: Arial, sans-serif;
     font-size: 1.5rem;
-    /* Slightly larger font size for prominence */
+    /* Larger font size for prominence */
 }
 
 .create-category-btn {
-    background-color: #007bff;
-    /* Primary color */
+    background-color: var(--c-text-secondary);
+    /* Primary action color */
     color: white;
     border: none;
     padding: 10px 20px;
@@ -168,8 +187,8 @@ export default {
 }
 
 .create-category-btn:hover {
-    background-color: #0056b3;
-    /* Darker shade on hover */
+    background-color: var(--c-text-action);
+    /* New color on hover */
 }
 
 .modal-overlay {
@@ -192,18 +211,46 @@ export default {
     border-radius: 8px;
     width: 100%;
     max-width: 500px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    /* More prominent shadow for modal */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    /* Prominent shadow */
 }
 
 .modal-content h2 {
     margin-bottom: 16px;
     font-size: 1.25rem;
-    color: #444;
+    color: var(--c-text-secondary);
+    /* Secondary color for headings */
+}
+
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-content input,
+.modal-content textarea {
+    width: 100%;
+    /* Align input and textarea widths */
+    padding: 8px;
+    border: 1px solid var(--c-text-secondary);
+    /* Subtle border color */
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.modal-content textarea {
+    height: 100px;
+    resize: none;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }
 
 .modal-buttons button {
-    margin-top: 16px;
     padding: 8px 16px;
     font-size: 1rem;
     border-radius: 4px;
@@ -213,21 +260,20 @@ export default {
 }
 
 .modal-buttons button[type="submit"] {
-    background-color: #28a745;
-    /* Success color */
+    background-color: var(--c-text-secondary);
+    /* Action color */
     color: white;
 }
 
 .modal-buttons button[type="submit"]:hover {
-    background-color: #218838;
-    /* Darker green */
+    background-color: var(--c-text-action);
+    /* New color on hover */
 }
 
 .modal-buttons button[type="button"] {
-    background-color: #dc3545;
+    background-color: #e9606d;
     /* Danger color */
     color: white;
-    margin-left: 8px;
 }
 
 .modal-buttons button[type="button"]:hover {
@@ -243,10 +289,12 @@ table {
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Subtle table shadow */
 }
 
 table thead {
-    background-color: #007bff;
+    background-color: var(--c-text-action);
+    /* Action color for header */
     color: white;
     text-align: left;
 }
@@ -254,7 +302,8 @@ table thead {
 table th,
 table td {
     padding: 12px;
-    border-bottom: 1px solid #ddd;
+    border-bottom: 1px solid var(--c-text-secondary);
+    /* Secondary color for borders */
 }
 
 table tr:last-child td {
@@ -262,15 +311,43 @@ table tr:last-child td {
     /* Remove border for the last row */
 }
 
-table tr:hover {
-    background-color: #f1f1f1;
-    /* Highlight on hover */
-}
+
 
 p {
     font-size: 1rem;
-    color: #666;
+    color: var(--c-text-secondary);
+    /* Subtle color for text */
     margin-top: 16px;
     text-align: center;
+}
+
+
+
+.pagination-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 16px;
+}
+
+.pagination-controls button {
+    padding: 8px 16px;
+    font-size: 1rem;
+    border-radius: 4px;
+    border: 1px solid var(--c-text-secondary);
+    background-color: var(--c-text-action);
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.pagination-controls button:disabled {
+    background-color: var(--c-text-secondary);
+    cursor: not-allowed;
+}
+
+.pagination-controls span {
+    font-size: 1rem;
+    color: var(--c-text-secondary);
 }
 </style>

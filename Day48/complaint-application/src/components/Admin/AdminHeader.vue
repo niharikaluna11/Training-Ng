@@ -6,7 +6,8 @@
                     <div>
                         <img src="https://assets.codepen.io/285131/untitled-ui-icon.svg" />
                     </div>
-                    <img src="https://assets.codepen.io/285131/untitled-ui.svg" />
+                    <p style="color: black;">TicketSolve</p>
+
                 </a>
             </div>
             <div class="header-navigation">
