@@ -19,6 +19,16 @@ import AdminFileComplaint from "./components/Admin/AdminFileComplaint.vue";
 import ComplaintCategory from "./components/Admin/ComplaintCategory.vue";
 import AdminKnowledgeBase from "./components/Admin/AdminKnowledgeBase.vue";
 import HelpPage from "./components/HelpPage.vue";
+import UnauthorizedPage from "./components/UnauthorizedPage.vue";
+import UserProfile from "./components/User/UserProfile.vue";
+import UserCategoryView from "./components/User/UserCategoryView.vue";
+import UserViewOrg from "./components/User/UserViewOrg.vue";
+import UserFileComplaint from "./components/User/UserFileComplaint.vue";
+import UserKnowledgeBase from "./components/User/UserKnowledgeBase.vue";
+import OrgCategoryView from "./components/Organization/OrgCategoryView.vue";
+import OrgProfile from "./components/Organization/OrgProfile.vue";
+import OrgComplaintView from "./components/Organization/OrgComplaintView.vue";
+import OrgKnowledgeBase from "./components/Organization/OrgKnowledgeBase.vue";
 
 const routes = [
     { path: '/', component: HomePage },
@@ -28,12 +38,57 @@ const routes = [
     { path: '/ErrorPage', component: ErrorPage },
     { path: '/HelpPage', component: HelpPage },
     { path: '/ForgotPassword', component: ForgotPassword },
+    { path: '/UnauthorizedPage', component: UnauthorizedPage },
 
+    {
+        path: '/OrgKnowledgeBase',
+        component: OrgKnowledgeBase,
+        meta: { requiresAuth: true, requiresOrganization: true }
+    },
+    {
+        path: '/OrgComplaintView',
+        component: OrgComplaintView,
+        meta: { requiresAuth: true, requiresOrganization: true }
+    },
+    {
+        path: '/OrgProfile',
+        component: OrgProfile,
+        meta: { requiresAuth: true, requiresOrganization: true }
+    },
+    {
+        path: '/OrgCategoryView',
+        component: OrgCategoryView,
+        meta: { requiresAuth: true, requiresOrganization: true }
+    },
 
-
+    {
+        path: '/UserKnowledgeBase',
+        component: UserKnowledgeBase,
+        meta: { requiresAuth: true, requiresUser: true }
+    },
+    {
+        path: '/UserFileComplaint',
+        component: UserFileComplaint,
+        meta: { requiresAuth: true, requiresUser: true }
+    },
+    {
+        path: '/UserViewOrg',
+        component: UserViewOrg,
+        meta: { requiresAuth: true, requiresUser: true }
+    },
+    {
+        path: '/UserCategoryView',
+        component: UserCategoryView,
+        meta: { requiresAuth: true, requiresUser: true }
+    },
     {
         path: '/UserDashboard',
         component: UserDashboard,
+        meta: { requiresAuth: true, requiresUser: true }
+    },
+    {
+        path: '/UserProfile',
+        component: UserProfile,
         meta: { requiresAuth: true, requiresUser: true }
     },
     {
@@ -119,7 +174,7 @@ router.afterEach(() => {
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         if (!isAuthenticated()) {
-            next({ path: "/login", query: { redirect: to.path } });
+            next({ path: "/UnauthorizedPage", query: { redirect: to.path } });
         } else {
             next();
         }
@@ -135,7 +190,7 @@ function isAuthenticated() {
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresAdmin)) {
         if (!isAdminAuthenticated()) {
-            next({ path: "/login", query: { redirect: to.fullPath } });
+            next({ path: "/UnauthorizedPage", query: { redirect: to.fullPath } });
         } else {
             next();
         }
@@ -153,7 +208,7 @@ function isAdminAuthenticated() {
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresOrganization)) {
         if (!isOrganizationAuthenticated()) {
-            next({ path: "/login", query: { redirect: to.fullPath } });
+            next({ path: "/UnauthorizedPage", query: { redirect: to.fullPath } });
         } else {
             next();
         }
@@ -171,7 +226,7 @@ function isOrganizationAuthenticated() {
 router.beforeEach((to, from, next) => {
     if (to.matched.some((record) => record.meta.requiresUser)) {
         if (!isUserAuthenticated()) {
-            next({ path: "/login", query: { redirect: to.fullPath } });
+            next({ path: "/UnauthorizedPage", query: { redirect: to.fullPath } });
         } else {
             next();
         }
