@@ -7,7 +7,9 @@ export const getUserIdByUsername = async (username) => {
         const response = await axios.get(
             `http://localhost:5062/api/User/GetUserIdByUsername?username=${username}`
         );
-        return response; // Return the user ID from the response
+        console.log(response.data.userId);
+        return response.data.userId;
+        // Return the user ID from the response
     } catch (err) {
         console.error("Error fetching user ID:", err);
         throw err; // Throw error for handling in caller

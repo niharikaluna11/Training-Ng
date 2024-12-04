@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Update complaint status
-export const updateComplaintStatus = async (complaintId, organizationId, status, commentByUser, statusDate) => {
+export const updateComplaintStatus = async (complaintId, status, commentByUser, statusDate) => {
     try {
         // Retrieve the token from sessionStorage
         const token = sessionStorage.getItem("token");
@@ -13,7 +13,6 @@ export const updateComplaintStatus = async (complaintId, organizationId, status,
         // Prepare request body
         const requestBody = {
             complaintId,
-            organizationId,
             status,
             commentByUser,
             statusDate,

@@ -22,7 +22,7 @@ export const createCategory = async (categoryData) => {
     }
 };
 
-export const fetchCategories = async (pageNum = 1, pageSize = 9) => {
+export const fetchCategories = async (pageNum, pageSize) => {
     const url = `http://localhost:5062/api/ComplaintCategory/GetAllCategories?pagenum=${pageNum}&pagesize=${pageSize}`;
 
     try {
@@ -44,7 +44,7 @@ export const fetchCategories = async (pageNum = 1, pageSize = 9) => {
 };
 
 
-export const fetchCategoriesName = async (pageNum = 1, pageSize = 9) => {
+export const fetchCategoriesName = async (pageNum = 1, pageSize = 5) => {
     const url = `http://localhost:5062/api/ComplaintCategory/GetAllCategories?pagenum=${pageNum}&pagesize=${pageSize}`;
 
     try {

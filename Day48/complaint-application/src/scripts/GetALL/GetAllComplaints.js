@@ -1,6 +1,8 @@
 import axios from "axios";
-export const getAllComplaints = async (page, pageSize) => {
-    const url = `http://localhost:5062/api/Complaint/GetComplaints?orgId=1&pagenum=${page}&pagesize=${pageSize}`;
+
+
+export const getAllComplaints = async (page = 1, pageSize = 10) => {
+    const url = `http://localhost:5062/api/Complaint/GetAllComplaints?pageNum=${page}&pageSize=${pageSize}`;
 
     try {
         const token = sessionStorage.getItem("token");
