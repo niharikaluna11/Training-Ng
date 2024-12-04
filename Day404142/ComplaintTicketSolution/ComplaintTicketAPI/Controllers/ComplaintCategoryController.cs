@@ -32,6 +32,6 @@ public class ComplaintCategoryController : ControllerBase
             return BadRequest(ModelState);
 
         var createdCategory = await _service.AddComplaintCategory(categoryDto);
-        return CreatedAtAction(nameof(GetCategories), new { id = createdCategory.categoryId }, createdCategory);
+        return CreatedAtAction(nameof(GetCategories),  createdCategory);
     }
 }

@@ -27,6 +27,32 @@ namespace ComplaintTicketAPI.Controllers
             _userService = userService;
         }
 
+        [HttpGet("GetOrgByUserID")]
+        [Authorize]
+        public async Task<IActionResult> GetOrganizationByUserId(int userId)
+        {
+            try
+            {
+                var organization = await _organizationService.GetOrganizationByUserIdAsync(userId);
+
+                if (organization == null)
+                {
+                    return NotFound($"No organization found for user ID {userId}.");
+                }
+
+                return Ok(organization);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                // Log the error (if a logging mechanism is in place)
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         // Get a list of available roles for users
         [HttpGet("Roles/Available")]
         [Authorize]

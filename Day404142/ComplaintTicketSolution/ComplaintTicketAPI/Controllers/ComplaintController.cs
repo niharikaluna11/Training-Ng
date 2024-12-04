@@ -181,9 +181,9 @@ public class ComplaintController : ControllerBase
         }
     }
 
-    [HttpGet("GetComplaints")]
+    [HttpGet("GetAllComplaintsByOrgId")]
     [Authorize(Roles = "Admin,Organization")]
-    public async Task<ActionResult<PagedComplaintsDTO>> GetComplaints(int orgId, int pageNum, int pageSize)
+    public async Task<ActionResult<PagedComplaintsDTO>> GetComplaintsO(int orgId, int pageNum, int pageSize)
     {
         try
         {
@@ -205,6 +205,142 @@ public class ComplaintController : ControllerBase
                 
                 Description = c.Description,
                
+            }).ToList();
+
+            // Return the complaints along with total count for pagination
+            return Ok(new PagedComplaintsDTO
+            {
+                Complaints = complaintDataDTOs,
+                TotalCount = totalCount
+            });
+        }
+       
+        catch (Exception ex)
+        {
+            // Catch any other exceptions
+            return StatusCode(500, "An error occurred while processing the request.");
+        }
+    }
+
+
+
+    [HttpGet("GetAllComplaints")]
+    [Authorize(Roles = "Admin")]
+    public async Task<ActionResult<PagedComplaintsDTO>> GetComplaintsAll( int pageNum, int pageSize)
+    {
+        try
+        {
+            // Fetch complaints for the given organization with pagination
+            var complaints = await _complaintGetService.GetComplaintsAsync( pageNum, pageSize);
+
+            if (complaints == null || !complaints.Any())
+            {
+                return NotFound("No complaints found for the specified organization.");
+            }
+
+            // Fetch the total complaint count for pagination
+            var totalCount = await _complaintGetService.GetComplaintCountAsync();
+
+            // Map complaints to ComplaintDataDTO
+            var complaintDataDTOs = complaints.Select(c => new ComplaintDataDTO
+            {
+                complaintId = c.ComplaintId,
+
+                Description = c.Description,
+
+            }).ToList();
+
+            // Return the complaints along with total count for pagination
+            return Ok(new PagedComplaintsDTO
+            {
+                Complaints = complaintDataDTOs,
+                TotalCount = totalCount
+            });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            // If no complaints are found for the organization
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            // Catch any other exceptions
+            return StatusCode(500, "An error occurred while processing the request.");
+        }
+    }
+
+
+
+    [HttpGet("GetAllComplaintsByUserId")]
+    [Authorize]
+    public async Task<ActionResult<PagedComplaintsDTO>> GetComplaintsU(int userid, int pageNum, int pageSize)
+    {
+        try
+        {
+            // Fetch complaints for the given organization with pagination
+            var complaints = await _complaintGetService.GetComplaintsByUserIdAsync(userid, pageNum, pageSize);
+
+            if (complaints == null || !complaints.Any())
+            {
+                return NotFound("No complaints found for the specified organization.");
+            }
+
+            // Fetch the total complaint count for pagination
+            var totalCount = await _complaintGetService.GetComplaintCountByUserIdAsync(userid);
+
+            // Map complaints to ComplaintDataDTO
+            var complaintDataDTOs = complaints.Select(c => new ComplaintDataDTO
+            {
+                complaintId = c.ComplaintId,
+
+                Description = c.Description,
+
+            }).ToList();
+
+            // Return the complaints along with total count for pagination
+            return Ok(new PagedComplaintsDTO
+            {
+                Complaints = complaintDataDTOs,
+                TotalCount = totalCount
+            });
+        }
+        catch (KeyNotFoundException ex)
+        {
+            // If no complaints are found for the organization
+            return NotFound(ex.Message);
+        }
+        catch (Exception ex)
+        {
+            // Catch any other exceptions
+            return StatusCode(500, "An error occurred while processing the request.");
+        }
+    }
+
+
+    [HttpGet("GetAllComplaintsByCategoryId")]
+    [Authorize(Roles = "Admin,Organization")]
+    public async Task<ActionResult<PagedComplaintsDTO>> GetComplaintsC(int categoryid, int pageNum, int pageSize)
+    {
+        try
+        {
+            // Fetch complaints for the given organization with pagination
+            var complaints = await _complaintGetService.GetComplaintsByCategoryIdAsync(categoryid, pageNum, pageSize);
+
+            if (complaints == null || !complaints.Any())
+            {
+                return NotFound("No complaints found for the specified organization.");
+            }
+
+            // Fetch the total complaint count for pagination
+            var totalCount = await _complaintGetService.GetComplaintCountByCategoryIdAsync(categoryid);
+
+            // Map complaints to ComplaintDataDTO
+            var complaintDataDTOs = complaints.Select(c => new ComplaintDataDTO
+            {
+                complaintId = c.ComplaintId,
+
+                Description = c.Description,
+
             }).ToList();
 
             // Return the complaints along with total count for pagination

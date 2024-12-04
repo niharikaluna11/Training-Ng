@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using ComplaintTicketAPI.Interfaces.InteraceServices;
 using Microsoft.EntityFrameworkCore;
+using ComplaintTicketAPI.Repositories;
 
 namespace ComplaintTicketAPI.Controllers
 {
@@ -15,10 +16,11 @@ namespace ComplaintTicketAPI.Controllers
     public class UpdateComplaintController : ControllerBase
     {
         private readonly IUpdateComplaintService _updateComplaintService;
-
-        public UpdateComplaintController(IUpdateComplaintService updateComplaintService)
+        private readonly IComplaintDetailService _complaint;
+        public UpdateComplaintController(IUpdateComplaintService updateComplaintService, IComplaintDetailService complaint)
         {
             _updateComplaintService = updateComplaintService;
+            _complaint = complaint;
         }
 
 
@@ -29,7 +31,36 @@ namespace ComplaintTicketAPI.Controllers
         {
             try
             {
+                var complaint = await _complaint.GetComplaintDetailsAsync(updateRequest.ComplaintId);
+                if (complaint == null)
+                {
+                    return NotFound(new { Message = "Complaint not found" });
+                }
+
+                if (updateRequest.Status == Status.Recieved && complaint.Status== "InProgress")
+                {
+                    return BadRequest(new UpdateComplaintResponseDTO
+                    {
+                        ComplaintId = updateRequest.ComplaintId,
+                        Status = updateRequest.Status,
+                        Message = "Already in progress"
+                    });
+                }
+
+                // Check if the complaint status is "Resolved" and prevent any further updates
+                if (complaint.Status == "Resolved")
+                {
+                    return BadRequest(new UpdateComplaintResponseDTO
+                    {
+                        ComplaintId = updateRequest.ComplaintId,
+                        Status = updateRequest.Status,
+                        Message = "Already resolved"
+                    });
+
+                }
+
                 var updatedComplaint = await _updateComplaintService.UpdateComplaintStatusAsync(updateRequest);
+
 
                 if (updatedComplaint != null)
                 {
