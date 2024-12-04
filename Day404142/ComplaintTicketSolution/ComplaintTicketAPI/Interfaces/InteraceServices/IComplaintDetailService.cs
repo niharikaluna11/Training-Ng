@@ -7,10 +7,11 @@ namespace ComplaintTicketAPI.Interfaces.InteraceServices
     {
         Task<string> GetComplaintCategoryAsync(int categoryId);
         Task<List<string>> GetComplaintFilesAsync(int complaintId);
-        Task<DateTime?> GetLatestStatusDateAsync(int complaintId);
+        Task<(string Status, string Priority, DateTime? LatestStatusDate)> GetLatestStatusAsync(int complaintId);
         Task<ComplaintDetailDto> GetComplaintDetailsAsync(int complaintId);
         Task<User> GetUserDetailsAsync(int userId);
+
+        Task<(DateTime? StatusDate, string Status)> GetLatestStatusDateAsync(int complaintId);
         Task<Organization> GetOrganizationDetailsAsync(int orgId);
-        Task<(string Status, string Priority)> GetLatestStatusAsync(int complaintId);
     }
 }
