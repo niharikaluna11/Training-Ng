@@ -135,9 +135,18 @@ export default {
   },
   mounted() {
     const isToken = sessionStorage.getItem("token");
-    if (isToken) {
+    const role = localStorage.getItem("role");
+    if (isToken && role == "Admin") {
       this.isLogin = true;
       this.$router.push('/AdminDashboard')
+    }
+    if (isToken && role == "User") {
+      this.isLogin = true;
+      this.$router.push('/UserDashboard')
+    }
+    if (isToken && role == "Organization") {
+      this.isLogin = true;
+      this.$router.push('/OrganizationDashboard')
     }
   }
 };
