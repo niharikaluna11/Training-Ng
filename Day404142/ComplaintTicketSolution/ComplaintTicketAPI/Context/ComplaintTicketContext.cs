@@ -17,7 +17,10 @@ namespace ComplaintTicketAPI.Context
         public DbSet<ComplaintStatusDate> ComplaintStatusDates { get; set; }
         public DbSet<Organization> Organizations { get; set; }
 
-        
+        public DbSet<UserHelp> UserHelps { get; set; }
+
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -80,7 +83,8 @@ namespace ComplaintTicketAPI.Context
                 .HasForeignKey(c => c.OrganizationId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            
+
+
             // Enum configurations
             modelBuilder.Entity<User>()
                 .Property(u => u.Roles)
