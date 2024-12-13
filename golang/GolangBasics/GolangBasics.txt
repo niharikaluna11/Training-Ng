@@ -1,0 +1,21 @@
+Line 1: package main 
+It contains the package main of the program,
+ which have overall content of the program.It is the initial 
+ point to run the program, So it is compulsory to write.
+
+
+Line 2:import "fmt" 
+It contains an import statement “fmt”. 
+In Go (Golang), the import statement is used to include external packages 
+that provide additional functionality beyond the built-in language features. 
+In this case, “fmt” is a package that provides functions for formatting input and output.
+
+
+
+func main() {
+     // prints geeksforgeeks
+     fmt.Println("Hello, geeksforgeeks") 
+}
+Line 3: main function, it is beginning of execution of program.
+Line 4: fmt.Println() is a standard library function to print something 
+as a output on screen.In this, fmt package has transmitted Println method which is used to display the output.
