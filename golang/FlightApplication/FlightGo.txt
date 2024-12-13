@@ -1,0 +1,31 @@
+
+Models:
+        User
+        flights
+        UserFlight : 1User 1Flight for now
+
+Admin Role:
+            Add flights with details:
+                    Source
+                    Destination
+                    Seats
+                    Time (departure/arrival)
+                    Price
+                    IsAvailable
+                    IsGoing scheduled by default
+            View all added flights for verification.
+            Delete flight that are not going (soft delete)
+
+User Role:
+            Search flights between a source and destination.        
+            View flight details.
+            Book a flight.
+            Sort flights by price or name (airline).  
+
+
+API Endpoints :
+    Admin:
+            POST /admin/add-flight: Add a flight.
+            GET /admin/view-flights: View all flights.
+    User:
+            GET /flights?source={}&destination={}&sort={price|name}: Search and sort flights.
