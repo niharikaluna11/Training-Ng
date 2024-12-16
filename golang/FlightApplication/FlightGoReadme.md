@@ -76,4 +76,6 @@
 3. Book flights.
 4. Sort flight search results by price or name.
 ---
-
+## Notes
+1. This system is a console-based application and requires user input for all operations.
+2. Ensures robust validation for flight details, including a strict check to prevent past dates.
