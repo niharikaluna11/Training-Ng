@@ -1,0 +1,12 @@
+For Unit Tests and Spanner, you can complete the below task.
+        Create a REST API using Go and perform CRUD operations connecting to Spanner
+        The app should have unit tests, 
+        no hard coded values (database url, etc should come from env files) and swagger
+ 
+ 
+For GKE
+        Understand what is docker (search YouTube videos - max 1 hour)
+        Containerize your Go application
+        Understand Kubernetes on a high level (search YouTube videos - max 1 hour)
+        Understand what is a Pod, ReplicaSet, Deployment and Services (search YouTube videos - max 3 hour)
+        Create Deployment YAML 
