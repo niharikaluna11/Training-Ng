@@ -26,4 +26,5 @@ day6/productapp/.vs
 Day404142/ComplaintTicketSolution/ComplaintTicketAPI/appsettings.json
 Day404142/ComplaintTicketSolution/ComplaintTicketAPI/Services/GithubService.cs
 
-
+BankManagementSolution/BankManagementApplication/appsettings.json
+BankManagementSolution/GoBankManagement/.env

@@ -1,16 +1,13 @@
 package main
 
-import (
-	
-	// "mymod/greet"
-	// "mymod/pratice"
-	 "mymod/Assignment"
-	// "mymod/arrayandslices"
-)
+// "mymod/greet"
+// "mymod/pratice"
+//  "mymod/Assignment"
+// "mymod/arrayandslices"
 
 func main() {
 
-	Assignment.Sorting()
+	// Assignment.Sorting()
 	// for {
 	// 	fmt.Println("Select an option:")
 	// 	fmt.Println("1. Calculate Future Value")
